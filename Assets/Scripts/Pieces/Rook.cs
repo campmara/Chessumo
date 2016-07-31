@@ -3,9 +3,10 @@ using System.Collections;
 
 public class Rook : Piece 
 {
-
-	void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
+
 		// This piece can move pretty much across the board;
 		moveMagnitude = 10;
 

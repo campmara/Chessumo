@@ -3,8 +3,10 @@ using System.Collections;
 
 public class Pawn : Piece 
 {
-	void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
+
 		moveMagnitude = 1;
 
 		moveOffsets = new IntVector2[1];

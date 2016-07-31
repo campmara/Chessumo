@@ -58,68 +58,6 @@ public class ClassicMode : Mode
 		}
 	}
 
-	void PlacePieces()
-	{
-		CreateKing(1, 0);
-		CreateQueen(2, 0);
-		CreateRook(3, 0);
-		CreateBishop(1, 1);
-		CreateKnight(2, 1);
-		CreatePawn(3, 1);
-	}
-
-	void CreateKing(int x, int y)
-	{
-		GameObject kingObj = Instantiate(GameManager.Instance.kingPrefab) as GameObject;
-		King king = kingObj.GetComponent<King>();
-		SetupPiece(king, "King", x, y);
-	}
-
-	void CreateQueen(int x, int y)
-	{
-		GameObject queenObj = Instantiate(GameManager.Instance.queenPrefab) as GameObject;
-		Queen queen = queenObj.GetComponent<Queen>();
-		SetupPiece(queen, "Queen", x, y);
-	}
-
-	void CreateRook(int x, int y)
-	{
-		GameObject rookObj = Instantiate(GameManager.Instance.rookPrefab) as GameObject;
-		Rook rook = rookObj.GetComponent<Rook>();
-		SetupPiece(rook, "Rook", x, y);
-	}
-
-	void CreateBishop(int x, int y)
-	{
-		GameObject bishopObj = Instantiate(GameManager.Instance.bishopPrefab) as GameObject;
-		Bishop bishop = bishopObj.GetComponent<Bishop>();
-		SetupPiece(bishop, "Bishop", x, y);
-	}
-
-	void CreateKnight(int x, int y)
-	{
-		GameObject knightObj = Instantiate(GameManager.Instance.knightPrefab) as GameObject;
-		Knight knight = knightObj.GetComponent<Knight>();
-		SetupPiece(knight, "Knight", x, y);
-	}
-
-	void CreatePawn(int x, int y) 
-	{
-		GameObject pawnObj = Instantiate(GameManager.Instance.pawnPrefab) as GameObject;
-		Pawn pawn = pawnObj.GetComponent<Pawn>();
-		SetupPiece(pawn, "Pawn", x, y);
-	}
-
-	void SetupPiece(Piece piece, string name, int x, int y)
-	{
-		piece.gameObject.name = name;
-		piece.transform.parent = transform;
-		piece.transform.position = new Vector3(tileObjects[x, y].transform.position.x, tileObjects[x, y].transform.position.y, piece.transform.position.z);
-		piece.SetInfo(x, y, this);
-
-		pieces[x, y] = piece;
-	}
-
 	//////////////////////////////////////////////////////////
 	// UPDATE
 	//////////////////////////////////////////////////////////
@@ -131,7 +69,7 @@ public class ClassicMode : Mode
 			CheckRayMouse();
 		}
 #if UNITY_IPHONE
-		else if (Input.GetTouch(0).phase == TouchPhase.Began)
+		else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
 		{
 			Touch touch = Input.GetTouch(0);
 			CheckRayTap(touch);
@@ -212,7 +150,7 @@ public class ClassicMode : Mode
 			}
 			else if (piece != currentSelectedPiece)
 			{
-				if (!piece.potentialPush)
+				if (!piece.potentialPush && !piece.GetMoveDisabled())
 				{
 					ResetPossibleMoves();
 
@@ -220,13 +158,17 @@ public class ClassicMode : Mode
 
 					GameManager.Instance.SelectObject(currentSelectedPiece.transform);
 				}
+				else if (!piece.potentialPush && piece.GetMoveDisabled())
+				{
+					GameManager.Instance.Deselect();
+					currentSelectedPiece = null;
+				}
 				else
 				{
 					// Force a move. We're probably going to be pushing too.
 					IntVector2 coords = piece.GetCoordinates();
-					Tile tile = tileObjects[coords.x, coords.y].GetComponent<Tile>();
 
-					currentSelectedPiece.MoveToTile(tile);
+					currentSelectedPiece.MoveTo(coords, false);
 
 					GameManager.Instance.Deselect();
 					currentSelectedPiece = null;
@@ -240,7 +182,7 @@ public class ClassicMode : Mode
 			if (currentSelectedPiece && tile.IsShowingMove())
 			{
 				// We just made a move!!! omg !!!!
-				currentSelectedPiece.MoveToTile(tile);
+				currentSelectedPiece.MoveTo(tile.GetCoordinates(), false);
 				GameManager.Instance.Deselect();
 				currentSelectedPiece = null;
 			}

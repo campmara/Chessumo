@@ -3,8 +3,10 @@ using System.Collections;
 
 public class Knight : Piece 
 {
-	void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
+
 		moveMagnitude = 1;
 
 		moveOffsets = new IntVector2[8];

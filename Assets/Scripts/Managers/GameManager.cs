@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	void BeginGame()
+	public void BeginGame()
 	{
 		ModeManager.Instance.Load();
 	}

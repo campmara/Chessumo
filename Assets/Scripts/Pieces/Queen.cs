@@ -3,8 +3,10 @@ using System.Collections;
 
 public class Queen : Piece 
 {
-	void Awake()
+	protected override void Awake()
 	{
+		base.Awake();
+
 		moveMagnitude = 10;
 
 		moveOffsets = new IntVector2[8];

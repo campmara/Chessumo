@@ -121,7 +121,7 @@ Material:
       second: {r: -10000, g: -10000, b: 10000, a: 10000}
     - first:
         name: _FaceColor
-      second: {r: 0, g: 0, b: 0, a: 1}
+      second: {r: 1, g: 1, b: 1, a: 1}
     - first:
         name: _MaskCoord
       second: {r: 0, g: 0, b: 10000, a: 10000}

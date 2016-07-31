@@ -3,15 +3,26 @@ using System.Collections;
 
 public abstract class Piece : MonoBehaviour 
 {
+	[SerializeField] Color tint = Color.white;
+	[SerializeField] Color disabledTint = Color.black;
 	[ReadOnly] public bool potentialPush = false;
 
-	const float MOVE_LERP_TIME = 0.25f;
+	public static float MOVE_LERP_TIME = 0.25f;
 
 	// Array of coordinate offsets that define the moves a piece can make.
 	protected IntVector2[] moveOffsets;
 	protected int moveMagnitude = 1;
 	protected IntVector2 currentCoordinates;
 	protected Mode parentMode;
+
+	bool moveDisabled = false;
+	SpriteRenderer sprite;
+
+	protected virtual void Awake()
+	{
+		sprite = GetComponentInChildren<SpriteRenderer>();
+		sprite.color = tint;
+	}
 
 	public IntVector2 GetCoordinates()
 	{
@@ -47,10 +58,23 @@ public abstract class Piece : MonoBehaviour
 		return returnArray;
 	}
 
-	public void MoveToTile(Tile tile)
+	public void MoveTo(IntVector2 coordinates, bool pushed)
 	{
+		// This is the core disable / pushing logic.
+		if (pushed)
+		{
+			if (moveDisabled)
+			{
+				SetMoveDisabled(false);
+			}
+		}
+		else
+		{
+			SetMoveDisabled(true);
+		}
+
 		// Determine how many times we must repeat the movement to get to the desired point.
-		IntVector2 diff = tile.GetCoordinates() - GetCoordinates();
+		IntVector2 diff = coordinates - GetCoordinates();
 
 		if (diff.x != 0 && diff.y == 0)
 		{
@@ -76,6 +100,24 @@ public abstract class Piece : MonoBehaviour
 		{
 			// Move diagonally.
 			StartCoroutine(MoveDiagonally(diff.x, diff.y));
+		}
+	}
+
+	public bool GetMoveDisabled()
+	{
+		return moveDisabled;
+	}
+
+	void SetMoveDisabled(bool disabled)
+	{
+		moveDisabled = disabled;
+		if (disabled)
+		{
+			sprite.color = disabledTint;
+		}
+		else
+		{
+			sprite.color = tint;
 		}
 	}
 

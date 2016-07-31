@@ -151,6 +151,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78ea5c04549d0485db8b7713b38a0d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tint: {r: 0.7490196, g: 0.7254902, b: 0.61960787, a: 1}
+  disabledTint: {r: 0.16862746, g: 0.16862746, b: 0.16862746, a: 1}
   potentialPush: 0
 --- !u!114 &114000012676919468
 MonoBehaviour:

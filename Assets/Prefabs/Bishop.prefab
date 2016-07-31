@@ -283,6 +283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255182bef5010418ea8c01a57fa0d790, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tint: {r: 0.34901962, g: 1, b: 0.6784314, a: 1}
+  disabledTint: {r: 0.16911763, g: 0.16911763, b: 0.16911763, a: 1}
   potentialPush: 0
 --- !u!212 &212000013496451488
 SpriteRenderer:
