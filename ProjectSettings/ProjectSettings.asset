@@ -11,7 +11,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: Murray Campbell
-  productName: PRESS
+  productName: p r e s s
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenStyle: 0
@@ -179,7 +179,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: 233a83a1e146649f4af40d79530f21ce, type: 3}
+      m_Icon: {fileID: 2800000, guid: 2d8d13ccfd7e14c39b3bf29c2318339d, type: 3}
       m_Width: 128
       m_Height: 128
   m_BuildTargetBatching: []

@@ -32,12 +32,14 @@ public class ModeManager : MonoBehaviour
 		currentMode = null;
 	}
 
-	// Loads whichever mode is currently inhabiting _currentMode.
+	// Loads whichever mode is currently inhabiting currentMode.
 	public void Load()
 	{
 		if (currentMode == null)
 		{
 			Debug.Log("[MODE MANAGER] Loading Mode: Classic");
+
+			GameManager.Instance.Deselect();
 
 			Mode mode = Instantiate(modePrefabs[0]) as Mode;
 			mode.name = "Classic Mode";

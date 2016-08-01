@@ -61,14 +61,14 @@ public abstract class Mode : MonoBehaviour
 		}
 	}
 
-	void PieceOffGrid(Piece piece, IntVector2 pushCoordinates)
+	protected virtual void PieceOffGrid(Piece piece, IntVector2 pushCoordinates)
 	{
 		Vector2 offGridPosition = GameManager.Instance.CoordinateToPosition(pushCoordinates);
 		StartCoroutine(MovePieceOffGrid(piece, offGridPosition));
 		PlaceRandomPiece();
 	}
 
-	IEnumerator MovePieceOffGrid(Piece piece, Vector2 position)
+	protected IEnumerator MovePieceOffGrid(Piece piece, Vector2 position)
 	{
 		Vector3 oldPos = piece.transform.position;
 		Vector3 newPos = new Vector3(position.x, position.y, piece.transform.position.z);
@@ -103,14 +103,12 @@ public abstract class Mode : MonoBehaviour
 
 
 
-
-
 	IntVector2 RandomCoordinates()
 	{
 		return new IntVector2(Random.Range(0, gridSize.x), Random.Range(0, gridSize.y));
 	}
 
-	void PlaceRandomPiece()
+	protected void PlaceRandomPiece()
 	{
 		int rand = Random.Range(0, 6);
 		IntVector2 randCoords = RandomCoordinates();

@@ -19,7 +19,8 @@ public class ClassicMode : Mode
 	// PRIVATES
 	//////////////////////////////////////////////////////////
 
-
+	GameObject scoreObj;
+	Score score;
 
 	//////////////////////////////////////////////////////////
 	// ACTIVATION
@@ -35,6 +36,7 @@ public class ClassicMode : Mode
 	public override void Load()
 	{
 		SetupPlayfield();
+		SetupScore();
 		PlacePieces();
 	}
 
@@ -56,6 +58,16 @@ public class ClassicMode : Mode
 				tileObjects[x, y] = tileObj;
 			}
 		}
+	}
+
+	void SetupScore()
+	{
+		GameObject scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
+		scoreObj.name = "Score";
+		scoreObj.transform.parent = transform;
+		scoreObj.transform.position = new Vector3(0f, 3.5f, 0f);
+		score = scoreObj.GetComponent<Score>();
+		score.Reset();
 	}
 
 	//////////////////////////////////////////////////////////
@@ -208,6 +220,15 @@ public class ClassicMode : Mode
 				}
 			}
 		}
+	}
+
+	protected override void PieceOffGrid(Piece piece, IntVector2 pushCoordinates)
+	{
+		score.ScorePoint();
+
+		Vector2 offGridPosition = GameManager.Instance.CoordinateToPosition(pushCoordinates);
+		StartCoroutine(MovePieceOffGrid(piece, offGridPosition));
+		PlaceRandomPiece();
 	}
 
 	//////////////////////////////////////////////////////////

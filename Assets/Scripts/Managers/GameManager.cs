@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
 
 	[Header("General Prefabs")]
 	public GameObject tilePrefab;
+	public GameObject scorePrefab;
 	[Header("Piece Prefabs")]
 	public GameObject kingPrefab;
 	public GameObject queenPrefab;
@@ -78,7 +79,8 @@ public class GameManager : MonoBehaviour
 
 	public void Deselect()
 	{
-		selectionObj.SetActive(false);
+		if (selectionObj)
+			selectionObj.SetActive(false);
 	}
 }
 

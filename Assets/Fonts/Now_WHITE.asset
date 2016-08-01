@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74dfce233ddb29b4294c3e23c1d3650d, type: 3}
   m_Name: Now_WHITE
   m_EditorClassIdentifier: 
-  hashCode: -32212780
+  hashCode: -1028037746
   material: {fileID: 21000013794352420}
   materialHashCode: -1113358625
   fontAssetType: 1
