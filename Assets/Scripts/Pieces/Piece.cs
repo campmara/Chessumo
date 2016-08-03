@@ -17,6 +17,7 @@ public abstract class Piece : MonoBehaviour
 	protected Mode parentMode;
 
 	bool moveDisabled = false;
+
 	SpriteRenderer sprite;
 
 	protected virtual void Awake()
@@ -42,19 +43,25 @@ public abstract class Piece : MonoBehaviour
 		parentMode = mode;
 	}
 
+	public void SetSortingOrder(int order)
+	{
+		sprite.sortingOrder = order;
+	}
+
 	void OnEnable()
 	{
 		GameManager.Instance.GrowMe(this.gameObject);
 	}
 
-	public IntVector2[] GetPossibleMoves()
+	public virtual IntVector2[] GetPossibleMoves()
 	{
-		IntVector2[] returnArray = new IntVector2[moveOffsets.Length * moveMagnitude];
+		IntVector2[] returnArray = new IntVector2[moveOffsets.Length * moveMagnitude - 1];
 
 		for (int i = 0; i < returnArray.Length; i++)
 		{
 			int offsetIndex = Mathf.FloorToInt(i / moveMagnitude);
 			int coefficient = moveMagnitude > 1 ? (i + 1) % moveMagnitude : 1;
+			coefficient = coefficient == 0 ? moveMagnitude : coefficient;
 			IntVector2 moveOffset = new IntVector2(moveOffsets[offsetIndex].x * coefficient, moveOffsets[offsetIndex].y * coefficient);
 			//Debug.Log("Move Offset: [" + moveOffset.x + ", " + moveOffset.y + "]");
 

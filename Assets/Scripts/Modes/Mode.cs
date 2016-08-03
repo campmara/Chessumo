@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 
 public abstract class Mode : MonoBehaviour 
@@ -86,6 +87,11 @@ public abstract class Mode : MonoBehaviour
 		Vector3 newPos = new Vector3(position.x, position.y, piece.transform.position.z);
 
 		Tween tween = piece.transform.DOMove(newPos, Piece.MOVE_LERP_TIME);
+		yield return tween.WaitForCompletion();
+
+		piece.SetSortingOrder(-11);
+		tween = piece.transform.DOMoveY(-10f, 1f)
+			.SetEase(Ease.InCubic);
 		yield return tween.WaitForCompletion();
 
 		Destroy(piece.gameObject);
@@ -223,42 +229,42 @@ public abstract class Mode : MonoBehaviour
 		CreateKnight(3, 0);
 	}
 
-	void CreateKing(int x, int y)
+	protected void CreateKing(int x, int y)
 	{
 		GameObject kingObj = Instantiate(GameManager.Instance.kingPrefab) as GameObject;
 		King king = kingObj.GetComponent<King>();
 		SetupPiece(king, "King", x, y);
 	}
 
-	void CreateQueen(int x, int y)
+	protected void CreateQueen(int x, int y)
 	{
 		GameObject queenObj = Instantiate(GameManager.Instance.queenPrefab) as GameObject;
 		Queen queen = queenObj.GetComponent<Queen>();
 		SetupPiece(queen, "Queen", x, y);
 	}
 
-	void CreateRook(int x, int y)
+	protected void CreateRook(int x, int y)
 	{
 		GameObject rookObj = Instantiate(GameManager.Instance.rookPrefab) as GameObject;
 		Rook rook = rookObj.GetComponent<Rook>();
 		SetupPiece(rook, "Rook", x, y);
 	}
 
-	void CreateBishop(int x, int y)
+	protected void CreateBishop(int x, int y)
 	{
 		GameObject bishopObj = Instantiate(GameManager.Instance.bishopPrefab) as GameObject;
 		Bishop bishop = bishopObj.GetComponent<Bishop>();
 		SetupPiece(bishop, "Bishop", x, y);
 	}
 
-	void CreateKnight(int x, int y)
+	protected void CreateKnight(int x, int y)
 	{
 		GameObject knightObj = Instantiate(GameManager.Instance.knightPrefab) as GameObject;
 		Knight knight = knightObj.GetComponent<Knight>();
 		SetupPiece(knight, "Knight", x, y);
 	}
 
-	void CreatePawn(int x, int y) 
+	protected void CreatePawn(int x, int y) 
 	{
 		GameObject pawnObj = Instantiate(GameManager.Instance.pawnPrefab) as GameObject;
 		Pawn pawn = pawnObj.GetComponent<Pawn>();
@@ -273,6 +279,39 @@ public abstract class Mode : MonoBehaviour
 		piece.SetInfo(x, y, this);
 
 		pieces[x, y] = piece;
+	}
+
+	// Returns a list of coordinates diagonal to the given coordinates that contain pieces.
+	public List<IntVector2> GetDiagonalPieceCoordinates(IntVector2 coords)
+	{
+		List<IntVector2> retList = new List<IntVector2>();
+
+		IntVector2 upRight = new IntVector2(coords.x + 1, coords.y + 1);
+		IntVector2 downRight = new IntVector2(coords.x + 1, coords.y - 1);
+		IntVector2 downLeft = new IntVector2(coords.x - 1, coords.y - 1);
+		IntVector2 upLeft = new IntVector2(coords.x - 1, coords.y + 1);
+
+		if (IsWithinBounds(upRight) && pieces[upRight.x, upRight.y] != null)
+		{
+			retList.Add(upRight);
+		}
+
+		if (IsWithinBounds(downRight) && pieces[downRight.x, downRight.y] != null)
+		{
+			retList.Add(downRight);
+		}
+
+		if (IsWithinBounds(downLeft) && pieces[downLeft.x, downLeft.y] != null)
+		{
+			retList.Add(downLeft);
+		}
+
+		if (IsWithinBounds(upLeft) && pieces[upLeft.x, upLeft.y] != null)
+		{
+			retList.Add(upLeft);
+		}
+
+		return retList;
 	}
 }
 

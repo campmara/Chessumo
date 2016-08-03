@@ -46,6 +46,8 @@ public class ClassicMode : Mode
 
 	void SetupPlayfield()
 	{
+		bool isAltColor = false;
+
 		for (int x = 0; x < gridSize.x; x++)
 		{
 			for (int y = 0; y < gridSize.y; y++)
@@ -59,9 +61,26 @@ public class ClassicMode : Mode
 
 				tile.SetInfo(x, y, this);
 
+				if (isAltColor)
+					tile.SetColorAlternate();
+				else
+					tile.SetColorDefault();
+
+				isAltColor = !isAltColor;
+
 				tileObjects[x, y] = tileObj;
 			}
 		}
+	}
+
+	protected override void PlacePieces()
+	{
+		CreatePawn(1, 2);
+		CreatePawn(2, 2);
+		CreatePawn(3, 2);
+		CreateKnight(1, 1);
+		CreateRook(2, 1);
+		CreateKnight(3, 1);
 	}
 
 	protected override void DecideNextRandomPiece()
@@ -104,7 +123,7 @@ public class ClassicMode : Mode
 		scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
 		scoreObj.name = "Score";
 		scoreObj.transform.parent = transform;
-		scoreObj.transform.position = new Vector3(0f, 4.5f, 0f);
+		scoreObj.transform.position = new Vector3(0f, 5f, 0f);
 		score = scoreObj.GetComponent<Score>();
 		score.Reset();
 	}
@@ -114,7 +133,7 @@ public class ClassicMode : Mode
 		GameObject pieceViewerObj = Instantiate(GameManager.Instance.nextPieceViewerPrefab) as GameObject;
 		pieceViewerObj.name = "Piece Viewer";
 		pieceViewerObj.transform.parent = transform;
-		pieceViewerObj.transform.position = new Vector3(0f, 3.5f, 0f);
+		pieceViewerObj.transform.position = new Vector3(0f, 4f, 0f);
 		pieceViewer = pieceViewerObj.GetComponent<NextPieceViewer>();
 
 		DecideNextRandomPiece();

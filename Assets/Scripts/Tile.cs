@@ -22,8 +22,7 @@ public class Tile : MonoBehaviour
 	[SerializeField] GameObject possibleMoveObj;
 
 	[SerializeField] Color color = Color.white;
-	[SerializeField] Color highlightColor = Color.white;
-	[SerializeField] Color selectedColor = Color.white;
+	[SerializeField] Color alternateColor = Color.grey;
 
 	SpriteRenderer sprite;
 
@@ -33,15 +32,16 @@ public class Tile : MonoBehaviour
 	void Awake()
 	{
 		sprite = GetComponentInChildren<SpriteRenderer>();
-		Default();
 	}
 
-	void Update()
+	public void SetColorDefault()
 	{
-		if (Input.GetMouseButtonUp(0) && !IsShowingMove())
-		{
-			Default();
-		}
+		sprite.color = color;
+	}
+
+	public void SetColorAlternate()
+	{
+		sprite.color = alternateColor;
 	}
 
 	void OnEnable()
@@ -58,59 +58,6 @@ public class Tile : MonoBehaviour
 	{
 		currentCoordinates = new IntVector2(x, y);
 		parentMode = mode;
-	}
-
-	void OnMouseEnter()
-	{
-		if (Input.GetMouseButton(0))
-		{
-			Select();
-		}
-		else
-		{
-			Highlight();
-		}
-	}
-
-	void OnMouseOver()
-	{
-		if (!Input.GetMouseButton(0))
-			Highlight();
-	}
-
-	void OnMouseDown()
-	{
-		Select();
-	}
-
-	void OnMouseUp()
-	{
-		Default();
-	}
-
-	void OnMouseExit()
-	{
-		if (!Input.GetMouseButton(0))
-			Default();
-	}
-
-	//////////////////////////////////////////////////////////
-	// SELECTION VARIANTS
-	//////////////////////////////////////////////////////////
-
-	void Default()
-	{
-		sprite.color = color;
-	}
-
-	void Highlight()
-	{
-		sprite.color = highlightColor;
-	}
-
-	void Select()
-	{
-		sprite.color = selectedColor;
 	}
 
 	public bool IsShowingMove()

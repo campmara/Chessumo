@@ -186,8 +186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   possibleMoveObj: {fileID: 1000012523436986}
   color: {r: 1, g: 1, b: 1, a: 1}
-  highlightColor: {r: 0.875, g: 0.875, b: 0.875, a: 1}
-  selectedColor: {r: 0.71323526, g: 0.71323526, b: 0.71323526, a: 1}
+  alternateColor: {r: 0.9411765, g: 0.9411765, b: 0.9411765, a: 1}
 --- !u!114 &114000013479968416
 MonoBehaviour:
   m_ObjectHideFlags: 1

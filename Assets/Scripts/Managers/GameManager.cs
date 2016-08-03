@@ -52,7 +52,7 @@ public class GameManager : MonoBehaviour
 		GameObject startButton = Instantiate(startButtonPrefab) as GameObject;
 		startButton.name = "Start Button";
 		startButton.transform.parent = transform;
-		startButton.transform.position = new Vector3(0f, -3.5f, 0f);
+		startButton.transform.position = new Vector3(0f, -4f, 0f);
 	}
 
 	void Update()
@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour
 
 		obj.transform.localScale = startScale;
 
-		Tween tween = obj.transform.DOScale(desiredScale, 1f)
+		obj.transform.DOScale(desiredScale, 1f)
 			.SetEase(Ease.OutBack);
 
 		yield return null;
