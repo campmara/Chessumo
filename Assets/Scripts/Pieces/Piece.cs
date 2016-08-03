@@ -55,7 +55,7 @@ public abstract class Piece : MonoBehaviour
 
 	public virtual IntVector2[] GetPossibleMoves()
 	{
-		IntVector2[] returnArray = new IntVector2[moveOffsets.Length * moveMagnitude - 1];
+		IntVector2[] returnArray = new IntVector2[moveOffsets.Length * moveMagnitude];
 
 		for (int i = 0; i < returnArray.Length; i++)
 		{

@@ -9,11 +9,16 @@ public class King : Piece
 
 		moveMagnitude = 1;
 		
-		moveOffsets = new IntVector2[4];
+		moveOffsets = new IntVector2[8];
+		moveOffsets[0] = new IntVector2(-1, 1);
+		moveOffsets[1] = new IntVector2(0, 1);
+		moveOffsets[2] = new IntVector2(1, 1);
 
-		moveOffsets[0] = new IntVector2(0, 1);
-		moveOffsets[1] = new IntVector2(0, -1);
-		moveOffsets[2] = new IntVector2(1, 0);
 		moveOffsets[3] = new IntVector2(-1, 0);
+		moveOffsets[4] = new IntVector2(1, 0);
+		
+		moveOffsets[5] = new IntVector2(-1, -1);
+		moveOffsets[6] = new IntVector2(0, -1);
+		moveOffsets[7] = new IntVector2(1, -1);
 	}
 }
