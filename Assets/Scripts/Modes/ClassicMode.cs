@@ -22,6 +22,9 @@ public class ClassicMode : Mode
 	GameObject scoreObj;
 	Score score;
 
+	GameObject pieceViewerObj;
+	NextPieceViewer pieceViewer;
+
 	//////////////////////////////////////////////////////////
 	// ACTIVATION
 	//////////////////////////////////////////////////////////
@@ -38,6 +41,7 @@ public class ClassicMode : Mode
 		SetupPlayfield();
 		SetupScore();
 		PlacePieces();
+		SetupPieceViewer();
 	}
 
 	void SetupPlayfield()
@@ -60,14 +64,60 @@ public class ClassicMode : Mode
 		}
 	}
 
+	protected override void DecideNextRandomPiece()
+	{
+		int rand = Random.Range(0, 6);
+
+		switch (rand)
+		{
+			case 0:
+				nextRandomPieceType = PieceType.KING;
+				pieceViewer.ShowKing();
+				break;
+			case 1:
+				nextRandomPieceType = PieceType.QUEEN;
+				pieceViewer.ShowQueen();
+				break;
+			case 2:
+				nextRandomPieceType = PieceType.ROOK;
+				pieceViewer.ShowRook();
+				break;
+			case 3:
+				nextRandomPieceType = PieceType.BISHOP;
+				pieceViewer.ShowBishop();
+				break;
+			case 4:
+				nextRandomPieceType = PieceType.KNIGHT;
+				pieceViewer.ShowKnight();
+				break;
+			case 5:
+				nextRandomPieceType = PieceType.PAWN;
+				pieceViewer.ShowPawn();
+				break;
+			default:
+				break;
+		}
+	}
+
 	void SetupScore()
 	{
-		GameObject scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
+		scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
 		scoreObj.name = "Score";
 		scoreObj.transform.parent = transform;
-		scoreObj.transform.position = new Vector3(0f, 3.5f, 0f);
+		scoreObj.transform.position = new Vector3(0f, 4.5f, 0f);
 		score = scoreObj.GetComponent<Score>();
 		score.Reset();
+	}
+
+	void SetupPieceViewer()
+	{
+		GameObject pieceViewerObj = Instantiate(GameManager.Instance.nextPieceViewerPrefab) as GameObject;
+		pieceViewerObj.name = "Piece Viewer";
+		pieceViewerObj.transform.parent = transform;
+		pieceViewerObj.transform.position = new Vector3(0f, 3.5f, 0f);
+		pieceViewer = pieceViewerObj.GetComponent<NextPieceViewer>();
+
+		DecideNextRandomPiece();
 	}
 
 	//////////////////////////////////////////////////////////
@@ -228,7 +278,10 @@ public class ClassicMode : Mode
 
 		Vector2 offGridPosition = GameManager.Instance.CoordinateToPosition(pushCoordinates);
 		StartCoroutine(MovePieceOffGrid(piece, offGridPosition));
-		PlaceRandomPiece();
+
+		PlaceNextRandomPiece();
+
+		//PlaceRandomPiece();
 	}
 
 	//////////////////////////////////////////////////////////

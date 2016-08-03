@@ -41,6 +41,11 @@ public abstract class Piece : MonoBehaviour
 		parentMode = mode;
 	}
 
+	void OnEnable()
+	{
+		GameManager.Instance.GrowMe(this.gameObject);
+	}
+
 	public IntVector2[] GetPossibleMoves()
 	{
 		IntVector2[] returnArray = new IntVector2[moveOffsets.Length * moveMagnitude];

@@ -15,6 +15,11 @@ public class Score : MonoBehaviour
 		textMesh.text = "0";
 	}
 
+	void OnEnable()
+	{
+		GameManager.Instance.GrowMe(this.gameObject);
+	}
+
 	public void ScorePoint()
 	{
 		score++;

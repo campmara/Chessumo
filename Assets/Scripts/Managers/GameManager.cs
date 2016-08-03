@@ -15,8 +15,10 @@ public class GameManager : MonoBehaviour
 	public static GameManager Instance = null;
 
 	[Header("General Prefabs")]
+	public GameObject startButtonPrefab;
 	public GameObject tilePrefab;
 	public GameObject scorePrefab;
+	public GameObject nextPieceViewerPrefab;
 	[Header("Piece Prefabs")]
 	public GameObject kingPrefab;
 	public GameObject queenPrefab;
@@ -28,11 +30,11 @@ public class GameManager : MonoBehaviour
 	public GameObject selectionPrefab;
 	public GameObject possibleMovePrefab;
 
-	GameObject selectionObj;
-
 	/////////////////////////////////////////////////////////////////////
 	// PRIVATES
 	/////////////////////////////////////////////////////////////////////
+
+	GameObject selectionObj;
 
 	void Awake()
 	{
@@ -40,6 +42,16 @@ public class GameManager : MonoBehaviour
 		{
 			Instance = this;
 		}
+
+		CreateStartButton();
+	}
+
+	void CreateStartButton()
+	{
+		GameObject startButton = Instantiate(startButtonPrefab) as GameObject;
+		startButton.name = "Start Button";
+		startButton.transform.parent = transform;
+		startButton.transform.position = new Vector3(0f, -3.5f, 0f);
 	}
 
 	void Update()
@@ -81,6 +93,35 @@ public class GameManager : MonoBehaviour
 	{
 		if (selectionObj)
 			selectionObj.SetActive(false);
+	}
+
+	public void GrowMe(GameObject obj)
+	{
+		StartCoroutine(GrowToScale(obj));
+	}
+
+	IEnumerator GrowToScale(GameObject obj)
+	{
+		// Neat little effect for now to compensate for the fact that shit would just appear out of nowhere otherwise. this will die someday.
+
+		Vector3 startScale = new Vector3(0f, 0f, 1f);
+		Vector3 desiredScale = obj.transform.localScale;
+
+		obj.transform.localScale = startScale;
+
+		float timer = 0f;
+		float totalTime = 0.3f;
+
+		while (timer < totalTime)
+		{
+			if (obj)
+			{
+				timer += Time.deltaTime;
+				obj.transform.localScale = Vector3.Lerp(startScale, desiredScale, timer / totalTime);
+			}
+
+			yield return null;
+		}
 	}
 }
 

@@ -14,6 +14,11 @@ public class DebugStartButton : MonoBehaviour
 		spriteRenderer.sprite = upSprite;
 	}
 
+	void OnEnable()
+	{
+		GameManager.Instance.GrowMe(this.gameObject);
+	}
+
 	void OnMouseDown()
 	{
 		spriteRenderer.sprite = downSprite;

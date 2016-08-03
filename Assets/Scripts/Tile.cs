@@ -19,6 +19,8 @@ public class Tile : MonoBehaviour
 	// PRIVATES
 	//////////////////////////////////////////////////////////
 
+	[SerializeField] GameObject possibleMoveObj;
+
 	[SerializeField] Color color = Color.white;
 	[SerializeField] Color highlightColor = Color.white;
 	[SerializeField] Color selectedColor = Color.white;
@@ -27,8 +29,6 @@ public class Tile : MonoBehaviour
 
 	Mode parentMode;
 	IntVector2 currentCoordinates;
-
-	GameObject possibleMoveObj;
 
 	void Awake()
 	{
@@ -44,6 +44,11 @@ public class Tile : MonoBehaviour
 		}
 	}
 
+	void OnEnable()
+	{
+		GameManager.Instance.GrowMe(this.gameObject);
+	}
+
 	public IntVector2 GetCoordinates()
 	{
 		return currentCoordinates;
@@ -53,11 +58,6 @@ public class Tile : MonoBehaviour
 	{
 		currentCoordinates = new IntVector2(x, y);
 		parentMode = mode;
-
-		possibleMoveObj = Instantiate(GameManager.Instance.possibleMovePrefab) as GameObject;
-		possibleMoveObj.transform.parent = transform;
-		possibleMoveObj.transform.localPosition = Vector2.zero;
-		possibleMoveObj.SetActive(false);
 	}
 
 	void OnMouseEnter()

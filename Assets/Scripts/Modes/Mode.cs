@@ -11,6 +11,16 @@ public abstract class Mode : MonoBehaviour
 	// PUBLICS
 	/////////////////////////////////////////////////////////////////////
 
+	public enum PieceType
+	{
+		KING,
+		QUEEN,
+		ROOK,
+		BISHOP,
+		KNIGHT,
+		PAWN
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	// PRIVATES
 	/////////////////////////////////////////////////////////////////////
@@ -20,6 +30,7 @@ public abstract class Mode : MonoBehaviour
 
 	protected GameObject[,] tileObjects;
 	protected Piece[,] pieces;
+	protected PieceType nextRandomPieceType;
 
 	[ReadOnly, SerializeField] protected Piece currentSelectedPiece;
 
@@ -27,6 +38,7 @@ public abstract class Mode : MonoBehaviour
 	{
 		tileObjects = new GameObject[gridSize.x, gridSize.y];
 		pieces = new Piece[gridSize.x, gridSize.y];
+
 		currentSelectedPiece = null;
 	}
 
@@ -141,6 +153,71 @@ public abstract class Mode : MonoBehaviour
 			default:
 				break;
 		}
+	}
+
+	protected virtual void DecideNextRandomPiece()
+	{
+		int rand = Random.Range(0, 6);
+
+		switch (rand)
+		{
+			case 0:
+				nextRandomPieceType = PieceType.KING;
+				break;
+			case 1:
+				nextRandomPieceType = PieceType.QUEEN;
+				break;
+			case 2:
+				nextRandomPieceType = PieceType.ROOK;
+				break;
+			case 3:
+				nextRandomPieceType = PieceType.BISHOP;
+				break;
+			case 4:
+				nextRandomPieceType = PieceType.KNIGHT;
+				break;
+			case 5:
+				nextRandomPieceType = PieceType.PAWN;
+				break;
+			default:
+				break;
+		}
+	}
+
+	protected void PlaceNextRandomPiece()
+	{
+		IntVector2 randCoords = RandomCoordinates();
+
+		while (pieces[randCoords.x, randCoords.y] != null)
+		{
+			randCoords = RandomCoordinates();
+		}
+
+		switch (nextRandomPieceType)
+		{
+			case PieceType.KING:
+				CreateKing(randCoords.x, randCoords.y);
+				break;
+			case PieceType.QUEEN:
+				CreateQueen(randCoords.x, randCoords.y);
+				break;
+			case PieceType.ROOK:
+				CreateRook(randCoords.x, randCoords.y);
+				break;
+			case PieceType.BISHOP:
+				CreateBishop(randCoords.x, randCoords.y);
+				break;
+			case PieceType.KNIGHT:
+				CreateKnight(randCoords.x, randCoords.y);
+				break;
+			case PieceType.PAWN:
+				CreatePawn(randCoords.x, randCoords.y);
+				break;
+			default:
+				break;
+		}
+
+		DecideNextRandomPiece();
 	}
 
 	protected virtual void PlacePieces()
