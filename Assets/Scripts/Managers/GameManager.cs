@@ -44,6 +44,10 @@ public class GameManager : MonoBehaviour
 			Instance = this;
 		}
 
+		// This will eat battery, but threes does it so w/e.
+		// Eventually, adding a "conserve battery" option that sets this to 30 would be good.
+		Application.targetFrameRate = 60;
+
 		CreateStartButton();
 	}
 
