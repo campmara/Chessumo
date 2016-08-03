@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public abstract class Piece : MonoBehaviour 
 {
@@ -150,17 +151,10 @@ public abstract class Piece : MonoBehaviour
 			parentMode.OnPieceMove(this, nextCoordinates);
 
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
-			Vector3 oldPos = transform.position;
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			float timer = 0f;
-
-			while (timer < MOVE_LERP_TIME)
-			{
-				timer += Time.deltaTime;
-				transform.position = Vector3.Lerp(oldPos, newPos, timer / MOVE_LERP_TIME);
-				yield return null;
-			}
+			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME);
+			yield return tween.WaitForCompletion();
 			
 			SetCoordinates(nextCoordinates);
 
@@ -180,17 +174,10 @@ public abstract class Piece : MonoBehaviour
 			parentMode.OnPieceMove(this, nextCoordinates);
 
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
-			Vector3 oldPos = transform.position;
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			float timer = 0f;
-
-			while (timer < MOVE_LERP_TIME)
-			{
-				timer += Time.deltaTime;
-				transform.position = Vector3.Lerp(oldPos, newPos, timer / MOVE_LERP_TIME);
-				yield return null;
-			}
+			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME);
+			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);
 
@@ -211,17 +198,10 @@ public abstract class Piece : MonoBehaviour
 			parentMode.OnPieceMove(this, nextCoordinates);
 
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
-			Vector3 oldPos = transform.position;
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			float timer = 0f;
-
-			while (timer < MOVE_LERP_TIME)
-			{
-				timer += Time.deltaTime;
-				transform.position = Vector3.Lerp(oldPos, newPos, timer / MOVE_LERP_TIME);
-				yield return null;
-			}
+			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME);
+			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public abstract class Mode : MonoBehaviour 
 {
@@ -82,18 +83,10 @@ public abstract class Mode : MonoBehaviour
 
 	protected IEnumerator MovePieceOffGrid(Piece piece, Vector2 position)
 	{
-		Vector3 oldPos = piece.transform.position;
 		Vector3 newPos = new Vector3(position.x, position.y, piece.transform.position.z);
 
-		float timer = 0f;
-		float totalTime = Piece.MOVE_LERP_TIME;
-
-		while (timer < totalTime)
-		{
-			timer += Time.deltaTime;
-			piece.transform.position = Vector3.Lerp(oldPos, newPos, timer / totalTime);
-			yield return null;
-		}
+		Tween tween = piece.transform.DOMove(newPos, Piece.MOVE_LERP_TIME);
+		yield return tween.WaitForCompletion();
 
 		Destroy(piece.gameObject);
 	}

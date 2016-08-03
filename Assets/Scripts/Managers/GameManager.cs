@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour 
 {
@@ -104,24 +105,20 @@ public class GameManager : MonoBehaviour
 	{
 		// Neat little effect for now to compensate for the fact that shit would just appear out of nowhere otherwise. this will die someday.
 
+		if (!obj)
+		{
+			yield break;
+		}
+
 		Vector3 startScale = new Vector3(0f, 0f, 1f);
 		Vector3 desiredScale = obj.transform.localScale;
 
 		obj.transform.localScale = startScale;
 
-		float timer = 0f;
-		float totalTime = 0.3f;
+		Tween tween = obj.transform.DOScale(desiredScale, 1f)
+			.SetEase(Ease.OutBack);
 
-		while (timer < totalTime)
-		{
-			if (obj)
-			{
-				timer += Time.deltaTime;
-				obj.transform.localScale = Vector3.Lerp(startScale, desiredScale, timer / totalTime);
-			}
-
-			yield return null;
-		}
+		yield return null;
 	}
 }
 
