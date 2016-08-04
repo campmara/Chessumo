@@ -132,6 +132,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startButtonPrefab: {fileID: 1000011827934488, guid: 901b17a8d691a4ab8908e1af58b0d57d,
     type: 2}
+  boardPrefab: {fileID: 1000013961928238, guid: fa1f810d353ea4530b052f032be094d7,
+    type: 2}
   tilePrefab: {fileID: 1000010745778128, guid: 8999ac693b1ea4054b68983e890ec4f0, type: 2}
   scorePrefab: {fileID: 1000012984034224, guid: 0bdbde7e9d0ea412b9fec865fe0c2472,
     type: 2}
