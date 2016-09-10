@@ -75,12 +75,22 @@ public class ClassicMode : Mode
 
 	protected override void PlacePieces()
 	{
+		/*
 		CreatePawn(1, 2);
 		CreatePawn(2, 2);
 		CreatePawn(3, 2);
 		CreateKnight(1, 1);
 		CreateRook(2, 1);
 		CreateKnight(3, 1);
+		*/
+
+		PlaceRandomPiece();
+		PlaceRandomPiece();
+		PlaceRandomPiece();
+		PlaceRandomPiece();
+		PlaceRandomPiece();
+		PlaceRandomPiece();
+		PlaceRandomPiece();
 	}
 
 	protected override void DecideNextRandomPiece()
@@ -251,8 +261,7 @@ public class ClassicMode : Mode
 
 					currentSelectedPiece.MoveTo(coords, false);
 
-					GameManager.Instance.Deselect();
-					currentSelectedPiece = null;
+					OnMoveOccured();
 				}
 			}
 		}
@@ -264,14 +273,45 @@ public class ClassicMode : Mode
 			{
 				// We just made a move!!! omg !!!!
 				currentSelectedPiece.MoveTo(tile.GetCoordinates(), false);
-				GameManager.Instance.Deselect();
-				currentSelectedPiece = null;
+				OnMoveOccured();
 			}
 			else if (currentSelectedPiece && !tile.IsShowingMove())
 			{
+				if (currentSelectedPiece.GetType() == typeof(Knight))
+				{
+					currentSelectedPiece.GetComponent<Knight>().ResetKnight();
+				}
+
 				GameManager.Instance.Deselect();
 				currentSelectedPiece = null;
 			}
+		}
+	}
+
+	void OnMoveOccured()
+	{
+		if (currentSelectedPiece.GetType() == typeof(Knight))
+		{
+			Knight knight = currentSelectedPiece.GetComponent<Knight>();
+
+			if (knight.HasDirection())
+			{
+				knight.ResetKnight();
+				GameManager.Instance.Deselect();
+				currentSelectedPiece = null;
+			}
+			else
+			{
+				// Initiate another move for the knight.
+				currentSelectedPiece = knight;
+				GameManager.Instance.SelectObject(knight.transform);
+				ResetPossibleMoves();
+			}
+		}
+		else
+		{
+			GameManager.Instance.Deselect();
+			currentSelectedPiece = null;
 		}
 	}
 

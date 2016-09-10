@@ -16,7 +16,7 @@ public abstract class Piece : MonoBehaviour
 	protected IntVector2 currentCoordinates;
 	protected Mode parentMode;
 
-	bool moveDisabled = false;
+	protected bool moveDisabled = false;
 
 	SpriteRenderer sprite;
 
@@ -71,7 +71,7 @@ public abstract class Piece : MonoBehaviour
 		return returnArray;
 	}
 
-	public void MoveTo(IntVector2 coordinates, bool pushed)
+	public virtual void MoveTo(IntVector2 coordinates, bool pushed)
 	{
 		// This is the core disable / pushing logic.
 		if (pushed)
@@ -121,7 +121,7 @@ public abstract class Piece : MonoBehaviour
 		return moveDisabled;
 	}
 
-	void SetMoveDisabled(bool disabled)
+	protected void SetMoveDisabled(bool disabled)
 	{
 		moveDisabled = disabled;
 		if (disabled)
@@ -134,19 +134,19 @@ public abstract class Piece : MonoBehaviour
 		}
 	}
 
-	IEnumerator MoveXThenY(int xDistance, int yDistance)
+	protected IEnumerator MoveXThenY(int xDistance, int yDistance)
 	{
 		yield return StartCoroutine(MoveX(xDistance));
 		StartCoroutine(MoveY(yDistance));
 	}
 
-	IEnumerator MoveYThenX(int xDistance, int yDistance)
+	protected IEnumerator MoveYThenX(int xDistance, int yDistance)
 	{
 		yield return StartCoroutine(MoveY(yDistance));
 		StartCoroutine(MoveX(xDistance));
 	}
 
-	IEnumerator MoveX(int distance)
+	protected IEnumerator MoveX(int distance)
 	{
 		int sign = Mathf.FloorToInt(Mathf.Sign(distance));
 
@@ -169,7 +169,7 @@ public abstract class Piece : MonoBehaviour
 		}
 	}
 
-	IEnumerator MoveY(int distance)
+	protected IEnumerator MoveY(int distance)
 	{
 		int sign = Mathf.FloorToInt(Mathf.Sign(distance));
 
@@ -192,7 +192,7 @@ public abstract class Piece : MonoBehaviour
 		}
 	}
 
-	IEnumerator MoveDiagonally(int xDistance, int yDistance)
+	protected IEnumerator MoveDiagonally(int xDistance, int yDistance)
 	{
 		int xSign = Mathf.FloorToInt(Mathf.Sign(xDistance));
 		int ySign = Mathf.FloorToInt(Mathf.Sign(yDistance));

@@ -5,6 +5,7 @@ using System.Collections;
 public struct IntVector2
 {
 	public int x, y;
+	public static IntVector2 NULL { get { return new IntVector2(-1, -1); } }
 
 	public IntVector2(int x, int y)
 	{

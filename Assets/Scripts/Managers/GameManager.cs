@@ -29,7 +29,6 @@ public class GameManager : MonoBehaviour
 	public GameObject pawnPrefab;
 	[Header("Effect Prefabs")]
 	public GameObject selectionPrefab;
-	public GameObject possibleMovePrefab;
 
 	/////////////////////////////////////////////////////////////////////
 	// PRIVATES

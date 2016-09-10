@@ -132,10 +132,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startButtonPrefab: {fileID: 1000011827934488, guid: 901b17a8d691a4ab8908e1af58b0d57d,
     type: 2}
-  boardPrefab: {fileID: 1000013961928238, guid: fa1f810d353ea4530b052f032be094d7,
-    type: 2}
-  tilePrefab: {fileID: 1000010745778128, guid: 8999ac693b1ea4054b68983e890ec4f0, type: 2}
-  scorePrefab: {fileID: 1000012984034224, guid: 0bdbde7e9d0ea412b9fec865fe0c2472,
+  tilePrefab: {fileID: 1000012863807122, guid: 8999ac693b1ea4054b68983e890ec4f0, type: 2}
+  scorePrefab: {fileID: 1000011452536478, guid: 396667be61c144e91b7b9e1693fac3c1,
     type: 2}
   nextPieceViewerPrefab: {fileID: 1000013728354998, guid: 405155a372c254fb888f166ea3a1d160,
     type: 2}
@@ -149,8 +147,6 @@ MonoBehaviour:
     type: 2}
   pawnPrefab: {fileID: 1000013607600190, guid: 39259fa6fcd5a4acb87767b411bb6583, type: 2}
   selectionPrefab: {fileID: 1000010801953964, guid: 8ca3a305ecd0b4dffab9bef107c4827d,
-    type: 2}
-  possibleMovePrefab: {fileID: 1000010289229966, guid: 0805d8aee05454144ab816a080a59f95,
     type: 2}
 --- !u!1 &1518445306
 GameObject:
@@ -273,7 +269,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0.019607844}
+  m_BackGroundColor: {r: 0.86764705, g: 0.86764705, b: 0.86764705, a: 0.019607844}
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0

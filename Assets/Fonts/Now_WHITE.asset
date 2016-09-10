@@ -858,7 +858,7 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: Now-Regular_TMFont Material
-  m_Shader: {fileID: 4800000, guid: dca26082f9cb439469295791d9f76fe5, type: 3}
+  m_Shader: {fileID: 4800000, guid: cafd18099dfc0114896e0a8b277b81b6, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 5
   m_CustomRenderQueue: -1
@@ -888,6 +888,12 @@ Material:
         name: _MainTex
       second:
         m_Texture: {fileID: 28000012879425186}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - first:
+        name: _MaskTex
+      second:
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - first:
@@ -1062,7 +1068,7 @@ Material:
       second: {r: 0, g: 0, b: 10000, a: 10000}
     - first:
         name: _OutlineColor
-      second: {r: 0.72794116, g: 0.72794116, b: 0.72794116, a: 1}
+      second: {r: 1, g: 1, b: 1, a: 1}
     - first:
         name: _ReflectFaceColor
       second: {r: 0, g: 0, b: 0, a: 1}
