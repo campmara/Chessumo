@@ -4,6 +4,218 @@
 		"selected_items":
 		[
 			[
+				"Place",
+				"PlaceRandomPiece"
+			],
+			[
+				"board",
+				"boardPrefab"
+			],
+			[
+				"down",
+				"downLeft"
+			],
+			[
+				"curr",
+				"currentCoordinates"
+			],
+			[
+				"retu",
+				"returnArray"
+			],
+			[
+				"move",
+				"moveOffsets"
+			],
+			[
+				"moe",
+				"moveOffsets"
+			],
+			[
+				"coor",
+				"coords"
+			],
+			[
+				"start",
+				"startButton"
+			],
+			[
+				"startB",
+				"startButtonPrefab"
+			],
+			[
+				"Set",
+				"SetupPieceViewer"
+			],
+			[
+				"piece",
+				"pieceViewerObj"
+			],
+			[
+				"PieceTy",
+				"PieceType.KING"
+			],
+			[
+				"pi",
+				"pieceSprite"
+			],
+			[
+				"score",
+				"scoreObj"
+			],
+			[
+				"scor",
+				"scoreObj"
+			],
+			[
+				"tex",
+				"textMesh.text"
+			],
+			[
+				"Creat",
+				"CreatePawn"
+			],
+			[
+				"grid",
+				"gridSize.y"
+			],
+			[
+				"gridSi",
+				"gridSize.x"
+			],
+			[
+				"gridS",
+				"gridSize.x"
+			],
+			[
+				"rand",
+				"randCoords"
+			],
+			[
+				"ra",
+				"randCoords"
+			],
+			[
+				"disable",
+				"disabledTint"
+			],
+			[
+				"diff",
+				"difference"
+			],
+			[
+				"dif",
+				"difference.y"
+			],
+			[
+				"moveOf",
+				"moveOffset"
+			],
+			[
+				"off",
+				"offsetCoefficient"
+			],
+			[
+				"moveO",
+				"moveOffsets"
+			],
+			[
+				"Crea",
+				"CreatePawn"
+			],
+			[
+				"roo",
+				"rookObj"
+			],
+			[
+				"old",
+				"oldCoordinates"
+			],
+			[
+				"coordi",
+				"coordinates"
+			],
+			[
+				"gri",
+				"gridSize.y"
+			],
+			[
+				"RuntimePlatform",
+				"RuntimePlatform.IPhonePlayer"
+			],
+			[
+				"Touc",
+				"TouchPhase"
+			],
+			[
+				"TouchPhase",
+				"TouchPhase.Began"
+			],
+			[
+				"Clea",
+				"ClearPossibleMoveObjects"
+			],
+			[
+				"pos",
+				"possibleMoveObjects"
+			],
+			[
+				"poss",
+				"possibleMovePrefab"
+			],
+			[
+				"rot",
+				"rotationDirection"
+			],
+			[
+				"Vect",
+				"Vector3"
+			],
+			[
+				"tileO",
+				"tileObjects"
+			],
+			[
+				"chec",
+				"checkBoundsY"
+			],
+			[
+				"ret",
+				"returnArray"
+			],
+			[
+				"sele",
+				"selectionObj"
+			],
+			[
+				"lift",
+				"liftTile.GetCoordinates"
+			],
+			[
+				"possi",
+				"possibleCoordinates"
+			],
+			[
+				"SetupP",
+				"SetupPiece"
+			],
+			[
+				"In",
+				"IntVector2"
+			],
+			[
+				"GetMou",
+				"Input.GetMouseButton(button)"
+			],
+			[
+				"render",
+				"renderer.color"
+			],
+			[
+				"curren",
+				"currentMode"
+			],
+			[
 				"GetCo",
 				"Component.GetComponent(type)"
 			]
@@ -11,14 +223,6 @@
 	},
 	"buffers":
 	[
-		{
-			"file": "/Users/murray/Documents/Work/labyrinthium/depot/HotelCastevania/Hotel Castevania/Assets/Scripts/SpiderLegs.cs",
-			"settings":
-			{
-				"buffer_size": 2957,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -52,7 +256,7 @@
 				"Package Control: Remove Package"
 			]
 		],
-		"width": 337.0
+		"width": 467.0
 	},
 	"console":
 	{
@@ -72,14 +276,37 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
-	"expanded_folders":
-	[
-		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets"
-	],
 	"file_history":
 	[
-		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/PRESS.sublime-project",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Pieces/Pawn.cs",
+		"/Users/murray/Documents/Work/p4v/schrank2016fall_gam392_401/team/team_A/StoneSkip_GameMod2016/Assets/Scripts/Game/Rock Throw/RockFlingController.cs",
+		"/Users/murray/Documents/Work/p4v/schrank2016fall_gam392_401/team/team_A/StoneSkip_GameMod2016/Assets/Scripts/Game/Rock Throw/PullBackRockEffect.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Managers/GameManager.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Pieces/Knight.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Pieces/Piece.cs",
+		"/Users/murray/Documents/Work/labyrinthium/depot/HotelCastevania/Hotel Castevania/Assets/TextMesh Pro/Scripts/TextContainer.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Addons/TextMesh Pro/Resources/Shaders/TMPro_SDF.shader",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Addons/TextMesh Pro/Resources/Shaders/TMPro_SDF-Mobile.shader",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/PossibleMove.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Managers/ModeManager.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Tile.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Modes/ClassicMode.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Addons/TextMesh Pro/Scripts/TMPro_Private.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Modes/Mode.cs",
+		"/Users/murray/Documents/Work/labyrinthium/depot/HotelCastevania/Hotel Castevania/Assets/Scripts/Room.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/NextPieceViewer.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Pieces/Queen.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Pieces/King.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Rotator.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Score.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/DebugStartButton.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Pieces/Bishop.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Pieces/Rook.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/IntVector2.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Editor/CustomAttributeDrawers.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/Assets/Scripts/Modes/VersusMode.cs",
 		"/Users/murray/Documents/Work/labyrinthium/depot/HotelCastevania/Hotel Castevania/Assets/Scripts/SpiderLegs.cs",
+		"/Users/murray/Documents/Work/Unity/PRESS/PRESS/PRESS.sublime-project",
 		"/Users/murray/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
 		"/Users/murray/Documents/Work/labyrinthium/depot/HotelCastevania/Hotel Castevania/Hotel Castevania.sublime-project",
 		"/Users/murray/Library/Application Support/Sublime Text 3/Packages/User/C#.sublime-settings",
@@ -89,11 +316,11 @@
 	],
 	"find":
 	{
-		"height": 70.0
+		"height": 25.0
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 158.0,
 		"where_history":
 		[
 		]
@@ -103,6 +330,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"placePieces"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -120,37 +348,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "/Users/murray/Documents/Work/labyrinthium/depot/HotelCastevania/Hotel Castevania/Assets/Scripts/SpiderLegs.cs",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2957,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Unity3D/UnityC#.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				}
 			]
 		}
 	],

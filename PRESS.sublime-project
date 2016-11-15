@@ -1,14 +1,3 @@
 {
-	"folders":
-	[
-		{
-			"path": ".",
-			"file_exclude_patterns":
-			[
-				"*.dll",
-				"*.meta"
-			]
-		}
-	],
 	"solution_file": "./PRESS.sln"
 }
