@@ -111,8 +111,31 @@ public abstract class Mode : MonoBehaviour
 	public virtual void Load() {}
 	public virtual void Unload() {}
 
+	public void ResetPossibleMoves()
+	{
+		for (int i = 0; i < tileObjects.GetLength(0); i++)
+		{
+			for (int j = 0; j < tileObjects.GetLength(0); j++)
+			{
+				tileObjects[i, j].GetComponent<Tile>().HideMove();
 
+				if (pieces[i, j] != null)
+				{
+					pieces[i, j].SetPushPotential(false);
+				}
+			}
+		}
+	}
 
+	public virtual void OnMoveInitiated()
+	{
+
+	}
+
+	public virtual void OnMoveEnded()
+	{
+
+	}
 
 	IntVector2 RandomCoordinates()
 	{

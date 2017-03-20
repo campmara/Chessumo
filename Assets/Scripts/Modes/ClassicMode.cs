@@ -46,7 +46,7 @@ public class ClassicMode : Mode
 
 	void SetupPlayfield()
 	{
-		bool isAltColor = false;
+		//bool isAltColor = false;
 
 		for (int x = 0; x < gridSize.x; x++)
 		{
@@ -61,12 +61,14 @@ public class ClassicMode : Mode
 
 				tile.SetInfo(x, y, this);
 
+				/*
 				if (isAltColor)
 					tile.SetColorAlternate();
 				else
 					tile.SetColorDefault();
 
 				isAltColor = !isAltColor;
+				*/
 
 				tileObjects[x, y] = tileObj;
 			}
@@ -169,20 +171,7 @@ public class ClassicMode : Mode
 
 		if (currentSelectedPiece)
 		{
-			IntVector2[] possibleMoves = currentSelectedPiece.GetPossibleMoves();
-			for (int i = 0; i < possibleMoves.Length; i++)
-			{
-				IntVector2 move = possibleMoves[i];
-				if (IsWithinBounds(move))
-				{
-					tileObjects[move.x, move.y].GetComponent<Tile>().ShowMove();
-
-					if (pieces[move.x, move.y] != null)
-					{
-						pieces[move.x, move.y].potentialPush = true;
-					}
-				}
-			}
+			
 		}
 		else
 		{
@@ -245,9 +234,7 @@ public class ClassicMode : Mode
 				{
 					ResetPossibleMoves();
 
-					currentSelectedPiece = piece;
-
-					GameManager.Instance.SelectObject(currentSelectedPiece.transform);
+					SelectPiece(piece);
 				}
 				else if (!piece.potentialPush && piece.GetMoveDisabled())
 				{
@@ -260,8 +247,7 @@ public class ClassicMode : Mode
 					IntVector2 coords = piece.GetCoordinates();
 
 					currentSelectedPiece.MoveTo(coords, false);
-
-					OnMoveOccured();
+					OnMoveInitiated();
 				}
 			}
 		}
@@ -273,7 +259,7 @@ public class ClassicMode : Mode
 			{
 				// We just made a move!!! omg !!!!
 				currentSelectedPiece.MoveTo(tile.GetCoordinates(), false);
-				OnMoveOccured();
+				OnMoveInitiated();
 			}
 			else if (currentSelectedPiece && !tile.IsShowingMove())
 			{
@@ -288,7 +274,28 @@ public class ClassicMode : Mode
 		}
 	}
 
-	void OnMoveOccured()
+	void SelectPiece(Piece piece)
+	{
+		currentSelectedPiece = piece;
+		GameManager.Instance.SelectObject(currentSelectedPiece.transform);
+
+		IntVector2[] possibleMoves = currentSelectedPiece.GetPossibleMoves();
+		for (int i = 0; i < possibleMoves.Length; i++)
+		{
+			IntVector2 move = possibleMoves[i];
+			if (IsWithinBounds(move))
+			{
+				tileObjects[move.x, move.y].GetComponent<Tile>().ShowMove();
+
+				if (pieces[move.x, move.y] != null)
+				{
+					pieces[move.x, move.y].SetPushPotential(true);
+				}
+			}
+		}
+	}
+
+	public override void OnMoveInitiated()
 	{
 		if (currentSelectedPiece.GetType() == typeof(Knight))
 		{
@@ -303,32 +310,16 @@ public class ClassicMode : Mode
 			else
 			{
 				// Initiate another move for the knight.
-				currentSelectedPiece = knight;
-				GameManager.Instance.SelectObject(knight.transform);
 				ResetPossibleMoves();
+				SelectPiece(knight);
 			}
-		}
-		else
-		{
-			GameManager.Instance.Deselect();
-			currentSelectedPiece = null;
 		}
 	}
 
-	void ResetPossibleMoves()
+	public override void OnMoveEnded()
 	{
-		for (int i = 0; i < tileObjects.GetLength(0); i++)
-		{
-			for (int j = 0; j < tileObjects.GetLength(0); j++)
-			{
-				tileObjects[i, j].GetComponent<Tile>().HideMove();
-
-				if (pieces[i, j] != null)
-				{
-					pieces[i, j].potentialPush = false;
-				}
-			}
-		}
+		GameManager.Instance.Deselect();
+		currentSelectedPiece = null;
 	}
 
 	protected override void PieceOffGrid(Piece piece, IntVector2 pushCoordinates)

@@ -48,6 +48,31 @@ public abstract class Piece : MonoBehaviour
 		sprite.sortingOrder = order;
 	}
 
+	public void SetPushPotential(bool hasPotential)
+	{
+		if (hasPotential)
+		{
+			PickPieceUp();
+		}
+		else
+		{
+			SetPieceDown();
+		}
+
+		potentialPush = hasPotential;
+	}
+
+	// For when it's underneath a tile that's highlighted.
+	void PickPieceUp()
+	{
+		sprite.transform.localPosition += Vector3.up * 0.1f;
+	}
+
+	void SetPieceDown()
+	{
+		sprite.transform.localPosition = Vector3.zero;
+	}
+
 	void OnEnable()
 	{
 		GameManager.Instance.GrowMe(this.gameObject);
@@ -89,30 +114,32 @@ public abstract class Piece : MonoBehaviour
 		// Determine how many times we must repeat the movement to get to the desired point.
 		IntVector2 diff = coordinates - GetCoordinates();
 
+		Coroutine moveRoutine = null;
+
 		if (diff.x != 0 && diff.y == 0)
 		{
 			// Move horizontally.
-			StartCoroutine(MoveX(diff.x));
+			moveRoutine = StartCoroutine(MoveX(diff.x));
 		}
 		else if (diff.y != 0 && diff.x == 0)
 		{
 			// Move vertically.
-			StartCoroutine(MoveY(diff.y));
+			moveRoutine = StartCoroutine(MoveY(diff.y));
 		}
 		else if (diff.x != 0 && diff.y != 0 && Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
 		{
 			// Move horizontally first, then vertically.
-			StartCoroutine(MoveXThenY(diff.x, diff.y));
+			moveRoutine = StartCoroutine(MoveXThenY(diff.x, diff.y));
 		}
 		else if (diff.x != 0 && diff.y != 0 && Mathf.Abs(diff.x) < Mathf.Abs(diff.y))
 		{
 			// Move vertically first, then horizontally.
-			StartCoroutine(MoveYThenX(diff.x, diff.y));
+			moveRoutine = StartCoroutine(MoveYThenX(diff.x, diff.y));
 		}
 		else if (diff.x != 0 && diff.y != 0 && Mathf.Abs(diff.x) == Mathf.Abs(diff.y))
 		{
 			// Move diagonally.
-			StartCoroutine(MoveDiagonally(diff.x, diff.y));
+			moveRoutine = StartCoroutine(MoveDiagonally(diff.x, diff.y));
 		}
 	}
 
@@ -136,14 +163,110 @@ public abstract class Piece : MonoBehaviour
 
 	protected IEnumerator MoveXThenY(int xDistance, int yDistance)
 	{
-		yield return StartCoroutine(MoveX(xDistance));
-		StartCoroutine(MoveY(yDistance));
+		///////////////////////////////
+		// X MOVEMENT
+		///////////////////////////////
+
+		int sign = Mathf.FloorToInt(Mathf.Sign(xDistance));
+
+		for (int i = 0; i < Mathf.Abs(xDistance); i++)
+		{
+			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(sign, 0);
+
+			// Send Information to the pieces that are affected by the move.
+			parentMode.OnPieceMove(this, nextCoordinates);
+
+			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+
+			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME).SetEase(Ease.Linear);
+			yield return tween.WaitForCompletion();
+
+			SetCoordinates(nextCoordinates);
+
+			yield return null;
+		}
+
+		///////////////////////////////
+		// Y MOVEMENT
+		///////////////////////////////
+
+		sign = Mathf.FloorToInt(Mathf.Sign(yDistance));
+
+		for (int i = 0; i < Mathf.Abs(yDistance); i++)
+		{
+			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, sign);
+
+			// Send Information to the pieces that are affected by the move.
+			parentMode.OnPieceMove(this, nextCoordinates);
+
+			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+
+			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME).SetEase(Ease.Linear);
+			yield return tween.WaitForCompletion();
+
+			SetCoordinates(nextCoordinates);
+
+			yield return null;
+		}
+
+		// End Move Callback
+		parentMode.OnMoveEnded();
 	}
 
 	protected IEnumerator MoveYThenX(int xDistance, int yDistance)
 	{
-		yield return StartCoroutine(MoveY(yDistance));
-		StartCoroutine(MoveX(xDistance));
+		///////////////////////////////
+		// Y MOVEMENT
+		///////////////////////////////
+
+		int sign = Mathf.FloorToInt(Mathf.Sign(yDistance));
+
+		for (int i = 0; i < Mathf.Abs(yDistance); i++)
+		{
+			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, sign);
+
+			// Send Information to the pieces that are affected by the move.
+			parentMode.OnPieceMove(this, nextCoordinates);
+
+			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+
+			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME).SetEase(Ease.Linear);
+			yield return tween.WaitForCompletion();
+
+			SetCoordinates(nextCoordinates);
+
+			yield return null;
+		}
+
+		///////////////////////////////
+		// X MOVEMENT
+		///////////////////////////////
+
+		sign = Mathf.FloorToInt(Mathf.Sign(xDistance));
+
+		for (int i = 0; i < Mathf.Abs(xDistance); i++)
+		{
+			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(sign, 0);
+
+			// Send Information to the pieces that are affected by the move.
+			parentMode.OnPieceMove(this, nextCoordinates);
+
+			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+
+			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME).SetEase(Ease.Linear);
+			yield return tween.WaitForCompletion();
+
+			SetCoordinates(nextCoordinates);
+
+			yield return null;
+		}
+
+		// End Move Callback
+		parentMode.OnMoveEnded();
 	}
 
 	protected IEnumerator MoveX(int distance)
@@ -160,13 +283,16 @@ public abstract class Piece : MonoBehaviour
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME);
+			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME).SetEase(Ease.Linear);
 			yield return tween.WaitForCompletion();
-			
+
 			SetCoordinates(nextCoordinates);
 
 			yield return null;
 		}
+
+		// End Move Callback
+		parentMode.OnMoveEnded();
 	}
 
 	protected IEnumerator MoveY(int distance)
@@ -183,13 +309,16 @@ public abstract class Piece : MonoBehaviour
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME);
+			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME).SetEase(Ease.Linear);
 			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);
 
 			yield return null;
 		}
+
+		// End Move Callback
+		parentMode.OnMoveEnded();
 	}
 
 	protected IEnumerator MoveDiagonally(int xDistance, int yDistance)
@@ -207,13 +336,16 @@ public abstract class Piece : MonoBehaviour
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME);
+			Tween tween = transform.DOMove(newPos, MOVE_LERP_TIME).SetEase(Ease.Linear);
 			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);
 
 			yield return null;
 		}
+
+		// End Move Callback
+		parentMode.OnMoveEnded();
 	}
 }
 

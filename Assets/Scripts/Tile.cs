@@ -19,29 +19,31 @@ public class Tile : MonoBehaviour
 	// PRIVATES
 	//////////////////////////////////////////////////////////
 
-	[SerializeField] GameObject possibleMoveObj;
+	[SerializeField] private Sprite downSprite;
+	[SerializeField] private Sprite upSprite;
 
-	[SerializeField] Color color = Color.white;
-	[SerializeField] Color alternateColor = Color.grey;
+	[SerializeField] private Color color = Color.white;
+	[SerializeField] private Color alternateColor = Color.grey;
 
-	SpriteRenderer sprite;
+	private SpriteRenderer spriteRenderer;
 
-	Mode parentMode;
-	IntVector2 currentCoordinates;
+	private Mode parentMode;
+	private IntVector2 currentCoordinates;
 
 	void Awake()
 	{
-		sprite = GetComponentInChildren<SpriteRenderer>();
+		spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+		SetColorDefault();
 	}
 
 	public void SetColorDefault()
 	{
-		sprite.color = color;
+		spriteRenderer.color = color;
 	}
 
 	public void SetColorAlternate()
 	{
-		sprite.color = alternateColor;
+		spriteRenderer.color = alternateColor;
 	}
 
 	void OnEnable()
@@ -62,7 +64,7 @@ public class Tile : MonoBehaviour
 
 	public bool IsShowingMove()
 	{
-		return possibleMoveObj.activeSelf;
+		return spriteRenderer.sprite == upSprite;
 	}
 
 	// Public because this gets called by the mode.
@@ -70,7 +72,8 @@ public class Tile : MonoBehaviour
 	{
 		if (!IsShowingMove())
 		{
-			possibleMoveObj.SetActive(true);
+			spriteRenderer.sprite = upSprite;
+			SetColorAlternate();
 		}
 	}
 
@@ -78,7 +81,8 @@ public class Tile : MonoBehaviour
 	{
 		if (IsShowingMove())
 		{
-			possibleMoveObj.SetActive(false);
+			spriteRenderer.sprite = downSprite;
+			SetColorDefault();
 		}
 	}
 }
