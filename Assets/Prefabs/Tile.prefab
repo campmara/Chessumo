@@ -96,8 +96,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   downSprite: {fileID: 21300000, guid: 61641914a1ad64a81a3b4eae510be1e0, type: 3}
   upSprite: {fileID: 21300000, guid: 3751fdbf64993451aa33b1f6bfc59a47, type: 3}
-  color: {r: 0.60294116, g: 0.60294116, b: 0.60294116, a: 1}
-  alternateColor: {r: 0.33823532, g: 0.33823532, b: 0.33823532, a: 1}
+  color: {r: 0.75, g: 0.75, b: 0.75, a: 1}
+  alternateColor: {r: 0.44117647, g: 0.44117647, b: 0.44117647, a: 1}
 --- !u!212 &212832862552760176
 SpriteRenderer:
   m_ObjectHideFlags: 1
