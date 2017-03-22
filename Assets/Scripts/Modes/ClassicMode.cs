@@ -21,6 +21,9 @@ public class ClassicMode : Mode
 
 	GameObject scoreObj;
 	Score score;
+	
+	GameObject highScoreObj;
+	HighScore highScore;
 
 	GameObject pieceViewerObj;
 	NextPieceViewer pieceViewer;
@@ -138,6 +141,13 @@ public class ClassicMode : Mode
 		scoreObj.transform.position = new Vector3(0f, 5f, 0f);
 		score = scoreObj.GetComponent<Score>();
 		score.Reset();
+
+		highScoreObj = Instantiate(GameManager.Instance.highScorePrefab) as GameObject;
+		highScoreObj.name = "High Score";
+		highScoreObj.transform.parent = transform;
+		highScoreObj.transform.position = new Vector3(0f, 5f, 0f);
+		highScore = highScoreObj.GetComponent<HighScore>();
+		highScore.Reset();
 	}
 
 	void SetupPieceViewer()

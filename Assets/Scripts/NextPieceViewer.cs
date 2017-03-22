@@ -22,7 +22,7 @@ public class NextPieceViewer : MonoBehaviour
 
 	void OnEnable()
 	{
-		GameManager.Instance.GrowMe(this.gameObject);
+		GameManager.Instance.GrowMeFromSlit(this.gameObject, 2f);
 	}
 
 	public void ShowKing()

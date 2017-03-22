@@ -8,3 +8,27 @@ Arrow-based Move System:
     - also will be less finicky with the weird move styles of the various pieces.
     - better for visual clarity tooooooooooo.
 
+Code Refactoring:
+    - fix up mode hierarchy
+
+Game Balancing:
+    - Make it so if you get more than one off the board, the points you get are doubled.
+        - This will put more of an emphasis on lining up pieces.
+
+Add an end to the game:
+    - When you run out of moves, game should end.
+    - All the tiles and pieces fall down (maybe adding a final amount of points to your score).
+    - Score submitted to high score save if it's a high score.
+    - Shows a page ad.
+
+Make where the new pieces drop down deterministic:
+    - They will drop randomly on the opposite side of where you pushed off a piece.
+    - Actually wait. Maybe just keep it random.
+
+Admob Integration:
+    - interstitial ads after every game.
+    - watch video ads to get closer to unlocking an ad-less version of the game.
+        - the quantity watched of video ads must be worth more than it costs to pay for ad removal.
+
+GameCenter Integration:
+    - high scores and leaderboards, baby!

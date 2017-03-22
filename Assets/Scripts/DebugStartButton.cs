@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class DebugStartButton : MonoBehaviour 
 {
@@ -16,7 +15,7 @@ public class DebugStartButton : MonoBehaviour
 
 	void OnEnable()
 	{
-		GameManager.Instance.GrowMe(this.gameObject);
+		GameManager.Instance.GrowMe(this.gameObject, 1f);
 	}
 
 	void OnMouseDown()
@@ -28,5 +27,6 @@ public class DebugStartButton : MonoBehaviour
 	void OnMouseUp()
 	{
 		spriteRenderer.sprite = upSprite;
+		
 	}
 }

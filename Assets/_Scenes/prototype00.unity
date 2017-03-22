@@ -136,6 +136,8 @@ MonoBehaviour:
   tilePrefab: {fileID: 1345034203562220, guid: 1bc957b08614540c08670a641b668e3d, type: 2}
   scorePrefab: {fileID: 1000011452536478, guid: 396667be61c144e91b7b9e1693fac3c1,
     type: 2}
+  highScorePrefab: {fileID: 1000011452536478, guid: ab260fe38f00446d9ab6ac4da73de75f,
+    type: 2}
   nextPieceViewerPrefab: {fileID: 1000013728354998, guid: 405155a372c254fb888f166ea3a1d160,
     type: 2}
   kingPrefab: {fileID: 1000012858214770, guid: 8bf9b3f6f39cb414bab1b115e88e82d2, type: 2}

@@ -3,7 +3,7 @@ using System.Collections;
 using TMPro;
 using DG.Tweening;
 
-public class Score : MonoBehaviour 
+public class HighScore : MonoBehaviour 
 {
 	[SerializeField] private TextMeshPro textMesh;
 
@@ -25,10 +25,10 @@ public class Score : MonoBehaviour
 		GameManager.Instance.GrowMeFromSlit(this.gameObject, 1f);
 	}
 
-	public void ScorePoint()
+	void GetHighScore()
 	{
-		score++;
-		UpdateText();
+		// Something something.
+		// Pull the high score from my save manager.
 	}
 
 	public void Reset()
@@ -42,3 +42,4 @@ public class Score : MonoBehaviour
 		textMesh.text = score.ToString();
 	}
 }
+
