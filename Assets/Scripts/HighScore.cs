@@ -7,39 +7,39 @@ public class HighScore : MonoBehaviour
 {
 	[SerializeField] private TextMeshPro textMesh;
 
-	private int score;
-
 	void Awake()
 	{
 		if (!textMesh)
 		{
 			Debug.LogError("Please assign the textMesh of the Score.");
 		}
-
-		score = 0;
-		textMesh.text = "0";
 	}
 
 	void OnEnable()
 	{
-		GameManager.Instance.GrowMeFromSlit(this.gameObject, 1f);
+		GameManager.Instance.GrowMeFromSlit(this.gameObject, 1f, Ease.OutBounce);
 	}
 
-	void GetHighScore()
+	public void PullHighScore()
 	{
-		// Something something.
-		// Pull the high score from my save manager.
+		textMesh.text = SaveDataManager.Instance.GetHighScore().ToString();
 	}
 
 	public void Reset()
 	{
-		score = 0;
-		UpdateText();
+		textMesh.text = "0";
 	}
 
-	void UpdateText()
+	public Tween Lower()
 	{
-		textMesh.text = score.ToString();
+		return transform.DOMoveY(Constants.SCORE_LOWERED_Y, Constants.SCORE_TWEEN_TIME)
+				.SetEase(Ease.Linear);
+	}
+
+	public Tween Raise()
+	{
+		return transform.DOMoveY(Constants.SCORE_RAISED_Y, Constants.SCORE_TWEEN_TIME)
+				.SetEase(Ease.Linear);
 	}
 }
 

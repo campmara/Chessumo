@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public class NextPieceViewer : MonoBehaviour 
 {
@@ -22,7 +23,7 @@ public class NextPieceViewer : MonoBehaviour
 
 	void OnEnable()
 	{
-		GameManager.Instance.GrowMeFromSlit(this.gameObject, 2f);
+		GameManager.Instance.GrowMeFromSlit(this.gameObject, 2f, Ease.OutBounce);
 	}
 
 	public void ShowKing()

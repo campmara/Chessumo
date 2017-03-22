@@ -115,7 +115,7 @@ public abstract class Mode : MonoBehaviour
 	{
 		for (int i = 0; i < tileObjects.GetLength(0); i++)
 		{
-			for (int j = 0; j < tileObjects.GetLength(0); j++)
+			for (int j = 0; j < tileObjects.GetLength(1); j++)
 			{
 				tileObjects[i, j].GetComponent<Tile>().HideMove();
 

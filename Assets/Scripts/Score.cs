@@ -8,6 +8,7 @@ public class Score : MonoBehaviour
 	[SerializeField] private TextMeshPro textMesh;
 
 	private int score;
+	public int GetScore() { return score; }
 
 	void Awake()
 	{
@@ -22,7 +23,12 @@ public class Score : MonoBehaviour
 
 	void OnEnable()
 	{
-		GameManager.Instance.GrowMeFromSlit(this.gameObject, 1f);
+		GameManager.Instance.GrowMeFromSlit(this.gameObject, 1f, Ease.OutBounce);
+	}
+
+	public void SubmitScore()
+	{
+		SaveDataManager.Instance.TrySubmitHighScore(score);
 	}
 
 	public void ScorePoint()
@@ -40,5 +46,17 @@ public class Score : MonoBehaviour
 	void UpdateText()
 	{
 		textMesh.text = score.ToString();
+	}
+
+	public Tween Lower()
+	{
+		return transform.DOMoveY(Constants.SCORE_LOWERED_Y, Constants.SCORE_TWEEN_TIME)
+				.SetEase(Ease.Linear);
+	}
+
+	public Tween Raise()
+	{
+		return transform.DOMoveY(Constants.SCORE_RAISED_Y, Constants.SCORE_TWEEN_TIME)
+				.SetEase(Ease.Linear);
 	}
 }

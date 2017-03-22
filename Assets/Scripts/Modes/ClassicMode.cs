@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public class ClassicMode : Mode 
 {
@@ -28,6 +29,9 @@ public class ClassicMode : Mode
 	GameObject pieceViewerObj;
 	NextPieceViewer pieceViewer;
 
+	GameObject endMessageObj;
+	GameEndMessage endMessage;
+
 	//////////////////////////////////////////////////////////
 	// ACTIVATION
 	//////////////////////////////////////////////////////////
@@ -41,10 +45,20 @@ public class ClassicMode : Mode
 
 	public override void Load()
 	{
-		SetupPlayfield();
+		Coroutine boardRoutine = StartCoroutine(SetupBoard());
+
 		SetupScore();
-		PlacePieces();
 		SetupPieceViewer();
+		SetupGameEndMessage();
+	}
+
+	IEnumerator SetupBoard()
+	{
+		SetupPlayfield();
+
+		yield return new WaitForSeconds(1.5f);
+
+		PlacePieces();
 	}
 
 	void SetupPlayfield()
@@ -138,27 +152,122 @@ public class ClassicMode : Mode
 		scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
 		scoreObj.name = "Score";
 		scoreObj.transform.parent = transform;
-		scoreObj.transform.position = new Vector3(0f, 5f, 0f);
+		scoreObj.transform.position = new Vector3(0f, Constants.SCORE_RAISED_Y, 0f);
 		score = scoreObj.GetComponent<Score>();
 		score.Reset();
 
 		highScoreObj = Instantiate(GameManager.Instance.highScorePrefab) as GameObject;
 		highScoreObj.name = "High Score";
 		highScoreObj.transform.parent = transform;
-		highScoreObj.transform.position = new Vector3(0f, 5f, 0f);
+		highScoreObj.transform.position = new Vector3(0f, Constants.SCORE_RAISED_Y, 0f);
 		highScore = highScoreObj.GetComponent<HighScore>();
-		highScore.Reset();
+		highScore.PullHighScore();
 	}
 
 	void SetupPieceViewer()
 	{
-		GameObject pieceViewerObj = Instantiate(GameManager.Instance.nextPieceViewerPrefab) as GameObject;
+		pieceViewerObj = Instantiate(GameManager.Instance.nextPieceViewerPrefab) as GameObject;
 		pieceViewerObj.name = "Piece Viewer";
 		pieceViewerObj.transform.parent = transform;
-		pieceViewerObj.transform.position = new Vector3(0f, 4f, 0f);
+		pieceViewerObj.transform.position = new Vector3(0f, Constants.SCORE_RAISED_Y - 1f, 0f);
 		pieceViewer = pieceViewerObj.GetComponent<NextPieceViewer>();
 
 		DecideNextRandomPiece();
+	}
+
+	void SetupGameEndMessage()
+	{
+		endMessageObj = Instantiate(GameManager.Instance.gameEndMessagePrefab) as GameObject;
+		endMessageObj.name = "Game End Message";
+		endMessageObj.transform.parent = transform;
+		endMessage = endMessageObj.GetComponent<GameEndMessage>();
+	}
+
+	bool IsGameOver()
+	{
+		bool gameOver = true;
+
+		for (int i = 0; i < pieces.GetLength(0); i++)
+		{
+			for (int j = 0; j < pieces.GetLength(1); j++)
+			{
+				if (pieces[i, j] != null && !pieces[i, j].GetMoveDisabled()) 
+				{
+					gameOver = false;
+				}
+			}
+		}
+
+		return gameOver;
+	}
+
+	void CheckForGameEnd()
+	{
+		if (IsGameOver())
+		{
+			Coroutine endRoutine = StartCoroutine(GameEndRoutine());
+		}
+	}
+
+	IEnumerator GameEndRoutine()
+	{
+		GameManager.Instance.ShrinkMeToSlit(pieceViewerObj, 0f, Ease.InQuint);
+
+		yield return new WaitForSeconds(0.5f);
+
+		Coroutine pieceDropRoutine = StartCoroutine(DropPieces());
+		Coroutine tileDropRoutine = StartCoroutine(DropTiles());
+
+		yield return new WaitForSeconds(4f);
+
+		// Lower the score and high score.
+		//score.Lower();
+		//highScore.Lower();
+		yield return endMessage.Appear().WaitForCompletion();
+
+		yield return new WaitForSeconds(0.5f);
+
+		score.SubmitScore();
+		highScore.PullHighScore();
+
+		yield return new WaitForSeconds(1.5f);
+		
+		GameManager.Instance.OnGameEnd();
+	}
+
+	IEnumerator DropPieces()
+	{
+		for (int i = 0; i < pieces.GetLength(0); i++)
+		{
+			for (int j = 0; j < pieces.GetLength(1); j++)
+			{
+				if (pieces[i, j] != null) 
+				{
+					float duration = Random.Range(0.4f, 1.5f);
+
+					tileObjects[i, j].transform.DOMoveY(-10f, duration).SetEase(Ease.InQuint);
+					pieces[i, j].transform.DOMoveY(-10f, duration).SetEase(Ease.InQuint);
+
+					yield return new WaitForSeconds(0.01f);
+				}
+			}
+		}
+	}
+
+	IEnumerator DropTiles()
+	{
+		for (int i = 0; i < tileObjects.GetLength(0); i++)
+		{
+			for (int j = 0; j < tileObjects.GetLength(1); j++)
+			{
+				if (pieces[i, j] == null)
+				{
+					// If there are no pieces on this then we can drop.
+					tileObjects[i, j].transform.DOMoveY(-10f, Random.Range(0.4f, 1.5f)).SetEase(Ease.InQuint);
+					yield return new WaitForSeconds(0.01f);
+				}
+			}
+		}
 	}
 
 	//////////////////////////////////////////////////////////
@@ -330,6 +439,9 @@ public class ClassicMode : Mode
 	{
 		GameManager.Instance.Deselect();
 		currentSelectedPiece = null;
+
+		// Check for Game Over after every move.
+		CheckForGameEnd();
 	}
 
 	protected override void PieceOffGrid(Piece piece, IntVector2 pushCoordinates)

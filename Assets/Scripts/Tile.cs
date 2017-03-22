@@ -48,7 +48,7 @@ public class Tile : MonoBehaviour
 
 	void OnEnable()
 	{
-		GameManager.Instance.GrowMe(this.gameObject);
+		GameManager.Instance.GrowMe(this.gameObject, Random.Range(0f, 0.5f));
 	}
 
 	public IntVector2 GetCoordinates()

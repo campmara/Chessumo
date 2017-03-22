@@ -6,12 +6,6 @@ using DG.Tweening;
 public class GameManager : MonoBehaviour 
 {
 	/////////////////////////////////////////////////////////////////////
-	// CONSTANTS
-	/////////////////////////////////////////////////////////////////////
-
-	public const ulong MAX_SCORE = 9999999999999999999;
-
-	/////////////////////////////////////////////////////////////////////
 	// PUBLICS
 	/////////////////////////////////////////////////////////////////////
 
@@ -30,6 +24,7 @@ public class GameManager : MonoBehaviour
 	public GameObject scorePrefab;
 	public GameObject highScorePrefab;
 	public GameObject nextPieceViewerPrefab;
+	public GameObject gameEndMessagePrefab;
 	[Header("Piece Prefabs")]
 	public GameObject kingPrefab;
 	public GameObject queenPrefab;
@@ -47,6 +42,7 @@ public class GameManager : MonoBehaviour
 	private State currentState;
 
 	GameObject selectionObj;
+	DebugStartButton startButton;
 
 	void Awake()
 	{
@@ -61,15 +57,24 @@ public class GameManager : MonoBehaviour
 
 		currentState = State.MENU;
 
-		CreateStartButton();
+		// Create the start button 1 second in. Just to make sure we don't jitter at the start.
+		Invoke("CreateStartButton", 1f);
 	}
 
 	void CreateStartButton()
 	{
-		GameObject startButton = Instantiate(startButtonPrefab) as GameObject;
-		startButton.name = "Start Button";
-		startButton.transform.parent = transform;
-		startButton.transform.position = new Vector3(0f, -4f, 0f);
+		GameObject startButtonObj = Instantiate(startButtonPrefab) as GameObject;
+		startButtonObj.name = "Start Button";
+		startButtonObj.transform.parent = transform;
+		startButtonObj.transform.position = new Vector3(0f, Constants.QUIT_LOWERED_Y, 0f);
+
+		startButton = startButtonObj.GetComponent(typeof(DebugStartButton)) as DebugStartButton;
+		startButton.Raise();
+	}
+
+	public void OnGameEnd()
+	{
+		startButton.Raise();
 	}
 
 	void Update()
@@ -87,8 +92,8 @@ public class GameManager : MonoBehaviour
 
 	public Vector2 CoordinateToPosition(IntVector2 coordinate)
 	{
-		float xPos = coordinate.x - Mathf.Floor(ModeManager.Instance.CurrentMode.GridSize.x / 2f);
-		float yPos = coordinate.y - Mathf.Floor(ModeManager.Instance.CurrentMode.GridSize.y / 2f);
+		float xPos = coordinate.x - Mathf.Floor(ModeManager.Instance.CurrentMode.GridSize.x / 2f) + Constants.GRID_OFFSET_X;
+		float yPos = coordinate.y - Mathf.Floor(ModeManager.Instance.CurrentMode.GridSize.y / 2f) + Constants.GRID_OFFSET_Y;
 		return new Vector2(xPos, yPos);
 	}
 
@@ -153,8 +158,6 @@ public class GameManager : MonoBehaviour
 
 	IEnumerator GrowFromSlit(GameObject obj, float delay, Ease ease)
 	{
-		// Neat little effect for now to compensate for the fact that shit would just appear out of nowhere otherwise. this will die someday.
-
 		if (!obj)
 		{
 			yield break;
@@ -173,6 +176,26 @@ public class GameManager : MonoBehaviour
 		if (obj)
 		{
 			obj.transform.DOScaleY(desiredScaleY, 1f)
+				.SetEase(ease);
+		}
+
+		yield return null;
+	}
+
+	public void ShrinkMeToSlit(GameObject obj, float delay = 0f, Ease ease = Ease.OutBack)
+	{
+		StartCoroutine(ShrinkToSlit(obj, delay, ease));
+	}
+
+	IEnumerator ShrinkToSlit(GameObject obj, float delay, Ease ease)
+	{
+		// Then wait the delay.
+		yield return new WaitForSeconds(delay);
+
+		// Then rescale via tween.
+		if (obj)
+		{
+			obj.transform.DOScaleY(0f, 1f)
 				.SetEase(ease);
 		}
 

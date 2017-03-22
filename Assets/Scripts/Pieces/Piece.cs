@@ -75,6 +75,7 @@ public abstract class Piece : MonoBehaviour
 
 	void OnEnable()
 	{
+		// Spawn in 1 second after the tiles do.
 		GameManager.Instance.GrowMe(this.gameObject);
 	}
 
