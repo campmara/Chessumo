@@ -20,17 +20,19 @@ public class ClassicMode : Mode
 	// PRIVATES
 	//////////////////////////////////////////////////////////
 
-	GameObject scoreObj;
-	Score score;
+	private GameObject scoreObj;
+	private Score score;
 	
-	GameObject highScoreObj;
-	HighScore highScore;
+	private GameObject highScoreObj;
+	private HighScore highScore;
 
-	GameObject pieceViewerObj;
-	NextPieceViewer pieceViewer;
+	private GameObject pieceViewerObj;
+	private NextPieceViewer pieceViewer;
 
-	GameObject endMessageObj;
-	GameEndMessage endMessage;
+	private GameObject endMessageObj;
+	private GameEndMessage endMessage;
+
+	private bool moveInProgress = false;
 
 	//////////////////////////////////////////////////////////
 	// ACTIVATION
@@ -211,7 +213,7 @@ public class ClassicMode : Mode
 
 	IEnumerator GameEndRoutine()
 	{
-		GameManager.Instance.ShrinkMeToSlit(pieceViewerObj, 0f, Ease.InQuint);
+		GameManager.Instance.ShrinkMeToSlit(pieceViewerObj, 0f, Ease.OutQuint);
 
 		yield return new WaitForSeconds(0.5f);
 
@@ -276,6 +278,11 @@ public class ClassicMode : Mode
 
 	void Update()
 	{
+		if (moveInProgress)
+		{
+			return;
+		}
+
 		if (Input.GetMouseButtonDown(0))
 		{
 			CheckRayMouse();
@@ -287,15 +294,6 @@ public class ClassicMode : Mode
 			CheckRayTap(touch);
 		}
 #endif
-
-		if (currentSelectedPiece)
-		{
-			
-		}
-		else
-		{
-			ResetPossibleMoves();
-		}
 	}
 
 	void CheckRayMouse()
@@ -313,6 +311,7 @@ public class ClassicMode : Mode
 			{
 				GameManager.Instance.Deselect();
 				currentSelectedPiece = null;
+				ResetPossibleMoves();
 			}
 		}
 	}
@@ -332,6 +331,7 @@ public class ClassicMode : Mode
 			{
 				GameManager.Instance.Deselect();
 				currentSelectedPiece = null;
+				ResetPossibleMoves();
 			}
 		}
 	}
@@ -344,21 +344,28 @@ public class ClassicMode : Mode
 
 			if (piece == currentSelectedPiece)
 			{
+				ResetKnightIfNeeded();
+
 				GameManager.Instance.Deselect();
 				currentSelectedPiece = null;
+				ResetPossibleMoves();
 			}
 			else if (piece != currentSelectedPiece)
 			{
 				if (!piece.potentialPush && !piece.GetMoveDisabled())
-				{
-					ResetPossibleMoves();
+				{	
+					ResetKnightIfNeeded();
 
+					ResetPossibleMoves();
 					SelectPiece(piece);
 				}
 				else if (!piece.potentialPush && piece.GetMoveDisabled())
 				{
+					ResetKnightIfNeeded();
+
 					GameManager.Instance.Deselect();
 					currentSelectedPiece = null;
+					ResetPossibleMoves();
 				}
 				else
 				{
@@ -389,7 +396,16 @@ public class ClassicMode : Mode
 
 				GameManager.Instance.Deselect();
 				currentSelectedPiece = null;
+				ResetPossibleMoves();
 			}
+		}
+	}
+
+	void ResetKnightIfNeeded()
+	{
+		if (currentSelectedPiece && currentSelectedPiece.GetType() == typeof(Knight))
+		{
+			currentSelectedPiece.GetComponent<Knight>().ResetKnight();
 		}
 	}
 
@@ -416,6 +432,8 @@ public class ClassicMode : Mode
 
 	public override void OnMoveInitiated()
 	{
+		moveInProgress = true;
+
 		if (currentSelectedPiece.GetType() == typeof(Knight))
 		{
 			Knight knight = currentSelectedPiece.GetComponent<Knight>();
@@ -425,12 +443,14 @@ public class ClassicMode : Mode
 				knight.ResetKnight();
 				GameManager.Instance.Deselect();
 				currentSelectedPiece = null;
+				ResetPossibleMoves();
 			}
 			else
 			{
 				// Initiate another move for the knight.
 				ResetPossibleMoves();
 				SelectPiece(knight);
+				moveInProgress = false;
 			}
 		}
 	}
@@ -439,9 +459,12 @@ public class ClassicMode : Mode
 	{
 		GameManager.Instance.Deselect();
 		currentSelectedPiece = null;
+		ResetPossibleMoves();
 
 		// Check for Game Over after every move.
 		CheckForGameEnd();
+
+		moveInProgress = false;
 	}
 
 	protected override void PieceOffGrid(Piece piece, IntVector2 pushCoordinates)
