@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
 	public GameObject scorePrefab;
 	public GameObject highScorePrefab;
 	public GameObject nextPieceViewerPrefab;
-	public GameObject gameEndMessagePrefab;
 	[Header("Piece Prefabs")]
 	public GameObject kingPrefab;
 	public GameObject queenPrefab;
@@ -66,7 +65,7 @@ public class GameManager : MonoBehaviour
 		GameObject startButtonObj = Instantiate(startButtonPrefab) as GameObject;
 		startButtonObj.name = "Start Button";
 		startButtonObj.transform.parent = transform;
-		startButtonObj.transform.position = new Vector3(0f, Constants.QUIT_LOWERED_Y, 0f);
+		startButtonObj.transform.position = new Vector3(0f, Constants.instance.QUIT_LOWERED_Y, 0f);
 
 		startButton = startButtonObj.GetComponent(typeof(DebugStartButton)) as DebugStartButton;
 		startButton.Raise();
@@ -92,8 +91,11 @@ public class GameManager : MonoBehaviour
 
 	public Vector2 CoordinateToPosition(IntVector2 coordinate)
 	{
-		float xPos = coordinate.x - Mathf.Floor(ModeManager.Instance.CurrentMode.GridSize.x / 2f) + Constants.GRID_OFFSET_X;
-		float yPos = coordinate.y - Mathf.Floor(ModeManager.Instance.CurrentMode.GridSize.y / 2f) + Constants.GRID_OFFSET_Y;
+		//float xPos = coordinate.x - Mathf.Floor(Constants.instance.GRID_SIZE.x / 2f) + Constants.instance.GRID_OFFSET_X;
+		//float yPos = coordinate.y - Mathf.Floor(Constants.instance.GRID_SIZE.y / 2f) + Constants.instance.GRID_OFFSET_Y;
+
+		float xPos = (coordinate.x - (Constants.instance.GRID_SIZE.x / 2f)) + 0.5f + Constants.instance.GRID_OFFSET_X;
+		float yPos = (coordinate.y - (Constants.instance.GRID_SIZE.y / 2f)) + 0.5f + Constants.instance.GRID_OFFSET_Y;
 		return new Vector2(xPos, yPos);
 	}
 

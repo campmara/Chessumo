@@ -27,9 +27,6 @@ public abstract class Mode : MonoBehaviour
 	// PRIVATES
 	/////////////////////////////////////////////////////////////////////
 
-	public IntVector2 GridSize { get { return gridSize; } }
-	[SerializeField] protected IntVector2 gridSize = new IntVector2(5, 5);
-
 	protected GameObject[,] tileObjects;
 	protected Piece[,] pieces;
 	protected PieceType nextRandomPieceType;
@@ -38,8 +35,8 @@ public abstract class Mode : MonoBehaviour
 
 	protected virtual void Awake()
 	{
-		tileObjects = new GameObject[gridSize.x, gridSize.y];
-		pieces = new Piece[gridSize.x, gridSize.y];
+		tileObjects = new GameObject[Constants.instance.GRID_SIZE.x, Constants.instance.GRID_SIZE.y];
+		pieces = new Piece[Constants.instance.GRID_SIZE.x, Constants.instance.GRID_SIZE.y];
 
 		currentSelectedPiece = null;
 	}
@@ -84,17 +81,21 @@ public abstract class Mode : MonoBehaviour
 
 	protected IEnumerator MovePieceOffGrid(Piece piece, Vector2 position)
 	{
-		Vector3 newPos = new Vector3(position.x, position.y, piece.transform.position.z);
+		GameObject pieceObj = piece.gameObject;
 
-		Tween tween = piece.transform.DOMove(newPos, Piece.MOVE_LERP_TIME);
+		Vector3 newPos = new Vector3(position.x, position.y, pieceObj.transform.position.z);
+
+		Tween tween = pieceObj.transform.DOMove(newPos, Constants.instance.PIECE_MOVE_TIME);
 		yield return tween.WaitForCompletion();
 
 		piece.SetSortingOrder(-11);
-		tween = piece.transform.DOMoveY(-10f, 1f)
+		Destroy(piece); // Destroy the piece class so it won't get touched.
+
+		tween = pieceObj.transform.DOMoveY(-10f, 1f)
 			.SetEase(Ease.InCubic);
 		yield return tween.WaitForCompletion();
 
-		Destroy(piece.gameObject);
+		Destroy(pieceObj);
 	}
 
 	public void UpdatePieceCoordinates(Piece piece, IntVector2 oldCoordinates, IntVector2 newCoordinates)
@@ -105,7 +106,7 @@ public abstract class Mode : MonoBehaviour
 
 	public bool IsWithinBounds(IntVector2 coordinates)
 	{
-		return (coordinates.x >= 0 && coordinates.x < gridSize.x) && (coordinates.y >= 0 && coordinates.y < gridSize.y);
+		return (coordinates.x >= 0 && coordinates.x < Constants.instance.GRID_SIZE.x) && (coordinates.y >= 0 && coordinates.y < Constants.instance.GRID_SIZE.y);
 	}
 
 	public virtual void Load() {}
@@ -139,7 +140,7 @@ public abstract class Mode : MonoBehaviour
 
 	IntVector2 RandomCoordinates()
 	{
-		return new IntVector2(Random.Range(0, gridSize.x), Random.Range(0, gridSize.y));
+		return new IntVector2(Random.Range(0, Constants.instance.GRID_SIZE.x), Random.Range(0, Constants.instance.GRID_SIZE.y));
 	}
 
 	protected void PlaceRandomPiece()

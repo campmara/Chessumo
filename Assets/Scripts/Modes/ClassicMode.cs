@@ -29,21 +29,11 @@ public class ClassicMode : Mode
 	private GameObject pieceViewerObj;
 	private NextPieceViewer pieceViewer;
 
-	private GameObject endMessageObj;
-	private GameEndMessage endMessage;
-
 	private bool moveInProgress = false;
 
 	//////////////////////////////////////////////////////////
 	// ACTIVATION
 	//////////////////////////////////////////////////////////
-
-	/*
-	override void Awake()
-	{
-		base.Awake();
-	}
-	*/
 
 	public override void Load()
 	{
@@ -51,7 +41,6 @@ public class ClassicMode : Mode
 
 		SetupScore();
 		SetupPieceViewer();
-		SetupGameEndMessage();
 	}
 
 	IEnumerator SetupBoard()
@@ -67,9 +56,9 @@ public class ClassicMode : Mode
 	{
 		//bool isAltColor = false;
 
-		for (int x = 0; x < gridSize.x; x++)
+		for (int x = 0; x < Constants.instance.GRID_SIZE.x; x++)
 		{
-			for (int y = 0; y < gridSize.y; y++)
+			for (int y = 0; y < Constants.instance.GRID_SIZE.y; y++)
 			{
 				GameObject tileObj = Instantiate(GameManager.Instance.tilePrefab) as GameObject;
 				Tile tile = tileObj.GetComponent<Tile>();
@@ -105,13 +94,11 @@ public class ClassicMode : Mode
 		CreateKnight(3, 1);
 		*/
 
-		PlaceRandomPiece();
-		PlaceRandomPiece();
-		PlaceRandomPiece();
-		PlaceRandomPiece();
-		PlaceRandomPiece();
-		PlaceRandomPiece();
-		PlaceRandomPiece();
+		// Spawn all the starting pieces.
+		for (int i = 0; i < Constants.instance.STARTING_PIECES; i++)
+		{
+			PlaceRandomPiece();
+		}
 	}
 
 	protected override void DecideNextRandomPiece()
@@ -154,14 +141,14 @@ public class ClassicMode : Mode
 		scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
 		scoreObj.name = "Score";
 		scoreObj.transform.parent = transform;
-		scoreObj.transform.position = new Vector3(0f, Constants.SCORE_RAISED_Y, 0f);
+		scoreObj.transform.position = new Vector3(0f, Constants.instance.SCORE_RAISED_Y, 0f);
 		score = scoreObj.GetComponent<Score>();
 		score.Reset();
 
 		highScoreObj = Instantiate(GameManager.Instance.highScorePrefab) as GameObject;
 		highScoreObj.name = "High Score";
 		highScoreObj.transform.parent = transform;
-		highScoreObj.transform.position = new Vector3(0f, Constants.SCORE_RAISED_Y, 0f);
+		highScoreObj.transform.position = new Vector3(0f, Constants.instance.SCORE_RAISED_Y, 0f);
 		highScore = highScoreObj.GetComponent<HighScore>();
 		highScore.PullHighScore();
 	}
@@ -171,18 +158,10 @@ public class ClassicMode : Mode
 		pieceViewerObj = Instantiate(GameManager.Instance.nextPieceViewerPrefab) as GameObject;
 		pieceViewerObj.name = "Piece Viewer";
 		pieceViewerObj.transform.parent = transform;
-		pieceViewerObj.transform.position = new Vector3(0f, Constants.SCORE_RAISED_Y - 1f, 0f);
+		pieceViewerObj.transform.position = new Vector3(0f, Constants.instance.SCORE_RAISED_Y - 1f, 0f);
 		pieceViewer = pieceViewerObj.GetComponent<NextPieceViewer>();
 
 		DecideNextRandomPiece();
-	}
-
-	void SetupGameEndMessage()
-	{
-		endMessageObj = Instantiate(GameManager.Instance.gameEndMessagePrefab) as GameObject;
-		endMessageObj.name = "Game End Message";
-		endMessageObj.transform.parent = transform;
-		endMessage = endMessageObj.GetComponent<GameEndMessage>();
 	}
 
 	bool IsGameOver()
@@ -220,19 +199,19 @@ public class ClassicMode : Mode
 		Coroutine pieceDropRoutine = StartCoroutine(DropPieces());
 		Coroutine tileDropRoutine = StartCoroutine(DropTiles());
 
-		yield return new WaitForSeconds(4f);
+		yield return new WaitForSeconds(2f);
 
 		// Lower the score and high score.
 		//score.Lower();
 		//highScore.Lower();
-		yield return endMessage.Appear().WaitForCompletion();
+		//yield return endMessage.Appear().WaitForCompletion();
 
-		yield return new WaitForSeconds(0.5f);
+		//yield return new WaitForSeconds(0.5f);
 
 		score.SubmitScore();
 		highScore.PullHighScore();
 
-		yield return new WaitForSeconds(1.5f);
+		//yield return new WaitForSeconds(1.5f);
 		
 		GameManager.Instance.OnGameEnd();
 	}
