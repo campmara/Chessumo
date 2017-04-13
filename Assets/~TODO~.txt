@@ -40,4 +40,8 @@ Grid Size Testing:
 
 Known Bugs:
     - Right now you can select a piece while another is still moving. Disallow this.
+        - Did it a little bit, but this surfaced a bug.
+        - Pieces that go a distance greater than 1 somehow just reset after one move.
+        - Fix this by doing the continuous tween feature that you're planning on implementing.
     - Tiles lower immediately when a piece is moving more than one tile.
+    - Tiles appear underneath the above tile when they are in UpSprite mode. Set Sorting Order on creation of the grid.
