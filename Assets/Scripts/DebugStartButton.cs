@@ -26,15 +26,15 @@ public class DebugStartButton : MonoBehaviour
 
 	public void Raise()
 	{
-		transform.DOMoveY(Constants.instance.QUIT_RAISED_Y, Constants.instance.QUIT_TWEEN_TIME)
+		transform.DOMoveY(Constants.I.StartButtonRaisedY, Constants.I.StartButtonTweenTime)
 			.SetEase(Ease.OutBack);
 
-		Invoke("RaiseButton", Constants.instance.QUIT_TWEEN_TIME + 0.25f);
+		Invoke("RaiseButton", Constants.I.StartButtonTweenTime + 0.25f);
 	}
 
 	public void Lower()
 	{
-		transform.DOMoveY(Constants.instance.QUIT_LOWERED_Y, Constants.instance.QUIT_TWEEN_TIME)
+		transform.DOMoveY(Constants.I.StartButtonLoweredY, Constants.I.StartButtonTweenTime)
 			.SetEase(Ease.InQuint);
 	}
 

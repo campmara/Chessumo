@@ -2,23 +2,26 @@
 
 public class Constants : ScriptableObjectSingleton<Constants>
 {
-	[Header("Grid")]
-	public IntVector2 GRID_SIZE = new IntVector2(5, 5);
-	public float GRID_OFFSET_X = 0f;
-	public float GRID_OFFSET_Y = -0.5f;
-
-	[Header("Start Button")]
-	public float QUIT_RAISED_Y = -4f;
-	public float QUIT_LOWERED_Y = -7f;
-	public float QUIT_TWEEN_TIME = 0.75f;
-
-	[Header("Score")]
-	public int SCORE_MAX = 2147483647;
-	public float SCORE_RAISED_Y = 6.5f;
-	public float SCORE_LOWERED_Y = 0f;
-	public float SCORE_TWEEN_TIME = 1f;
+	[Header("Gameplay")]
+	public IntVector2 GridSize = new IntVector2(5, 5);
+	public int StartingPieceCount = 7;
+	public bool CombosEnabled = true;
+	
+	[Header("Grid Specifics")]
+	public float GridOffsetX = 0f;
+	public float GridOffsetY = -0.5f;
 
 	[Header("Pieces")]
-	public int STARTING_PIECES = 7;
-	public float PIECE_MOVE_TIME = 0.25f;
+	public float PieceMoveTime = 0.25f;
+
+	[Header("Start Button")]
+	public float StartButtonRaisedY = -4f;
+	public float StartButtonLoweredY = -7f;
+	public float StartButtonTweenTime = 0.75f;
+
+	[Header("Score")]
+	public int MaxScore = 2147483647;
+	public float ScoreRaisedY = 6.5f;
+	public float ScoreLoweredY = 0f;
+	public float ScoreTweenTime = 1f;
 }

@@ -178,7 +178,7 @@ public abstract class Piece : MonoBehaviour
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Tween tween = transform.DOMove(newPos, Constants.instance.PIECE_MOVE_TIME).SetEase(Ease.Linear);
+			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
 			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);
@@ -202,7 +202,7 @@ public abstract class Piece : MonoBehaviour
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Tween tween = transform.DOMove(newPos, Constants.instance.PIECE_MOVE_TIME).SetEase(Ease.Linear);
+			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
 			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);
@@ -232,7 +232,7 @@ public abstract class Piece : MonoBehaviour
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Tween tween = transform.DOMove(newPos, Constants.instance.PIECE_MOVE_TIME).SetEase(Ease.Linear);
+			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
 			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);
@@ -256,7 +256,7 @@ public abstract class Piece : MonoBehaviour
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Tween tween = transform.DOMove(newPos, Constants.instance.PIECE_MOVE_TIME).SetEase(Ease.Linear);
+			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
 			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);
@@ -282,7 +282,7 @@ public abstract class Piece : MonoBehaviour
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Tween tween = transform.DOMove(newPos, Constants.instance.PIECE_MOVE_TIME).SetEase(Ease.Linear);
+			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
 			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);
@@ -308,7 +308,7 @@ public abstract class Piece : MonoBehaviour
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Tween tween = transform.DOMove(newPos, Constants.instance.PIECE_MOVE_TIME).SetEase(Ease.Linear);
+			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
 			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);
@@ -335,7 +335,7 @@ public abstract class Piece : MonoBehaviour
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Tween tween = transform.DOMove(newPos, Constants.instance.PIECE_MOVE_TIME).SetEase(Ease.Linear);
+			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
 			yield return tween.WaitForCompletion();
 
 			SetCoordinates(nextCoordinates);

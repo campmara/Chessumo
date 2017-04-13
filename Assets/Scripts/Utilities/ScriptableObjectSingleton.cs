@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 public class ScriptableObjectSingleton<T> : ScriptableObject where T : ScriptableObjectSingleton<T>
 {
 	static T _instance = null;
-	public static T instance
+	public static T I
 	{
 		get
 		{

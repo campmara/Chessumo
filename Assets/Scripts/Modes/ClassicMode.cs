@@ -22,6 +22,8 @@ public class ClassicMode : Mode
 
 	private GameObject scoreObj;
 	private Score score;
+
+	private int scoreCombo;
 	
 	private GameObject highScoreObj;
 	private HighScore highScore;
@@ -56,9 +58,9 @@ public class ClassicMode : Mode
 	{
 		//bool isAltColor = false;
 
-		for (int x = 0; x < Constants.instance.GRID_SIZE.x; x++)
+		for (int x = 0; x < Constants.I.GridSize.x; x++)
 		{
-			for (int y = 0; y < Constants.instance.GRID_SIZE.y; y++)
+			for (int y = 0; y < Constants.I.GridSize.y; y++)
 			{
 				GameObject tileObj = Instantiate(GameManager.Instance.tilePrefab) as GameObject;
 				Tile tile = tileObj.GetComponent<Tile>();
@@ -95,7 +97,7 @@ public class ClassicMode : Mode
 		*/
 
 		// Spawn all the starting pieces.
-		for (int i = 0; i < Constants.instance.STARTING_PIECES; i++)
+		for (int i = 0; i < Constants.I.StartingPieceCount; i++)
 		{
 			PlaceRandomPiece();
 		}
@@ -141,14 +143,14 @@ public class ClassicMode : Mode
 		scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
 		scoreObj.name = "Score";
 		scoreObj.transform.parent = transform;
-		scoreObj.transform.position = new Vector3(0f, Constants.instance.SCORE_RAISED_Y, 0f);
+		scoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
 		score = scoreObj.GetComponent<Score>();
 		score.Reset();
 
 		highScoreObj = Instantiate(GameManager.Instance.highScorePrefab) as GameObject;
 		highScoreObj.name = "High Score";
 		highScoreObj.transform.parent = transform;
-		highScoreObj.transform.position = new Vector3(0f, Constants.instance.SCORE_RAISED_Y, 0f);
+		highScoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
 		highScore = highScoreObj.GetComponent<HighScore>();
 		highScore.PullHighScore();
 	}
@@ -158,7 +160,7 @@ public class ClassicMode : Mode
 		pieceViewerObj = Instantiate(GameManager.Instance.nextPieceViewerPrefab) as GameObject;
 		pieceViewerObj.name = "Piece Viewer";
 		pieceViewerObj.transform.parent = transform;
-		pieceViewerObj.transform.position = new Vector3(0f, Constants.instance.SCORE_RAISED_Y - 1f, 0f);
+		pieceViewerObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY - 1f, 0f);
 		pieceViewer = pieceViewerObj.GetComponent<NextPieceViewer>();
 
 		DecideNextRandomPiece();
@@ -413,6 +415,9 @@ public class ClassicMode : Mode
 	{
 		moveInProgress = true;
 
+		Debug.Log("Score Combo Zeroed");
+		scoreCombo = 0;
+
 		if (currentSelectedPiece.GetType() == typeof(Knight))
 		{
 			Knight knight = currentSelectedPiece.GetComponent<Knight>();
@@ -449,6 +454,9 @@ public class ClassicMode : Mode
 	protected override void PieceOffGrid(Piece piece, IntVector2 pushCoordinates)
 	{
 		score.ScorePoint();
+		
+		// Increment the score combo.
+		IncrementScoreCombo();
 
 		Vector2 offGridPosition = GameManager.Instance.CoordinateToPosition(pushCoordinates);
 		StartCoroutine(MovePieceOffGrid(piece, offGridPosition));
@@ -456,6 +464,28 @@ public class ClassicMode : Mode
 		PlaceNextRandomPiece();
 
 		//PlaceRandomPiece();
+	}
+
+	void IncrementScoreCombo()
+	{
+		if (!Constants.I.CombosEnabled)
+		{
+			return;
+		}
+
+		Debug.Log("Score Combo Incremented, Current Number: " + scoreCombo);
+		scoreCombo++;
+
+		if (scoreCombo >= Constants.I.GridSize.x - 1)
+		{
+			// We've scored the combo!
+			Debug.Log("Scored Combo.");
+
+			for (int i = 0; i < scoreCombo; i++)
+			{
+				score.ScorePoint();
+			}
+		}
 	}
 
 	//////////////////////////////////////////////////////////

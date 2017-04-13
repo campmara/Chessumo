@@ -50,13 +50,13 @@ public class Score : MonoBehaviour
 
 	public Tween Lower()
 	{
-		return transform.DOMoveY(Constants.instance.SCORE_LOWERED_Y, Constants.instance.SCORE_TWEEN_TIME)
+		return transform.DOMoveY(Constants.I.ScoreLoweredY, Constants.I.ScoreTweenTime)
 				.SetEase(Ease.Linear);
 	}
 
 	public Tween Raise()
 	{
-		return transform.DOMoveY(Constants.instance.SCORE_RAISED_Y, Constants.instance.SCORE_TWEEN_TIME)
+		return transform.DOMoveY(Constants.I.ScoreRaisedY, Constants.I.ScoreTweenTime)
 				.SetEase(Ease.Linear);
 	}
 }
