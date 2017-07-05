@@ -12,7 +12,7 @@ public abstract class Piece : MonoBehaviour
 	protected IntVector2[] moveOffsets;
 	protected int moveMagnitude = 1;
 	protected IntVector2 currentCoordinates;
-	protected Mode parentMode;
+	protected Game parentGame;
 
 	protected bool moveDisabled = false;
 
@@ -31,19 +31,19 @@ public abstract class Piece : MonoBehaviour
 
 	public void SetCoordinates(IntVector2 coordinates)
 	{
-		parentMode.UpdatePieceCoordinates(this, currentCoordinates, coordinates);
+		parentGame.UpdatePieceCoordinates(this, currentCoordinates, coordinates);
 		currentCoordinates = coordinates;
 	}
 
-	public void SetInfo(int x, int y, Mode mode)
+	public void SetInfo(int x, int y, Game game)
 	{
 		currentCoordinates = new IntVector2(x, y);
-		parentMode = mode;
+		parentGame = game;
 	}
 
-	public void SetSortingOrder(int order)
+	public void HandleFallingSortingOrder()
 	{
-		sprite.sortingOrder = order;
+		sprite.sortingLayerName = "Falling Pieces";
 	}
 
 	public void SetPushPotential(bool hasPotential)
@@ -173,7 +173,7 @@ public abstract class Piece : MonoBehaviour
 			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(sign, 0);
 
 			// Send Information to the pieces that are affected by the move.
-			parentMode.OnPieceMove(this, nextCoordinates);
+			parentGame.OnPieceMove(this, nextCoordinates);
 
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
@@ -197,7 +197,7 @@ public abstract class Piece : MonoBehaviour
 			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, sign);
 
 			// Send Information to the pieces that are affected by the move.
-			parentMode.OnPieceMove(this, nextCoordinates);
+			parentGame.OnPieceMove(this, nextCoordinates);
 
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
@@ -211,7 +211,7 @@ public abstract class Piece : MonoBehaviour
 		}
 
 		// End Move Callback
-		parentMode.OnMoveEnded();
+		parentGame.OnMoveEnded();
 	}
 
 	protected IEnumerator MoveYThenX(int xDistance, int yDistance)
@@ -227,7 +227,7 @@ public abstract class Piece : MonoBehaviour
 			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, sign);
 
 			// Send Information to the pieces that are affected by the move.
-			parentMode.OnPieceMove(this, nextCoordinates);
+			parentGame.OnPieceMove(this, nextCoordinates);
 
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
@@ -251,7 +251,7 @@ public abstract class Piece : MonoBehaviour
 			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(sign, 0);
 
 			// Send Information to the pieces that are affected by the move.
-			parentMode.OnPieceMove(this, nextCoordinates);
+			parentGame.OnPieceMove(this, nextCoordinates);
 
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
@@ -265,7 +265,7 @@ public abstract class Piece : MonoBehaviour
 		}
 
 		// End Move Callback
-		parentMode.OnMoveEnded();
+		parentGame.OnMoveEnded();
 	}
 
 	protected IEnumerator MoveX(int distance)
@@ -277,7 +277,7 @@ public abstract class Piece : MonoBehaviour
 			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(sign, 0);
 
 			// Send Information to the pieces that are affected by the move.
-			parentMode.OnPieceMove(this, nextCoordinates);
+			parentGame.OnPieceMove(this, nextCoordinates);
 
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
@@ -291,7 +291,7 @@ public abstract class Piece : MonoBehaviour
 		}
 
 		// End Move Callback
-		parentMode.OnMoveEnded();
+		parentGame.OnMoveEnded();
 	}
 
 	protected IEnumerator MoveY(int distance)
@@ -303,7 +303,7 @@ public abstract class Piece : MonoBehaviour
 			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, sign);
 
 			// Send Information to the pieces that are affected by the move.
-			parentMode.OnPieceMove(this, nextCoordinates);
+			parentGame.OnPieceMove(this, nextCoordinates);
 
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
@@ -317,7 +317,7 @@ public abstract class Piece : MonoBehaviour
 		}
 
 		// End Move Callback
-		parentMode.OnMoveEnded();
+		parentGame.OnMoveEnded();
 	}
 
 	protected IEnumerator MoveDiagonally(int xDistance, int yDistance)
@@ -330,7 +330,7 @@ public abstract class Piece : MonoBehaviour
 			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(xSign, ySign);
 
 			// Send Information to the pieces that are affected by the move.
-			parentMode.OnPieceMove(this, nextCoordinates);
+			parentGame.OnPieceMove(this, nextCoordinates);
 
 			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
@@ -344,7 +344,7 @@ public abstract class Piece : MonoBehaviour
 		}
 
 		// End Move Callback
-		parentMode.OnMoveEnded();
+		parentGame.OnMoveEnded();
 	}
 }
 

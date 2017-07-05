@@ -38,6 +38,10 @@ GameCenter Integration:
 Grid Size Testing:
     - Just try the game with a 4x4 grid and see how that feels.
 
+Sound:
+    - Very light sound design.
+    - Reserved, just enough blips and blops to give it the cold, inhuman lifelessness it deserves.
+
 Known Bugs:
     - Right now you can select a piece while another is still moving. Disallow this.
         - Did it a little bit, but this surfaced a bug.
@@ -45,3 +49,4 @@ Known Bugs:
         - Fix this by doing the continuous tween feature that you're planning on implementing.
     - Tiles lower immediately when a piece is moving more than one tile.
     - Tiles appear underneath the above tile when they are in UpSprite mode. Set Sorting Order on creation of the grid.
+    - Piece selection sprite doesn't deselect when we move certain pieces.

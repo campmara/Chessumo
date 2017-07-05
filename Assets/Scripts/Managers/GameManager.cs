@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
 	}
 	public State CurrentState { get { return currentState; } }
 
+	[Header("Game Prefab")]
+	public Game gamePrefab;
 	[Header("General Prefabs")]
 	public GameObject startButtonPrefab;
 	public GameObject tilePrefab;
@@ -38,6 +40,7 @@ public class GameManager : MonoBehaviour
 	// PRIVATES
 	/////////////////////////////////////////////////////////////////////
 
+	private Game game;
 	private State currentState;
 
 	GameObject selectionObj;
@@ -86,7 +89,28 @@ public class GameManager : MonoBehaviour
 
 	public void BeginGame()
 	{
-		ModeManager.Instance.Load();
+		if (game == null)
+		{
+			Debug.Log("[GAME MANAGER] Loading and Beginning Game.");
+
+			GameManager.Instance.Deselect();
+
+			game = Instantiate(gamePrefab) as Game;
+			game.name = "Chessumo Game";
+			game.transform.parent = transform;
+
+			game.Load();
+		}
+		else
+		{
+			Debug.Log("[GAME MANAGER] Unloading Game");
+			game.Unload();
+
+			game = null;
+
+			// Reload the game, now that we've unloaded everything correctly.
+			BeginGame();
+		}
 	}
 
 	public Vector2 CoordinateToPosition(IntVector2 coordinate)

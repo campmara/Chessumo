@@ -27,7 +27,7 @@ public class Tile : MonoBehaviour
 
 	private SpriteRenderer spriteRenderer;
 
-	private Mode parentMode;
+	private Game parentGame;
 	private IntVector2 currentCoordinates;
 
 	void Awake()
@@ -56,10 +56,10 @@ public class Tile : MonoBehaviour
 		return currentCoordinates;
 	}
 
-	public void SetInfo(int x, int y, Mode mode)
+	public void SetInfo(int x, int y, Game game)
 	{
 		currentCoordinates = new IntVector2(x, y);
-		parentMode = mode;
+		parentGame = game;
 	}
 
 	public bool IsShowingMove()

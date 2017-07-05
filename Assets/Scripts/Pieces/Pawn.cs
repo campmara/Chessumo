@@ -20,7 +20,7 @@ public class Pawn : Piece
 	public override IntVector2[] GetPossibleMoves()
 	{
 		// Check for diagonal pieces. Put them in a new array of moveOffsets that the rest of this function uses.
-		List<IntVector2> diagonals = parentMode.GetDiagonalPieceCoordinates(currentCoordinates);
+		List<IntVector2> diagonals = parentGame.GetDiagonalPieceCoordinates(currentCoordinates);
 
 		IntVector2[] returnArray = new IntVector2[moveOffsets.Length + diagonals.Count];
 
