@@ -43,8 +43,8 @@ public class GameManager : MonoBehaviour
 	private Game game;
 	private State currentState;
 
-	GameObject selectionObj;
-	DebugStartButton startButton;
+	private GameObject selectionObj;
+	private DebugStartButton startButton;
 
 	void Awake()
 	{

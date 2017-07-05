@@ -39,11 +39,13 @@ public class Tile : MonoBehaviour
 	public void SetColorDefault()
 	{
 		spriteRenderer.color = color;
+		spriteRenderer.sortingOrder = 0;
 	}
 
 	public void SetColorAlternate()
 	{
 		spriteRenderer.color = alternateColor;
+		spriteRenderer.sortingOrder = 1;
 	}
 
 	void OnEnable()
