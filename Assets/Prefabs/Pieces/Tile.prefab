@@ -94,8 +94,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a49e90db7f654aecb7848b70b1786c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  downSprite: {fileID: 21300000, guid: 61641914a1ad64a81a3b4eae510be1e0, type: 3}
-  upSprite: {fileID: 21300000, guid: 3751fdbf64993451aa33b1f6bfc59a47, type: 3}
+  downSprite: {fileID: 21300000, guid: 679add5a3b7194442bc2229fc3dc83ac, type: 3}
+  upSprite: {fileID: 21300000, guid: 6ab5de0b9b8ff40f99647d7043caab5a, type: 3}
   color: {r: 0.75, g: 0.75, b: 0.75, a: 1}
   alternateColor: {r: 0.44117647, g: 0.44117647, b: 0.44117647, a: 1}
 --- !u!212 &212832862552760176
@@ -128,9 +128,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -681853767
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 61641914a1ad64a81a3b4eae510be1e0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 679add5a3b7194442bc2229fc3dc83ac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
