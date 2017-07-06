@@ -30,6 +30,7 @@ public class Game : MonoBehaviour
 	private GameObject[,] tileObjects;
 	private Piece[,] pieces;
 	private PieceType nextRandomPieceType;
+	private int numPiecesToSpawn = 0;
 
 	private GameObject scoreObj;
 	private Score score;
@@ -43,6 +44,7 @@ public class Game : MonoBehaviour
 	private NextPieceViewer pieceViewer;
 
 	private bool moveInProgress = false;
+	private bool isPotentialMovement = false;
 
 	[ReadOnly, SerializeField] protected Piece currentSelectedPiece;
 
@@ -54,50 +56,57 @@ public class Game : MonoBehaviour
 		currentSelectedPiece = null;
 	}
 
-	public void OnPieceMove(Piece piece, IntVector2 newCoordinates)
+	public void OnPieceMove(Piece piece, IntVector2 direction, int distance)
 	{
 		IntVector2 oldCoordinates = piece.GetCoordinates();
+		IntVector2 currentCheckingCoords = oldCoordinates;
+		int absDist = Mathf.Abs(distance);
+		int distFromPushingPiece = 0;
+		int numPushedPieces = 0;
 
-		if (pieces[newCoordinates.x, newCoordinates.y] != null)
+		for (int i = 0; i < absDist; i++)
 		{
-			// We're pushing! Yay!
-			//Debug.Log("PUSHING PIECE");
+			currentCheckingCoords += direction;
+			distFromPushingPiece++;
 
-			IntVector2 push = newCoordinates + (newCoordinates - oldCoordinates);
-
-			if (IsWithinBounds(push))
+			if (pieces[currentCheckingCoords.x, currentCheckingCoords.y] != null)
 			{
-				// Push in the grid.
-				//Debug.Log("Pushing within bounds.");
-				pieces[newCoordinates.x, newCoordinates.y].MoveTo(push, true);
+				int pushDistance = (absDist - distFromPushingPiece) + 1;
+				IntVector2 push = currentCheckingCoords + direction * pushDistance;
+				numPushedPieces++;
+
+				if (IsWithinBounds(push))
+				{
+					// Push in the grid.
+					//Debug.Log("Pushing within bounds.");
+					pieces[currentCheckingCoords.x, currentCheckingCoords.y].MoveTo(push, true);
+				}
+				else
+				{
+					// PUSH OFF THE GRID.
+					//Debug.Log("YOU JUST PUSHED A PIECE OFF THE GRID");
+					PieceOffGrid(pieces[currentCheckingCoords.x, currentCheckingCoords.y], push, absDist, distFromPushingPiece, numPushedPieces);
+					pieces[currentCheckingCoords.x, currentCheckingCoords.y] = null;
+				}
 			}
 			else
 			{
-				// PUSH OFF THE GRID.
-				//Debug.Log("YOU JUST PUSHED A PIECE OFF THE GRID");
-				PieceOffGrid(pieces[newCoordinates.x, newCoordinates.y], push);
-				pieces[newCoordinates.x, newCoordinates.y] = null;
+				//Debug.Log("Normal Move. No Push");
 			}
-		}
-		else
-		{
-			//Debug.Log("Normal Move. No Push");
 		}
 	}
 
-	private void PieceOffGrid(Piece piece, IntVector2 pushCoordinates)
+	private void PieceOffGrid(Piece piece, IntVector2 pushCoordinates, int travelDist, int distFromPushingPiece, int numPushedPieces)
 	{
+		numPiecesToSpawn++;
 		score.ScorePoint();
 		
 		// Increment the score combo.
 		IncrementScoreCombo();
 
 		Vector2 offGridPosition = GameManager.Instance.CoordinateToPosition(pushCoordinates);
-		StartCoroutine(MovePieceOffGrid(piece, offGridPosition));
-
-		PlaceNextRandomPiece();
-
-		//PlaceRandomPiece();
+		
+		StartCoroutine(MovePieceOffGrid(piece, offGridPosition, travelDist, distFromPushingPiece, numPushedPieces));
 	}
 
 	void IncrementScoreCombo()
@@ -122,13 +131,20 @@ public class Game : MonoBehaviour
 		}
 	}
 
-	protected IEnumerator MovePieceOffGrid(Piece piece, Vector2 position)
+	protected IEnumerator MovePieceOffGrid(Piece piece, Vector2 position, int travelDist, int distFromPushingPiece, int numPushedPieces)
 	{
+		int clampPushed = Mathf.Clamp(numPushedPieces - 1, 0, numPushedPieces + 1);
+		int clampDist = Mathf.Clamp((distFromPushingPiece - 1) - clampPushed, 0, distFromPushingPiece + 1);
+		float waitTime = Constants.I.PieceMoveTime * clampDist;
+		yield return new WaitForSeconds(waitTime);
+
 		GameObject pieceObj = piece.gameObject;
 
 		Vector3 newPos = new Vector3(position.x, position.y, pieceObj.transform.position.z);
 
-		Tween tween = pieceObj.transform.DOMove(newPos, Constants.I.PieceMoveTime);
+		float duration = Constants.I.PieceMoveTime * (travelDist - Mathf.Clamp(distFromPushingPiece - 1, 0, distFromPushingPiece + 1));
+		Tween tween = pieceObj.transform.DOMove(newPos, duration)
+			.SetEase(Ease.Linear);
 		yield return tween.WaitForCompletion();
 
 		piece.HandleFallingSortingOrder();
@@ -228,95 +244,10 @@ public class Game : MonoBehaviour
 		}
 	}
 
-	bool IsGameOver()
-	{
-		bool gameOver = true;
-
-		for (int i = 0; i < pieces.GetLength(0); i++)
-		{
-			for (int j = 0; j < pieces.GetLength(1); j++)
-			{
-				if (pieces[i, j] != null && !pieces[i, j].GetMoveDisabled()) 
-				{
-					gameOver = false;
-				}
-			}
-		}
-
-		return gameOver;
-	}
-
-	void CheckForGameEnd()
-	{
-		if (IsGameOver())
-		{
-			Coroutine endRoutine = StartCoroutine(GameEndRoutine());
-		}
-	}
-
-	IEnumerator GameEndRoutine()
-	{
-		GameManager.Instance.ShrinkMeToSlit(pieceViewerObj, 0f, Ease.OutQuint);
-
-		yield return new WaitForSeconds(0.5f);
-
-		Coroutine pieceDropRoutine = StartCoroutine(DropPieces());
-		Coroutine tileDropRoutine = StartCoroutine(DropTiles());
-
-		yield return new WaitForSeconds(2f);
-
-		// Lower the score and high score.
-		//score.Lower();
-		//highScore.Lower();
-		//yield return endMessage.Appear().WaitForCompletion();
-
-		//yield return new WaitForSeconds(0.5f);
-
-		score.SubmitScore();
-		highScore.PullHighScore();
-
-		//yield return new WaitForSeconds(1.5f);
-		
-		GameManager.Instance.OnGameEnd();
-	}
-
-	IEnumerator DropPieces()
-	{
-		for (int i = 0; i < pieces.GetLength(0); i++)
-		{
-			for (int j = 0; j < pieces.GetLength(1); j++)
-			{
-				if (pieces[i, j] != null) 
-				{
-					float duration = Random.Range(0.4f, 1.5f);
-
-					tileObjects[i, j].transform.DOMoveY(-10f, duration).SetEase(Ease.InQuint);
-					pieces[i, j].transform.DOMoveY(-10f, duration).SetEase(Ease.InQuint);
-
-					yield return new WaitForSeconds(0.01f);
-				}
-			}
-		}
-	}
-
-	IEnumerator DropTiles()
-	{
-		for (int i = 0; i < tileObjects.GetLength(0); i++)
-		{
-			for (int j = 0; j < tileObjects.GetLength(1); j++)
-			{
-				if (pieces[i, j] == null)
-				{
-					// If there are no pieces on this then we can drop.
-					tileObjects[i, j].transform.DOMoveY(-10f, Random.Range(0.4f, 1.5f)).SetEase(Ease.InQuint);
-					yield return new WaitForSeconds(0.01f);
-				}
-			}
-		}
-	}
+#if UNITY_EDITOR
 
 	//////////////////////////////////////////////////////////
-	// UPDATE
+	// EDITOR UPDATE
 	//////////////////////////////////////////////////////////
 
 	void Update()
@@ -328,63 +259,156 @@ public class Game : MonoBehaviour
 
 		if (Input.GetMouseButtonDown(0))
 		{
-			CheckRayMouse();
+			OnFingerDown();
 		}
-#if UNITY_IPHONE
-		else if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+
+		if (currentSelectedPiece)
 		{
-			Touch touch = Input.GetTouch(0);
-			CheckRayTap(touch);
+			OnFingerMove();
 		}
-#endif
+
+		if (Input.GetMouseButtonUp(0))
+		{
+			OnFingerUp();
+		}
 	}
 
-	void CheckRayMouse()
+	//////////////////////////////////////////////////////////
+	// INPUT CALLBACKS
+	//////////////////////////////////////////////////////////
+
+	void OnFingerDown()
 	{
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 
 		if (Physics.Raycast(ray, out hit, Mathf.Infinity))
 		{
-			HandleRayHit(hit);
-		}
-		else
-		{
-			if (currentSelectedPiece)
-			{
-				GameManager.Instance.Deselect();
-				currentSelectedPiece = null;
-				ResetPossibleMoves();
-			}
+			HandleDownRayHit(hit);
 		}
 	}
 
-	void CheckRayTap(Touch touch)
+	void OnFingerMove()
+	{
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+		{
+			HandleMoveRayHit(hit);
+		}
+	}
+
+	void OnFingerUp()
+	{
+		// Try and initiate the move.
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+		{
+			HandleUpRayHit(hit);
+		}
+		else
+		{
+			GameManager.Instance.Deselect();
+			currentSelectedPiece = null;
+			ResetPossibleMoves();
+		}
+	}
+
+#elif UNITY_IPHONE
+
+	//////////////////////////////////////////////////////////
+	// IPHONE UPDATE
+	//////////////////////////////////////////////////////////
+
+	void Update()
+	{
+		if (moveInProgress)
+		{
+			return;
+		}
+
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+		{
+			Touch touch = Input.GetTouch(0);
+			OnFingerDown(touch);
+		}
+
+		if (currentSelectedPiece && Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Moved)
+		{
+			Touch touch = Input.GetTouch(0);
+			OnFingerMove(touch);
+		}
+
+		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
+		{
+			Touch touch = Input.GetTouch(0);
+			OnFingerUp();
+		}
+	}
+
+	//////////////////////////////////////////////////////////
+	// INPUT CALLBACKS
+	//////////////////////////////////////////////////////////
+
+	void OnFingerDown(Touch touch)
 	{
 		Ray ray = Camera.main.ScreenPointToRay(touch.position);
 		RaycastHit hit;
 
 		if (Physics.Raycast(ray, out hit, Mathf.Infinity))
 		{
-			HandleRayHit(hit);
-		}
-		else
-		{
-			if (currentSelectedPiece)
-			{
-				GameManager.Instance.Deselect();
-				currentSelectedPiece = null;
-				ResetPossibleMoves();
-			}
+			HandleDownRayHit(hit);
 		}
 	}
 
-	void HandleRayHit(RaycastHit hit)
+	void OnFingerMove(Touch touch)
+	{
+		Ray ray = Camera.main.ScreenPointToRay(touch.position);
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+		{
+			HandleMoveRayHit(hit);
+		}
+	}
+
+	void OnFingerUp(Touch touch)
+	{
+		Ray ray = Camera.main.ScreenPointToRay(touch.position);
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+		{
+			HandleUpRayHit(hit);
+		}
+		else
+		{
+			GameManager.Instance.Deselect();
+			currentSelectedPiece = null;
+			ResetPossibleMoves();
+		}
+	}
+
+#endif
+
+	void HandleDownRayHit(RaycastHit hit)
 	{
 		if (hit.collider.GetComponent<Piece>())
 		{
 			Piece piece = hit.collider.GetComponent<Piece>();
 
+			if (!piece.potentialPush && !piece.GetMoveDisabled())
+			{	
+				ResetKnightIfNeeded();
+
+				ResetPossibleMoves();
+				SelectPiece(piece);
+			}
+
+			/*
 			if (piece == currentSelectedPiece)
 			{
 				ResetKnightIfNeeded();
@@ -419,8 +443,70 @@ public class Game : MonoBehaviour
 					OnMoveInitiated();
 				}
 			}
+			*/
+		}
+		/*
+		else if (hit.collider.GetComponent<Tile>())
+		{
+			Tile tile = hit.collider.GetComponent<Tile>();
+
+			if (currentSelectedPiece && tile.IsShowingMove())
+			{
+				// We just made a move!!! omg !!!!
+				currentSelectedPiece.MoveTo(tile.GetCoordinates(), false);
+				OnMoveInitiated();
+			}
+			else if (currentSelectedPiece && !tile.IsShowingMove())
+			{
+				if (currentSelectedPiece.GetType() == typeof(Knight))
+				{
+					currentSelectedPiece.GetComponent<Knight>().ResetKnight();
+				}
+
+				GameManager.Instance.Deselect();
+				currentSelectedPiece = null;
+				ResetPossibleMoves();
+			}
+		}
+		*/
+	}
+
+	void HandleMoveRayHit(RaycastHit hit)
+	{
+		// Tells the arrow system to update.
+
+		if (hit.collider.GetComponent<Piece>())
+		{
+			Piece piece = hit.collider.GetComponent<Piece>();
+
 		}
 		else if (hit.collider.GetComponent<Tile>())
+		{
+			Tile tile = hit.collider.GetComponent<Tile>();
+
+		}
+	}
+
+	void HandleUpRayHit(RaycastHit hit)
+	{
+		if (hit.collider.GetComponent<Piece>()) // up on a piece
+		{
+			Piece piece = hit.collider.GetComponent<Piece>();
+
+			if (piece.potentialPush)
+			{
+				IntVector2 coords = piece.GetCoordinates();
+				currentSelectedPiece.MoveTo(coords, false);
+				OnMoveInitiated();
+			}
+			else
+			{
+				GameManager.Instance.Deselect();
+				currentSelectedPiece = null;
+				ResetPossibleMoves();
+			}	
+		}
+		else if (hit.collider.GetComponent<Tile>()) // up on a tile
 		{
 			Tile tile = hit.collider.GetComponent<Tile>();
 
@@ -507,10 +593,105 @@ public class Game : MonoBehaviour
 		currentSelectedPiece = null;
 		ResetPossibleMoves();
 
+		// Spawn the needed amount of pieces.
+		for (int i = 0; i < numPiecesToSpawn; i++)
+		{
+			PlaceNextRandomPiece();
+		}
+
+		numPiecesToSpawn = 0;
+
 		// Check for Game Over after every move.
 		CheckForGameEnd();
 
 		moveInProgress = false;
+	}
+
+	void CheckForGameEnd()
+	{
+		if (IsGameOver())
+		{
+			Coroutine endRoutine = StartCoroutine(GameEndRoutine());
+		}
+	}
+
+	bool IsGameOver()
+	{
+		bool gameOver = true;
+
+		for (int i = 0; i < pieces.GetLength(0); i++)
+		{
+			for (int j = 0; j < pieces.GetLength(1); j++)
+			{
+				if (pieces[i, j] != null && !pieces[i, j].GetMoveDisabled()) 
+				{
+					gameOver = false;
+				}
+			}
+		}
+
+		return gameOver;
+	}
+
+	IEnumerator GameEndRoutine()
+	{
+		GameManager.Instance.ShrinkMeToSlit(pieceViewerObj, 0f, Ease.OutQuint);
+
+		yield return new WaitForSeconds(0.5f);
+
+		Coroutine pieceDropRoutine = StartCoroutine(DropPieces());
+		Coroutine tileDropRoutine = StartCoroutine(DropTiles());
+
+		yield return new WaitForSeconds(2f);
+
+		// Lower the score and high score.
+		//score.Lower();
+		//highScore.Lower();
+		//yield return endMessage.Appear().WaitForCompletion();
+
+		//yield return new WaitForSeconds(0.5f);
+
+		score.SubmitScore();
+		highScore.PullHighScore();
+
+		//yield return new WaitForSeconds(1.5f);
+		
+		GameManager.Instance.OnGameEnd();
+	}
+
+	IEnumerator DropPieces()
+	{
+		for (int i = 0; i < pieces.GetLength(0); i++)
+		{
+			for (int j = 0; j < pieces.GetLength(1); j++)
+			{
+				if (pieces[i, j] != null) 
+				{
+					float duration = Random.Range(0.4f, 1.5f);
+
+					tileObjects[i, j].transform.DOMoveY(-10f, duration).SetEase(Ease.InQuint);
+					pieces[i, j].transform.DOMoveY(-10f, duration).SetEase(Ease.InQuint);
+
+					yield return new WaitForSeconds(0.01f);
+				}
+			}
+		}
+	}
+
+	IEnumerator DropTiles()
+	{
+		for (int i = 0; i < tileObjects.GetLength(0); i++)
+		{
+			for (int j = 0; j < tileObjects.GetLength(1); j++)
+			{
+				if (pieces[i, j] == null)
+				{
+					// If there are no pieces on this then we can drop.
+					tileObjects[i, j].transform.DOMoveY(-10f, Random.Range(0.4f, 1.5f)).SetEase(Ease.InQuint);
+					yield return new WaitForSeconds(0.01f);
+				}
+			}
+		}
 	}
 
 	public void Unload() 

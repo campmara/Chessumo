@@ -37,6 +37,13 @@ public struct IntVector2
 		return a;
 	}
 
+	public static IntVector2 operator * (IntVector2 a, int b)
+	{
+		a.x *= b;
+		a.y *= b;
+		return a;
+	}
+
 	public override bool Equals(System.Object obj)
     {
         // If parameter is null return false.

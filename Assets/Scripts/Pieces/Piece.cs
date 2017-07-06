@@ -10,6 +10,10 @@ public abstract class Piece : MonoBehaviour
 
 	// Array of coordinate offsets that define the moves a piece can make.
 	protected IntVector2[] moveOffsets;
+
+	// New move system.
+	protected PossibleMove possibleMoves;
+
 	protected int moveMagnitude = 1;
 	protected IntVector2 currentCoordinates;
 	protected Game parentGame;
@@ -168,23 +172,16 @@ public abstract class Piece : MonoBehaviour
 
 		int sign = Mathf.FloorToInt(Mathf.Sign(xDistance));
 
-		for (int i = 0; i < Mathf.Abs(xDistance); i++)
-		{
-			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(sign, 0);
+		IntVector2 nextCoordinates = currentCoordinates + new IntVector2(xDistance, 0);
+		parentGame.OnPieceMove(this, new IntVector2(sign, 0), xDistance);
 
-			// Send Information to the pieces that are affected by the move.
-			parentGame.OnPieceMove(this, nextCoordinates);
+		Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+		Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
-			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(xDistance)).SetEase(Ease.Linear);
+		yield return tween.WaitForCompletion();
 
-			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
-			yield return tween.WaitForCompletion();
-
-			SetCoordinates(nextCoordinates);
-
-			yield return null;
-		}
+		SetCoordinates(nextCoordinates);
 
 		///////////////////////////////
 		// Y MOVEMENT
@@ -192,25 +189,17 @@ public abstract class Piece : MonoBehaviour
 
 		sign = Mathf.FloorToInt(Mathf.Sign(yDistance));
 
-		for (int i = 0; i < Mathf.Abs(yDistance); i++)
-		{
-			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, sign);
+		nextCoordinates = currentCoordinates + new IntVector2(0, yDistance);
+		parentGame.OnPieceMove(this, new IntVector2(0, sign), yDistance);
 
-			// Send Information to the pieces that are affected by the move.
-			parentGame.OnPieceMove(this, nextCoordinates);
+		convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+		newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
-			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(yDistance)).SetEase(Ease.Linear);
+		yield return tween.WaitForCompletion();
 
-			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
-			yield return tween.WaitForCompletion();
+		SetCoordinates(nextCoordinates);
 
-			SetCoordinates(nextCoordinates);
-
-			yield return null;
-		}
-
-		// End Move Callback
 		parentGame.OnMoveEnded();
 	}
 
@@ -222,23 +211,18 @@ public abstract class Piece : MonoBehaviour
 
 		int sign = Mathf.FloorToInt(Mathf.Sign(yDistance));
 
-		for (int i = 0; i < Mathf.Abs(yDistance); i++)
-		{
-			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, sign);
+		IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, yDistance);
+		parentGame.OnPieceMove(this, new IntVector2(0, sign), yDistance);
 
-			// Send Information to the pieces that are affected by the move.
-			parentGame.OnPieceMove(this, nextCoordinates);
+		Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+		Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
-			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(yDistance)).SetEase(Ease.Linear);
+		yield return tween.WaitForCompletion();
 
-			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
-			yield return tween.WaitForCompletion();
+		SetCoordinates(nextCoordinates);
 
-			SetCoordinates(nextCoordinates);
-
-			yield return null;
-		}
+		parentGame.OnMoveEnded();
 
 		///////////////////////////////
 		// X MOVEMENT
@@ -246,25 +230,17 @@ public abstract class Piece : MonoBehaviour
 
 		sign = Mathf.FloorToInt(Mathf.Sign(xDistance));
 
-		for (int i = 0; i < Mathf.Abs(xDistance); i++)
-		{
-			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(sign, 0);
+		nextCoordinates = currentCoordinates + new IntVector2(xDistance, 0);
+		parentGame.OnPieceMove(this, new IntVector2(sign, 0), xDistance);
 
-			// Send Information to the pieces that are affected by the move.
-			parentGame.OnPieceMove(this, nextCoordinates);
+		convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+		newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
-			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(xDistance)).SetEase(Ease.Linear);
+		yield return tween.WaitForCompletion();
 
-			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
-			yield return tween.WaitForCompletion();
+		SetCoordinates(nextCoordinates);
 
-			SetCoordinates(nextCoordinates);
-
-			yield return null;
-		}
-
-		// End Move Callback
 		parentGame.OnMoveEnded();
 	}
 
@@ -272,25 +248,17 @@ public abstract class Piece : MonoBehaviour
 	{
 		int sign = Mathf.FloorToInt(Mathf.Sign(distance));
 
-		for (int i = 0; i < Mathf.Abs(distance); i++)
-		{
-			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(sign, 0);
+		IntVector2 nextCoordinates = currentCoordinates + new IntVector2(distance, 0);
+		parentGame.OnPieceMove(this, new IntVector2(sign, 0), distance);
 
-			// Send Information to the pieces that are affected by the move.
-			parentGame.OnPieceMove(this, nextCoordinates);
+		Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+		Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
-			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(distance)).SetEase(Ease.Linear);
+		yield return tween.WaitForCompletion();
 
-			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
-			yield return tween.WaitForCompletion();
+		SetCoordinates(nextCoordinates);
 
-			SetCoordinates(nextCoordinates);
-
-			yield return null;
-		}
-
-		// End Move Callback
 		parentGame.OnMoveEnded();
 	}
 
@@ -298,25 +266,17 @@ public abstract class Piece : MonoBehaviour
 	{
 		int sign = Mathf.FloorToInt(Mathf.Sign(distance));
 
-		for (int i = 0; i < Mathf.Abs(distance); i++)
-		{
-			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, sign);
+		IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, distance);
+		parentGame.OnPieceMove(this, new IntVector2(0, sign), distance);
 
-			// Send Information to the pieces that are affected by the move.
-			parentGame.OnPieceMove(this, nextCoordinates);
+		Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+		Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
-			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(distance)).SetEase(Ease.Linear);
+		yield return tween.WaitForCompletion();
 
-			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
-			yield return tween.WaitForCompletion();
+		SetCoordinates(nextCoordinates);
 
-			SetCoordinates(nextCoordinates);
-
-			yield return null;
-		}
-
-		// End Move Callback
 		parentGame.OnMoveEnded();
 	}
 
@@ -325,25 +285,17 @@ public abstract class Piece : MonoBehaviour
 		int xSign = Mathf.FloorToInt(Mathf.Sign(xDistance));
 		int ySign = Mathf.FloorToInt(Mathf.Sign(yDistance));
 
-		for (int i = 0; i < Mathf.Abs(xDistance); i++)
-		{
-			IntVector2 nextCoordinates = currentCoordinates + new IntVector2(xSign, ySign);
+		IntVector2 nextCoordinates = currentCoordinates + new IntVector2(xDistance, yDistance);
+		parentGame.OnPieceMove(this, new IntVector2(xSign, ySign), xDistance);
 
-			// Send Information to the pieces that are affected by the move.
-			parentGame.OnPieceMove(this, nextCoordinates);
+		Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
+		Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
 
-			Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
-			Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(xDistance)).SetEase(Ease.Linear);
+		yield return tween.WaitForCompletion();
 
-			Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime).SetEase(Ease.Linear);
-			yield return tween.WaitForCompletion();
+		SetCoordinates(nextCoordinates);
 
-			SetCoordinates(nextCoordinates);
-
-			yield return null;
-		}
-
-		// End Move Callback
 		parentGame.OnMoveEnded();
 	}
 }

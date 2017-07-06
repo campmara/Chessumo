@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Name: Constants
   m_EditorClassIdentifier: 
   GridSize:
-    x: 5
-    y: 5
-  StartingPieceCount: 7
+    x: 4
+    y: 4
+  StartingPieceCount: 5
   CombosEnabled: 1
   GridOffsetX: 0
   GridOffsetY: -0.5
