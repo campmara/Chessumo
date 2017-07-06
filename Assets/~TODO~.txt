@@ -42,6 +42,18 @@ Sound:
     - Very light sound design.
     - Reserved, just enough blips and blops to give it the cold, inhuman lifelessness it deserves.
 
+Art:
+    - Draw your own original piece icons.
+    - Make sure Now typeface is free.
+
+Company:
+    - Incorporate
+    - Protect through copyright
+
+Tutorialization:
+    - Save tutorial completion.
+    - Little tutorial. Threes-esque, just very simple walkthrough of game rules.
+
 Known Bugs:
     - Right now you can select a piece while another is still moving. Disallow this.
         - Did it a little bit, but this surfaced a bug.
