@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 	public GameObject startButtonPrefab;
 	public GameObject tilePrefab;
 	public GameObject scorePrefab;
+	public GameObject scoreEffectPrefab;
 	public GameObject highScorePrefab;
 	public GameObject nextPieceViewerPrefab;
 	[Header("Piece Prefabs")]
@@ -56,6 +57,9 @@ public class GameManager : MonoBehaviour
 		// This will eat battery, but threes does it so w/e.
 		// Eventually, adding a "conserve battery" option that sets this to 30 would be good.
 		Application.targetFrameRate = 60;
+
+		// Init DOTween.
+		DOTween.Init();
 
 		currentState = State.MENU;
 

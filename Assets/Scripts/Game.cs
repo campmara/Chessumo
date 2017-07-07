@@ -34,6 +34,8 @@ public class Game : MonoBehaviour
 
 	private GameObject scoreObj;
 	private Score score;
+	private GameObject scoreEffectObj;
+	private ScoreEffect scoreEffect;
 
 	private int scoreCombo;
 	
@@ -99,10 +101,6 @@ public class Game : MonoBehaviour
 	private void PieceOffGrid(Piece piece, IntVector2 pushCoordinates, int travelDist, int distFromPushingPiece, int numPushedPieces)
 	{
 		numPiecesToSpawn++;
-		score.ScorePoint();
-		
-		// Increment the score combo.
-		IncrementScoreCombo();
 
 		Vector2 offGridPosition = GameManager.Instance.CoordinateToPosition(pushCoordinates);
 		
@@ -150,9 +148,14 @@ public class Game : MonoBehaviour
 		piece.HandleFallingSortingOrder();
 		Destroy(piece); // Destroy the piece class so it won't get touched.
 
-		tween = pieceObj.transform.DOMoveY(-10f, 1f)
+		tween = pieceObj.transform.DOMoveY(-6f, 0.75f)
 			.SetEase(Ease.InCubic);
 		yield return tween.WaitForCompletion();
+
+		// Score a point and handle the score combo.
+		score.ScorePoint();
+		scoreEffect.OnPointScored();
+		IncrementScoreCombo();
 
 		Destroy(pieceObj);
 	}
@@ -184,6 +187,11 @@ public class Game : MonoBehaviour
 		scoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
 		score = scoreObj.GetComponent<Score>();
 		score.Reset();
+
+		scoreEffectObj = Instantiate(GameManager.Instance.scoreEffectPrefab) as GameObject;
+		scoreEffectObj.name = "Score Effect";
+		scoreEffectObj.transform.parent = transform;
+		scoreEffect = scoreEffectObj.GetComponent<ScoreEffect>();
 
 		highScoreObj = Instantiate(GameManager.Instance.highScorePrefab) as GameObject;
 		highScoreObj.name = "High Score";
