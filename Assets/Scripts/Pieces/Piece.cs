@@ -11,9 +11,6 @@ public abstract class Piece : MonoBehaviour
 	// Array of coordinate offsets that define the moves a piece can make.
 	protected IntVector2[] moveOffsets;
 
-	// New move system.
-	protected PossibleMove possibleMoves;
-
 	protected int moveMagnitude = 1;
 	protected IntVector2 currentCoordinates;
 	protected Game parentGame;
@@ -117,32 +114,30 @@ public abstract class Piece : MonoBehaviour
 		// Determine how many times we must repeat the movement to get to the desired point.
 		IntVector2 diff = coordinates - GetCoordinates();
 
-		Coroutine moveRoutine = null;
-
 		if (diff.x != 0 && diff.y == 0)
 		{
 			// Move horizontally.
-			moveRoutine = StartCoroutine(MoveX(diff.x));
+			StartCoroutine(MoveX(diff.x));
 		}
 		else if (diff.y != 0 && diff.x == 0)
 		{
 			// Move vertically.
-			moveRoutine = StartCoroutine(MoveY(diff.y));
+			StartCoroutine(MoveY(diff.y));
 		}
 		else if (diff.x != 0 && diff.y != 0 && Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
 		{
 			// Move horizontally first, then vertically.
-			moveRoutine = StartCoroutine(MoveXThenY(diff.x, diff.y));
+			StartCoroutine(MoveXThenY(diff.x, diff.y));
 		}
 		else if (diff.x != 0 && diff.y != 0 && Mathf.Abs(diff.x) < Mathf.Abs(diff.y))
 		{
 			// Move vertically first, then horizontally.
-			moveRoutine = StartCoroutine(MoveYThenX(diff.x, diff.y));
+			StartCoroutine(MoveYThenX(diff.x, diff.y));
 		}
 		else if (diff.x != 0 && diff.y != 0 && Mathf.Abs(diff.x) == Mathf.Abs(diff.y))
 		{
 			// Move diagonally.
-			moveRoutine = StartCoroutine(MoveDiagonally(diff.x, diff.y));
+			StartCoroutine(MoveDiagonally(diff.x, diff.y));
 		}
 	}
 

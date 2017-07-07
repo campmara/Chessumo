@@ -46,9 +46,12 @@ public class Game : MonoBehaviour
 	private NextPieceViewer pieceViewer;
 
 	private bool moveInProgress = false;
-	private bool isPotentialMovement = false;
 
 	[ReadOnly, SerializeField] protected Piece currentSelectedPiece;
+
+	/////////////////////////////////////////////////////////////////////
+	// CODE
+	/////////////////////////////////////////////////////////////////////
 
     private void Awake()
 	{
@@ -56,108 +59,6 @@ public class Game : MonoBehaviour
 		pieces = new Piece[Constants.I.GridSize.x, Constants.I.GridSize.y];
 
 		currentSelectedPiece = null;
-	}
-
-	public void OnPieceMove(Piece piece, IntVector2 direction, int distance)
-	{
-		IntVector2 oldCoordinates = piece.GetCoordinates();
-		IntVector2 currentCheckingCoords = oldCoordinates;
-		int absDist = Mathf.Abs(distance);
-		int distFromPushingPiece = 0;
-		int numPushedPieces = 0;
-
-		for (int i = 0; i < absDist; i++)
-		{
-			currentCheckingCoords += direction;
-			distFromPushingPiece++;
-
-			if (pieces[currentCheckingCoords.x, currentCheckingCoords.y] != null)
-			{
-				int pushDistance = (absDist - distFromPushingPiece) + 1;
-				IntVector2 push = currentCheckingCoords + direction * pushDistance;
-				numPushedPieces++;
-
-				if (IsWithinBounds(push))
-				{
-					// Push in the grid.
-					//Debug.Log("Pushing within bounds.");
-					pieces[currentCheckingCoords.x, currentCheckingCoords.y].MoveTo(push, true);
-				}
-				else
-				{
-					// PUSH OFF THE GRID.
-					//Debug.Log("YOU JUST PUSHED A PIECE OFF THE GRID");
-					PieceOffGrid(pieces[currentCheckingCoords.x, currentCheckingCoords.y], push, absDist, distFromPushingPiece, numPushedPieces);
-					pieces[currentCheckingCoords.x, currentCheckingCoords.y] = null;
-				}
-			}
-			else
-			{
-				//Debug.Log("Normal Move. No Push");
-			}
-		}
-	}
-
-	private void PieceOffGrid(Piece piece, IntVector2 pushCoordinates, int travelDist, int distFromPushingPiece, int numPushedPieces)
-	{
-		numPiecesToSpawn++;
-
-		Vector2 offGridPosition = GameManager.Instance.CoordinateToPosition(pushCoordinates);
-		
-		StartCoroutine(MovePieceOffGrid(piece, offGridPosition, travelDist, distFromPushingPiece, numPushedPieces));
-	}
-
-	void IncrementScoreCombo()
-	{
-		if (!Constants.I.CombosEnabled)
-		{
-			return;
-		}
-
-		Debug.Log("Score Combo Incremented, Current Number: " + scoreCombo);
-		scoreCombo++;
-
-		if (scoreCombo >= Constants.I.GridSize.x - 1)
-		{
-			// We've scored the combo!
-			Debug.Log("Scored Combo.");
-
-			for (int i = 0; i < scoreCombo; i++)
-			{
-				score.ScorePoint();
-			}
-		}
-	}
-
-	protected IEnumerator MovePieceOffGrid(Piece piece, Vector2 position, int travelDist, int distFromPushingPiece, int numPushedPieces)
-	{
-		int clampPushed = Mathf.Clamp(numPushedPieces - 1, 0, numPushedPieces + 1);
-		int clampDist = Mathf.Clamp((distFromPushingPiece - 1) - clampPushed, 0, distFromPushingPiece + 1);
-		float waitTime = Constants.I.PieceMoveTime * clampDist;
-		yield return new WaitForSeconds(waitTime);
-
-		GameObject pieceObj = piece.gameObject;
-
-		Vector3 newPos = new Vector3(position.x, position.y, pieceObj.transform.position.z);
-
-		float duration = Constants.I.PieceMoveTime * (travelDist - Mathf.Clamp(distFromPushingPiece - 1, 0, distFromPushingPiece + 1));
-		Tween tween = pieceObj.transform.DOMove(newPos, duration)
-			.SetEase(Ease.Linear);
-		yield return tween.WaitForCompletion();
-
-		piece.HandleFallingSortingOrder();
-		Destroy(piece); // Destroy the piece class so it won't get touched.
-
-		tween = pieceObj.transform.DOMoveY(-6f, 0.75f)
-			.SetEase(Ease.InCubic);
-		yield return tween.WaitForCompletion();
-
-		// Score a point and handle the score combo.
-		score.ScorePoint();
-		scoreEffect.OnPointScored();
-		IncrementScoreCombo();
-
-		Destroy(pieceObj);
 	}
 
 	public void UpdatePieceCoordinates(Piece piece, IntVector2 oldCoordinates, IntVector2 newCoordinates)
@@ -173,7 +74,7 @@ public class Game : MonoBehaviour
 
 	public void Load() 
 	{
-		Coroutine boardRoutine = StartCoroutine(SetupBoard());
+		StartCoroutine(SetupBoard());
 
 		SetupScore();
 		SetupPieceViewer();
@@ -223,8 +124,6 @@ public class Game : MonoBehaviour
 
 	void SetupPlayfield()
 	{
-		//bool isAltColor = false;
-
 		for (int x = 0; x < Constants.I.GridSize.x; x++)
 		{
 			for (int y = 0; y < Constants.I.GridSize.y; y++)
@@ -237,15 +136,6 @@ public class Game : MonoBehaviour
 				tile.transform.position = GameManager.Instance.CoordinateToPosition(new IntVector2(x, y));
 
 				tile.SetInfo(x, y, this);
-
-				/*
-				if (isAltColor)
-					tile.SetColorAlternate();
-				else
-					tile.SetColorDefault();
-
-				isAltColor = !isAltColor;
-				*/
 
 				tileObjects[x, y] = tileObj;
 			}
@@ -322,6 +212,7 @@ public class Game : MonoBehaviour
 			GameManager.Instance.Deselect();
 			currentSelectedPiece = null;
 			ResetPossibleMoves();
+			MovePathManager.Instance.Reset();
 		}
 	}
 
@@ -397,6 +288,7 @@ public class Game : MonoBehaviour
 			GameManager.Instance.Deselect();
 			currentSelectedPiece = null;
 			ResetPossibleMoves();
+			MovePathManager.Instance.Reset();
 		}
 	}
 
@@ -410,88 +302,46 @@ public class Game : MonoBehaviour
 
 			if (!piece.potentialPush && !piece.GetMoveDisabled())
 			{	
-				ResetKnightIfNeeded();
-
 				ResetPossibleMoves();
 				SelectPiece(piece);
 			}
-
-			/*
-			if (piece == currentSelectedPiece)
-			{
-				ResetKnightIfNeeded();
-
-				GameManager.Instance.Deselect();
-				currentSelectedPiece = null;
-				ResetPossibleMoves();
-			}
-			else if (piece != currentSelectedPiece)
-			{
-				if (!piece.potentialPush && !piece.GetMoveDisabled())
-				{	
-					ResetKnightIfNeeded();
-
-					ResetPossibleMoves();
-					SelectPiece(piece);
-				}
-				else if (!piece.potentialPush && piece.GetMoveDisabled())
-				{
-					ResetKnightIfNeeded();
-
-					GameManager.Instance.Deselect();
-					currentSelectedPiece = null;
-					ResetPossibleMoves();
-				}
-				else
-				{
-					// Force a move. We're probably going to be pushing too.
-					IntVector2 coords = piece.GetCoordinates();
-
-					currentSelectedPiece.MoveTo(coords, false);
-					OnMoveInitiated();
-				}
-			}
-			*/
 		}
-		/*
-		else if (hit.collider.GetComponent<Tile>())
-		{
-			Tile tile = hit.collider.GetComponent<Tile>();
-
-			if (currentSelectedPiece && tile.IsShowingMove())
-			{
-				// We just made a move!!! omg !!!!
-				currentSelectedPiece.MoveTo(tile.GetCoordinates(), false);
-				OnMoveInitiated();
-			}
-			else if (currentSelectedPiece && !tile.IsShowingMove())
-			{
-				if (currentSelectedPiece.GetType() == typeof(Knight))
-				{
-					currentSelectedPiece.GetComponent<Knight>().ResetKnight();
-				}
-
-				GameManager.Instance.Deselect();
-				currentSelectedPiece = null;
-				ResetPossibleMoves();
-			}
-		}
-		*/
 	}
 
 	void HandleMoveRayHit(RaycastHit hit)
 	{
-		// Tells the arrow system to update.
+		if (hit.collider.GetComponent<Piece>() == currentSelectedPiece)
+		{
+			return;
+		}
 
+		// Tells the arrow system to update.
+		// CHECK TO MAKE SURE THAT WHAT YOU HIT IS WITHIN POSSIBLE MOVESPACE OF THE CURRENT PIECE. THIS IS IMPORTANT.
 		if (hit.collider.GetComponent<Piece>())
 		{
 			Piece piece = hit.collider.GetComponent<Piece>();
 
+			if (MovePathManager.Instance.MoveCount() == 0)
+			{
+				MovePathManager.Instance.AddMove(piece.GetCoordinates(), piece.GetCoordinates() - currentSelectedPiece.GetCoordinates());
+			}
+			else
+			{
+				MovePathManager.Instance.AddMove(piece.GetCoordinates(), piece.GetCoordinates() - MovePathManager.Instance.GetLastMoveDirection());
+			}
 		}
 		else if (hit.collider.GetComponent<Tile>())
 		{
 			Tile tile = hit.collider.GetComponent<Tile>();
 
+			if (MovePathManager.Instance.MoveCount() == 0)
+			{
+				MovePathManager.Instance.AddMove(tile.GetCoordinates(), tile.GetCoordinates() - currentSelectedPiece.GetCoordinates());
+			}
+			else
+			{
+				MovePathManager.Instance.AddMove(tile.GetCoordinates(), tile.GetCoordinates() - MovePathManager.Instance.GetLastMoveDirection());
+			}
 		}
 	}
 
@@ -503,8 +353,12 @@ public class Game : MonoBehaviour
 
 			if (piece.potentialPush)
 			{
-				IntVector2 coords = piece.GetCoordinates();
-				currentSelectedPiece.MoveTo(coords, false);
+				if (currentSelectedPiece.GetType() == typeof(Knight))
+				{
+					currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(MovePathManager.Instance.GetFirstMoveDirection());
+				}
+
+				currentSelectedPiece.MoveTo(piece.GetCoordinates(), false);
 				OnMoveInitiated();
 			}
 			else
@@ -512,6 +366,7 @@ public class Game : MonoBehaviour
 				GameManager.Instance.Deselect();
 				currentSelectedPiece = null;
 				ResetPossibleMoves();
+				MovePathManager.Instance.Reset();
 			}	
 		}
 		else if (hit.collider.GetComponent<Tile>()) // up on a tile
@@ -520,29 +375,124 @@ public class Game : MonoBehaviour
 
 			if (currentSelectedPiece && tile.IsShowingMove())
 			{
+				if (currentSelectedPiece.GetType() == typeof(Knight))
+				{
+					currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(MovePathManager.Instance.GetFirstMoveDirection());
+				}
+
 				// We just made a move!!! omg !!!!
 				currentSelectedPiece.MoveTo(tile.GetCoordinates(), false);
 				OnMoveInitiated();
 			}
 			else if (currentSelectedPiece && !tile.IsShowingMove())
 			{
-				if (currentSelectedPiece.GetType() == typeof(Knight))
-				{
-					currentSelectedPiece.GetComponent<Knight>().ResetKnight();
-				}
-
 				GameManager.Instance.Deselect();
 				currentSelectedPiece = null;
 				ResetPossibleMoves();
+				MovePathManager.Instance.Reset();
 			}
 		}
 	}
 
-	void ResetKnightIfNeeded()
+	public void OnPieceMove(Piece piece, IntVector2 direction, int distance)
 	{
-		if (currentSelectedPiece && currentSelectedPiece.GetType() == typeof(Knight))
+		IntVector2 oldCoordinates = piece.GetCoordinates();
+		IntVector2 currentCheckingCoords = oldCoordinates;
+		int absDist = Mathf.Abs(distance);
+		int distFromPushingPiece = 0;
+		int numPushedPieces = 0;
+
+		for (int i = 0; i < absDist; i++)
 		{
-			currentSelectedPiece.GetComponent<Knight>().ResetKnight();
+			currentCheckingCoords += direction;
+			distFromPushingPiece++;
+
+			if (pieces[currentCheckingCoords.x, currentCheckingCoords.y] != null)
+			{
+				int pushDistance = (absDist - distFromPushingPiece) + 1;
+				IntVector2 push = currentCheckingCoords + direction * pushDistance;
+				numPushedPieces++;
+
+				if (IsWithinBounds(push))
+				{
+					// Push in the grid.
+					//Debug.Log("Pushing within bounds.");
+					pieces[currentCheckingCoords.x, currentCheckingCoords.y].MoveTo(push, true);
+				}
+				else
+				{
+					// PUSH OFF THE GRID.
+					//Debug.Log("YOU JUST PUSHED A PIECE OFF THE GRID");
+					PieceOffGrid(pieces[currentCheckingCoords.x, currentCheckingCoords.y], push, absDist, distFromPushingPiece, numPushedPieces);
+					pieces[currentCheckingCoords.x, currentCheckingCoords.y] = null;
+				}
+			}
+			else
+			{
+				//Debug.Log("Normal Move. No Push");
+			}
+		}
+	}
+
+	private void PieceOffGrid(Piece piece, IntVector2 pushCoordinates, int travelDist, int distFromPushingPiece, int numPushedPieces)
+	{
+		numPiecesToSpawn++;
+
+		Vector2 offGridPosition = GameManager.Instance.CoordinateToPosition(pushCoordinates);
+		
+		StartCoroutine(MovePieceOffGrid(piece, offGridPosition, travelDist, distFromPushingPiece, numPushedPieces));
+	}
+
+	protected IEnumerator MovePieceOffGrid(Piece piece, Vector2 position, int travelDist, int distFromPushingPiece, int numPushedPieces)
+	{
+		int clampPushed = Mathf.Clamp(numPushedPieces - 1, 0, numPushedPieces + 1);
+		int clampDist = Mathf.Clamp((distFromPushingPiece - 1) - clampPushed, 0, distFromPushingPiece + 1);
+		float waitTime = Constants.I.PieceMoveTime * clampDist;
+		yield return new WaitForSeconds(waitTime);
+
+		GameObject pieceObj = piece.gameObject;
+
+		Vector3 newPos = new Vector3(position.x, position.y, pieceObj.transform.position.z);
+
+		float duration = Constants.I.PieceMoveTime * (travelDist - Mathf.Clamp(distFromPushingPiece - 1, 0, distFromPushingPiece + 1));
+		Tween tween = pieceObj.transform.DOMove(newPos, duration)
+			.SetEase(Ease.Linear);
+		yield return tween.WaitForCompletion();
+
+		piece.HandleFallingSortingOrder();
+		Destroy(piece); // Destroy the piece class so it won't get touched.
+
+		tween = pieceObj.transform.DOMoveY(-6f, 0.75f)
+			.SetEase(Ease.InCubic);
+		yield return tween.WaitForCompletion();
+
+		// Score a point and handle the score combo.
+		score.ScorePoint();
+		scoreEffect.OnPointScored();
+		IncrementScoreCombo();
+
+		Destroy(pieceObj);
+	}
+
+	void IncrementScoreCombo()
+	{
+		if (!Constants.I.CombosEnabled)
+		{
+			return;
+		}
+
+		Debug.Log("Score Combo Incremented, Current Number: " + scoreCombo);
+		scoreCombo++;
+
+		if (scoreCombo >= Constants.I.GridSize.x - 1)
+		{
+			// We've scored the combo!
+			Debug.Log("Scored Combo.");
+
+			for (int i = 0; i < scoreCombo; i++)
+			{
+				score.ScorePoint();
+			}
 		}
 	}
 
@@ -574,25 +524,7 @@ public class Game : MonoBehaviour
 		Debug.Log("Score Combo Zeroed");
 		scoreCombo = 0;
 
-		if (currentSelectedPiece.GetType() == typeof(Knight))
-		{
-			Knight knight = currentSelectedPiece.GetComponent<Knight>();
-
-			if (knight.HasDirection())
-			{
-				knight.ResetKnight();
-				GameManager.Instance.Deselect();
-				currentSelectedPiece = null;
-				ResetPossibleMoves();
-			}
-			else
-			{
-				// Initiate another move for the knight.
-				ResetPossibleMoves();
-				SelectPiece(knight);
-				moveInProgress = false;
-			}
-		}
+		MovePathManager.Instance.Reset();
 	}
 
 	public void OnMoveEnded()
@@ -619,7 +551,7 @@ public class Game : MonoBehaviour
 	{
 		if (IsGameOver())
 		{
-			Coroutine endRoutine = StartCoroutine(GameEndRoutine());
+			StartCoroutine(GameEndRoutine());
 		}
 	}
 
@@ -647,23 +579,13 @@ public class Game : MonoBehaviour
 
 		yield return new WaitForSeconds(0.5f);
 
-		Coroutine pieceDropRoutine = StartCoroutine(DropPieces());
-		Coroutine tileDropRoutine = StartCoroutine(DropTiles());
+		StartCoroutine(DropPieces());
+		StartCoroutine(DropTiles());
 
 		yield return new WaitForSeconds(2f);
 
-		// Lower the score and high score.
-		//score.Lower();
-		//highScore.Lower();
-		//yield return endMessage.Appear().WaitForCompletion();
-
-		//yield return new WaitForSeconds(0.5f);
-
 		score.SubmitScore();
 		highScore.PullHighScore();
-
-		//yield return new WaitForSeconds(1.5f);
-		
 		GameManager.Instance.OnGameEnd();
 	}
 
@@ -836,15 +758,6 @@ public class Game : MonoBehaviour
 
 	private void PlacePieces()
 	{
-		/*
-		CreatePawn(1, 2);
-		CreatePawn(2, 2);
-		CreatePawn(3, 2);
-		CreateKnight(1, 1);
-		CreateRook(2, 1);
-		CreateKnight(3, 1);
-		*/
-
 		// Spawn all the starting pieces.
 		for (int i = 0; i < Constants.I.StartingPieceCount; i++)
 		{

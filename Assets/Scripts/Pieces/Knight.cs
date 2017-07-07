@@ -5,8 +5,7 @@ public class Knight : Piece
 {
 	IntVector2[] secondaryMoveOffsets;
 
-	IntVector2 destination;
-	IntVector2 direction;
+	IntVector2 initialDirection;
 
 	protected override void Awake()
 	{
@@ -25,42 +24,21 @@ public class Knight : Piece
 		moveOffsets[6] = new IntVector2(-2, 1);
 		moveOffsets[7] = new IntVector2(-2, -1);
 
-		// Defined later.
-		secondaryMoveOffsets = new IntVector2[2];
-
-		destination = IntVector2.NULL;
-		direction = IntVector2.NULL;
-	}
-
-	public override IntVector2[] GetPossibleMoves()
-	{
-		IntVector2[] returnArray;
-
-		if (destination == IntVector2.NULL)
-		{
-			returnArray = new IntVector2[moveOffsets.Length];
-
-			for (int i = 0; i < moveOffsets.Length; i++)
-			{
-				returnArray[i] = currentCoordinates + moveOffsets[i];
-			}
-		}
-		else
-		{
-			returnArray = new IntVector2[secondaryMoveOffsets.Length];
-
-			for (int i = 0; i < secondaryMoveOffsets.Length; i++)
-			{
-				returnArray[i] = currentCoordinates + secondaryMoveOffsets[i];
-			}
-		}
-
-		return returnArray;
+		initialDirection = IntVector2.NULL;
 	}
 
 	// This is necessarily long.
 	public override void MoveTo(IntVector2 coordinates, bool pushed)
 	{
+		if (!pushed && !HasDirection())
+		{
+			Debug.LogError("[KNIGHT]: initial direction not set on move...");
+			return;
+		}
+
+		// Determine where it is we're actually moving.
+		IntVector2 diff = coordinates - GetCoordinates();
+		
 		//
 		// PUSHED
 		//
@@ -72,8 +50,7 @@ public class Knight : Piece
 				SetMoveDisabled(false);
 			}
 
-			// Determine how many times we must repeat the movement to get to the desired point.
-			IntVector2 diff = coordinates - GetCoordinates();
+			// Get Pushed.
 
 			if (diff.x != 0 && diff.y == 0)
 			{
@@ -95,75 +72,39 @@ public class Knight : Piece
 		}
 		else
 		{
-			if (HasDestination())
-			{
-				SetMoveDisabled(true);
-			}
+			SetMoveDisabled(true);
 		}
 			
 		//
 		// MOVED
 		//
 
-		if (destination == IntVector2.NULL)
+		if (initialDirection.x != 0)
 		{
-			destination = coordinates;
-
-			IntVector2 diff = destination - currentCoordinates;
-
-			if (diff.x > 0 && diff.y > 0)
-			{
-				secondaryMoveOffsets[0] = new IntVector2(1, 0);
-				secondaryMoveOffsets[1] = new IntVector2(0, 1);
-			}
-			else if (diff.x > 0 && diff.y < 0)
-			{
-				secondaryMoveOffsets[0] = new IntVector2(1, 0);
-				secondaryMoveOffsets[1] = new IntVector2(0, -1);
-			}
-			else if (diff.x < 0 && diff.y < 0)
-			{
-				secondaryMoveOffsets[0] = new IntVector2(-1, 0);
-				secondaryMoveOffsets[1] = new IntVector2(0, -1);
-			}
-			else if (diff.x < 0 && diff.y > 0)
-			{
-				secondaryMoveOffsets[0] = new IntVector2(-1, 0);
-				secondaryMoveOffsets[1] = new IntVector2(0, 1);
-			}
+			// Move horizontally first, then vertically.
+			StartCoroutine(MoveXThenY(diff.x, diff.y));
+			ResetKnight();
 		}
-		else
+		else if (initialDirection.y != 0)
 		{
-			direction = coordinates - currentCoordinates;
-
-			IntVector2 diff = destination - currentCoordinates;
-
-			if (direction.x != 0)
-			{
-				// Move horizontally first, then vertically.
-				StartCoroutine(MoveXThenY(diff.x, diff.y));
-			}
-			else if (direction.y != 0)
-			{
-				// Move vertically first, then horizontally.
-				StartCoroutine(MoveYThenX(diff.x, diff.y));
-			}
+			// Move vertically first, then horizontally.
+			StartCoroutine(MoveYThenX(diff.x, diff.y));
+			ResetKnight();
 		}
 	}
 
-	public bool HasDestination()
+	public void SetInitialDirection(IntVector2 dir)
 	{
-		return destination != IntVector2.NULL;
+		initialDirection = dir;
 	}
 
 	public bool HasDirection()
 	{
-		return direction != IntVector2.NULL;
+		return initialDirection != IntVector2.NULL;
 	}
 
 	public void ResetKnight()
 	{
-		destination = IntVector2.NULL;
-		direction = IntVector2.NULL;
+		initialDirection = IntVector2.NULL;
 	}
 }
