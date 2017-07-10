@@ -3,10 +3,7 @@ T O  D O  L I S T
 =================
 
 Arrow-based Move System:
-    - very much like fire emblem.
-    - to me this seems like the best course of action for movement. easier to integrate into the system.
-    - also will be less finicky with the weird move styles of the various pieces.
-    - better for visual clarity tooooooooooo.
+    - Implement movemagnitude handling into piece GetMove functions.
 
 Code Refactoring:
     - Maybe try fixing up game class and moving stuff out that doesn't need to be there.
