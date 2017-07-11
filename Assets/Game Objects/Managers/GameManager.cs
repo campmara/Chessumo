@@ -34,8 +34,6 @@ public class GameManager : MonoBehaviour
 	public GameObject bishopPrefab;
 	public GameObject knightPrefab;
 	public GameObject pawnPrefab;
-	[Header("Effect Prefabs")]
-	public GameObject selectionPrefab;
 
 	/////////////////////////////////////////////////////////////////////
 	// PRIVATES
@@ -44,7 +42,6 @@ public class GameManager : MonoBehaviour
 	private Game game;
 	private State currentState;
 
-	private GameObject selectionObj;
 	private DebugStartButton startButton;
 
 	void Awake()
@@ -97,8 +94,6 @@ public class GameManager : MonoBehaviour
 		{
 			Debug.Log("[GAME MANAGER] Loading and Beginning Game.");
 
-			GameManager.Instance.Deselect();
-
 			game = Instantiate(gamePrefab) as Game;
 			game.name = "Chessumo Game";
 			game.transform.parent = transform;
@@ -125,27 +120,6 @@ public class GameManager : MonoBehaviour
 		float xPos = (coordinate.x - (Constants.I.GridSize.x / 2f)) + 0.5f + Constants.I.GridOffsetX;
 		float yPos = (coordinate.y - (Constants.I.GridSize.y / 2f)) + 0.5f + Constants.I.GridOffsetY;
 		return new Vector2(xPos, yPos);
-	}
-
-	public void SelectObject(Transform obj)
-	{
-		if (!selectionObj)
-		{
-			selectionObj = Instantiate(selectionPrefab) as GameObject;
-			selectionObj.name = "Selection";
-			selectionObj.transform.parent = transform;
-			selectionObj.SetActive(false);
-		}
-
-		selectionObj.transform.position = obj.position;
-		//selectionObj.transform.localScale = new Vector2(obj.localScale.x + 0.1f, obj.localScale.y + 0.1f);
-		selectionObj.SetActive(true);
-	}
-
-	public void Deselect()
-	{
-		if (selectionObj)
-			selectionObj.SetActive(false);
 	}
 
 	public void GrowMe(GameObject obj, float delay = 0f, Ease ease = Ease.OutBack)

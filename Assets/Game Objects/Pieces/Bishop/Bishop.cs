@@ -15,4 +15,15 @@ public class Bishop : Piece
 		moveOffsets[2] = new IntVector2(-1, -1);
 		moveOffsets[3] = new IntVector2(1, -1);
 	}
+
+	public override void DetermineMoveset()
+	{
+		moveset = new InitialMove();
+		moveset.coordinates = currentCoordinates;
+
+		moveset.up_left = GetUpLeft(ref moveset);
+		moveset.up_right = GetUpRight(ref moveset);
+		moveset.down_left = GetDownLeft(ref moveset);
+		moveset.down_right = GetDownRight(ref moveset);
+	}
 }

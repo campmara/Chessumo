@@ -186,30 +186,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8567541052dd04840b7f8087cc60baac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveHorizontal: {fileID: 1860963796239848, guid: e97252a81454f4aa494ea1a0cf089110,
-    type: 2}
-  moveVertical: {fileID: 1860963796239848, guid: affffefae74464af9b9eee3af201e962,
-    type: 2}
-  moveDiagonal_BL2TR: {fileID: 1860963796239848, guid: 8b16dabd2aae145ffa6d8a3bfe2a1f5a,
-    type: 2}
-  moveDiagonal_TL2BR: {fileID: 1860963796239848, guid: 30439607e9a6a48dca84e45c266eabde,
-    type: 2}
-  moveCorner_DLRU: {fileID: 1860963796239848, guid: 79a148aee4b574ec7a563412a4de226d,
-    type: 2}
-  moveCorner_DRLU: {fileID: 1860963796239848, guid: b1e56ad34719b443b9aa6e67ec9c6fba,
-    type: 2}
-  moveCorner_ULRD: {fileID: 1860963796239848, guid: 7d5e0b751536447ddb24f8de0ebbef23,
-    type: 2}
-  moveCorner_URLD: {fileID: 1860963796239848, guid: 6540f7753c4d24dbbb147e7fb4dfc854,
-    type: 2}
-  moveEnd_Down: {fileID: 1860963796239848, guid: 12416d38804d6485ca01559d5f3e4d24,
-    type: 2}
-  moveEnd_Left: {fileID: 1860963796239848, guid: 99335d39856e0425e9577d7d6b6c4910,
-    type: 2}
-  moveEnd_Right: {fileID: 1860963796239848, guid: e58a5ac004a64450ab4caa6a47ce745d,
-    type: 2}
-  moveEnd_Up: {fileID: 1860963796239848, guid: 8531d0f1a0f094715bdf085d426d9a51, type: 2}
-  moveEnd_UR: {fileID: 1860963796239848, guid: 7ea97d524e443456bbd7bddaf86f3ab1, type: 2}
-  moveEnd_UL: {fileID: 1860963796239848, guid: c2ffcecdb952a4284ab6e6dd87cd576d, type: 2}
-  moveEnd_DL: {fileID: 1860963796239848, guid: e9b1ed26d5a764874ac7b5405816cf99, type: 2}
-  moveEnd_DR: {fileID: 1860963796239848, guid: 19da5ef86b26a46b49679caa2a720a72, type: 2}
+  closed: {fileID: 1818772064662148, guid: 2a620f31b79724148bedda473f1a80c1, type: 2}
+  corner_DL: {fileID: 1474304643464576, guid: 96fdc68fd1d704cafbc78d2f67cb7760, type: 2}
+  corner_DR: {fileID: 1000119386179062, guid: ee8ae8cd4c1404302b2c58cf273f5fc9, type: 2}
+  corner_UL: {fileID: 1494651258928996, guid: 7156d491929a04094a429483f7bbd198, type: 2}
+  corner_UR: {fileID: 1049293911781420, guid: 6969a24d9da144183901cc1b5c1ae576, type: 2}
+  end_D: {fileID: 1131884041811850, guid: 3c59a811e96fa4033b6ffc170b9cd08a, type: 2}
+  end_L: {fileID: 1024498225249208, guid: 467f4a426afc14ddd8b1c84ccad46f2b, type: 2}
+  end_R: {fileID: 1397271968429122, guid: d8160a84504804b568474544e92c67c4, type: 2}
+  end_U: {fileID: 1273540857187186, guid: dbff8d870823b420ab360aa1cbdb9cc8, type: 2}
+  end_DL: {fileID: 1787487671554694, guid: 2700a3ddb5cdf49a7bc56a6cf194c3a6, type: 2}
+  end_DR: {fileID: 1964591576758202, guid: 5db142c95eb3541f386acd3e738fa8d5, type: 2}
+  end_UL: {fileID: 1678778802820548, guid: 15c1f1965939c4d61a46659cdf095ffa, type: 2}
+  end_UR: {fileID: 1163692731035630, guid: 2c5b60d29442c4b0b8c1e7994dfd9ebd, type: 2}
+  passage_H: {fileID: 1923752269470412, guid: 567fb640b27bd468ea3d39f4e5c0e56b, type: 2}
+  passage_V: {fileID: 1835592223161746, guid: 0f58c02ef63db4f3ebf4ec78e4370f84, type: 2}
+  passage_DL: {fileID: 1393763928560326, guid: 8174fa56d592042cea1b2084106ef9ea, type: 2}
+  passage_DR: {fileID: 1277422399301536, guid: 1e414b11141f0481986abf2e76ceecd9, type: 2}
+  passage_UL: {fileID: 1967039930873632, guid: a458baf8f933b4225b815560c9e9a399, type: 2}
+  passage_UR: {fileID: 1566683425575992, guid: 5ed63ad8ab39441da86edc30f340dc4c, type: 2}

@@ -48,12 +48,9 @@ public class Game : MonoBehaviour
 	private bool moveInProgress = false;
 
 	[ReadOnly, SerializeField] private Piece currentSelectedPiece;
-	private IntVector2[] currentPossibleMoves;
+	private List<IntVector2> currentPossibleMoves;
 	private Piece currentMovePiece = null;
-	private Piece lastMovePiece = null;
 	private Tile currentMoveTile = null;
-	private Tile lastMoveTile = null;
-	private IntVector2 prevMoveCoords;
 
 	/////////////////////////////////////////////////////////////////////
 	// CODE
@@ -65,6 +62,7 @@ public class Game : MonoBehaviour
 		pieces = new Piece[Constants.I.GridSize.x, Constants.I.GridSize.y];
 
 		currentSelectedPiece = null;
+		currentPossibleMoves = new List<IntVector2>();
 	}
 
 	public void UpdatePieceCoordinates(Piece piece, IntVector2 oldCoordinates, IntVector2 newCoordinates)
@@ -220,10 +218,8 @@ public class Game : MonoBehaviour
 		}
 		else
 		{
-			GameManager.Instance.Deselect();
-			currentSelectedPiece = null;
 			ResetPossibleMoves();
-			MovePathManager.Instance.Reset();
+			MovePathManager.Instance.EndPath();
 		}
 	}
 
@@ -296,8 +292,6 @@ public class Game : MonoBehaviour
 		}
 		else
 		{
-			GameManager.Instance.Deselect();
-			currentSelectedPiece = null;
 			ResetPossibleMoves();
 			MovePathManager.Instance.Reset();
 		}
@@ -313,7 +307,7 @@ public class Game : MonoBehaviour
 
 			if (!piece.potentialPush && !piece.GetMoveDisabled())
 			{	
-				ResetPossibleMoves();
+				//ResetPossibleMoves();
 				SelectPiece(piece);
 			}
 		}
@@ -323,6 +317,9 @@ public class Game : MonoBehaviour
 	{
 		if (hit.collider.GetComponent<Piece>() == currentSelectedPiece)
 		{
+			MovePathManager.Instance.BeginPath(currentSelectedPiece.GetCoordinates(), isReturn: true);
+			currentMoveTile = null;
+			currentMovePiece = null;
 			return;
 		}
 
@@ -334,11 +331,7 @@ public class Game : MonoBehaviour
 		if (tile != null)
 		{
 			// Check to make sure we're processing a new tile and not a repeat one.
-			if (tile != currentMoveTile)
-			{
-				currentMoveTile = tile;
-			}
-			else
+			if (tile == currentMoveTile)
 			{
 				return;
 			}
@@ -348,25 +341,15 @@ public class Game : MonoBehaviour
 				return;
 			}
 
-			if (MovePathManager.Instance.MoveCount() == 0)
-			{
-				MovePathManager.Instance.AddMove(tile.GetCoordinates(), tile.GetCoordinates() - currentSelectedPiece.GetCoordinates());
-			}
-			else
-			{
-				MovePathManager.Instance.AddMove(tile.GetCoordinates(), tile.GetCoordinates() - prevMoveCoords);
-			}
+			Move move = currentSelectedPiece.Moveset.DetermineMove(tile.GetCoordinates());
+			MovePathManager.Instance.DrawPath(move);
 
-			prevMoveCoords = tile.GetCoordinates();
+			currentMoveTile = tile;
 		}
 		else if (piece != null)
 		{
 			// Check to make sure we're processing a new tile and not a repeat one.
-			if (piece != currentMovePiece)
-			{
-				currentMovePiece = piece;
-			}
-			else
+			if (piece == currentMovePiece)
 			{
 				return;
 			}
@@ -376,16 +359,10 @@ public class Game : MonoBehaviour
 				return;
 			}
 
-			if (MovePathManager.Instance.MoveCount() == 0)
-			{
-				MovePathManager.Instance.AddMove(piece.GetCoordinates(), piece.GetCoordinates() - currentSelectedPiece.GetCoordinates());
-			}
-			else
-			{
-				MovePathManager.Instance.AddMove(piece.GetCoordinates(), piece.GetCoordinates() - prevMoveCoords);
-			}
+			Move move = currentSelectedPiece.Moveset.DetermineMove(piece.GetCoordinates());
+			MovePathManager.Instance.DrawPath(move);
 
-			prevMoveCoords = piece.GetCoordinates();
+			currentMovePiece = piece;
 		}
 	}
 
@@ -402,15 +379,13 @@ public class Game : MonoBehaviour
 					currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(MovePathManager.Instance.GetFirstMoveDirection());
 				}
 
-				currentSelectedPiece.MoveTo(piece.GetCoordinates(), false);
+				currentSelectedPiece.MoveTo(piece.GetCoordinates(), false, 0, 0);
 				OnMoveInitiated();
 			}
 			else
 			{
-				GameManager.Instance.Deselect();
-				currentSelectedPiece = null;
 				ResetPossibleMoves();
-				MovePathManager.Instance.Reset();
+				MovePathManager.Instance.EndPath();
 			}	
 		}
 		else if (hit.collider.GetComponent<Tile>()) // up on a tile
@@ -425,15 +400,13 @@ public class Game : MonoBehaviour
 				}
 
 				// We just made a move!!! omg !!!!
-				currentSelectedPiece.MoveTo(tile.GetCoordinates(), false);
+				currentSelectedPiece.MoveTo(tile.GetCoordinates(), false, 0, 0);
 				OnMoveInitiated();
 			}
 			else if (currentSelectedPiece && !tile.IsShowingMove())
 			{
-				GameManager.Instance.Deselect();
-				currentSelectedPiece = null;
 				ResetPossibleMoves();
-				MovePathManager.Instance.Reset();
+				MovePathManager.Instance.EndPath();
 			}
 		}
 	}
@@ -444,7 +417,7 @@ public class Game : MonoBehaviour
 		{
 			IntVector2[] secondaryMoves = currentSelectedPiece.GetComponent<Knight>().GetSecondaryMoves();
 
-			for (int i = 0; i < currentPossibleMoves.Length; i++)
+			for (int i = 0; i < currentPossibleMoves.Count; i++)
 			{
 				if (currentPossibleMoves[i] == coords)
 				{
@@ -462,7 +435,7 @@ public class Game : MonoBehaviour
 		}
 		else
 		{
-			for (int i = 0; i < currentPossibleMoves.Length; i++)
+			for (int i = 0; i < currentPossibleMoves.Count; i++)
 			{
 				if (currentPossibleMoves[i] == coords)
 				{
@@ -497,7 +470,7 @@ public class Game : MonoBehaviour
 				{
 					// Push in the grid.
 					//Debug.Log("Pushing within bounds.");
-					pieces[currentCheckingCoords.x, currentCheckingCoords.y].MoveTo(push, true);
+					pieces[currentCheckingCoords.x, currentCheckingCoords.y].MoveTo(push, true, distFromPushingPiece, numPushedPieces);
 				}
 				else
 				{
@@ -578,11 +551,18 @@ public class Game : MonoBehaviour
 
 	void SelectPiece(Piece piece)
 	{
-		currentSelectedPiece = piece;
-		GameManager.Instance.SelectObject(currentSelectedPiece.transform);
+		// Handle Pickup Effect
+		piece.PickPieceUp();
+		tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>().ShowMove();
 
+		currentSelectedPiece = piece;
+
+		// Begin drawing the path.
+		MovePathManager.Instance.BeginPath(currentSelectedPiece.GetCoordinates(), isReturn: false);
+
+		currentSelectedPiece.DetermineMoveset();
 		currentPossibleMoves = currentSelectedPiece.GetPossibleMoves();
-		for (int i = 0; i < currentPossibleMoves.Length; i++)
+		for (int i = 0; i < currentPossibleMoves.Count; i++)
 		{
 			IntVector2 move = currentPossibleMoves[i];
 			if (IsWithinBounds(move))
@@ -591,6 +571,7 @@ public class Game : MonoBehaviour
 
 				if (pieces[move.x, move.y] != null)
 				{
+					pieces[move.x, move.y].PickPieceUp();
 					pieces[move.x, move.y].SetPushPotential(true);
 				}
 			}
@@ -603,15 +584,12 @@ public class Game : MonoBehaviour
 
 		Debug.Log("Score Combo Zeroed");
 		scoreCombo = 0;
-
-		MovePathManager.Instance.Reset();
 	}
 
 	public void OnMoveEnded()
 	{
-		GameManager.Instance.Deselect();
-		currentSelectedPiece = null;
 		ResetPossibleMoves();
+		MovePathManager.Instance.EndPath();
 
 		// Spawn the needed amount of pieces.
 		for (int i = 0; i < numPiecesToSpawn; i++)
@@ -719,11 +697,22 @@ public class Game : MonoBehaviour
 
 				if (pieces[i, j] != null)
 				{
+					pieces[i, j].SetPieceDown();
 					pieces[i, j].SetPushPotential(false);
 				}
 			}
 		}
+
+		if (currentSelectedPiece != null)
+		{
+			currentSelectedPiece.SetPieceDown();
+			currentSelectedPiece.SetPushPotential(false);
+			currentSelectedPiece = null;
+		}
+		
 		currentPossibleMoves = null;
+		currentMovePiece = null;
+		currentMoveTile = null;
 	}
 
 	IntVector2 RandomCoordinates()
@@ -896,38 +885,5 @@ public class Game : MonoBehaviour
 		piece.SetInfo(x, y, this);
 
 		pieces[x, y] = piece;
-	}
-
-	// Returns a list of coordinates diagonal to the given coordinates that contain pieces.
-	public List<IntVector2> GetDiagonalPieceCoordinates(IntVector2 coords)
-	{
-		List<IntVector2> retList = new List<IntVector2>();
-
-		IntVector2 upRight = new IntVector2(coords.x + 1, coords.y + 1);
-		IntVector2 downRight = new IntVector2(coords.x + 1, coords.y - 1);
-		IntVector2 downLeft = new IntVector2(coords.x - 1, coords.y - 1);
-		IntVector2 upLeft = new IntVector2(coords.x - 1, coords.y + 1);
-
-		if (IsWithinBounds(upRight) && pieces[upRight.x, upRight.y] != null)
-		{
-			retList.Add(upRight);
-		}
-
-		if (IsWithinBounds(downRight) && pieces[downRight.x, downRight.y] != null)
-		{
-			retList.Add(downRight);
-		}
-
-		if (IsWithinBounds(downLeft) && pieces[downLeft.x, downLeft.y] != null)
-		{
-			retList.Add(downLeft);
-		}
-
-		if (IsWithinBounds(upLeft) && pieces[upLeft.x, upLeft.y] != null)
-		{
-			retList.Add(upLeft);
-		}
-
-		return retList;
 	}
 }

@@ -21,4 +21,20 @@ public class Queen : Piece
 		moveOffsets[6] = new IntVector2(0, -1);
 		moveOffsets[7] = new IntVector2(1, -1);
 	}
+
+	public override void DetermineMoveset()
+	{
+		moveset = new InitialMove();
+		moveset.coordinates = currentCoordinates;
+
+		moveset.up = GetUp(ref moveset);
+		moveset.down = GetDown(ref moveset);
+		moveset.left = GetLeft(ref moveset);
+		moveset.right = GetRight(ref moveset);
+
+		moveset.up_left = GetUpLeft(ref moveset);
+		moveset.up_right = GetUpRight(ref moveset);
+		moveset.down_left = GetDownLeft(ref moveset);
+		moveset.down_right = GetDownRight(ref moveset);
+	}
 }

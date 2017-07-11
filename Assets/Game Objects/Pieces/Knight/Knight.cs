@@ -47,6 +47,14 @@ public class Knight : Piece
 		initialDirection = IntVector2.NULL;
 	}
 
+	public override void DetermineMoveset()
+	{
+		moveset = new InitialMove();
+
+		// TODO: Determine knight moveset
+		
+	}
+
 	public IntVector2[] GetSecondaryMoves()
 	{
 		IntVector2[] returnArray = new IntVector2[secondaryMoveOffsets.Length];
@@ -60,7 +68,7 @@ public class Knight : Piece
 	}
 
 	// This is necessarily long.
-	public override void MoveTo(IntVector2 coordinates, bool pushed)
+	public override void MoveTo(IntVector2 coordinates, bool pushed, int distFromPushingPiece, int numPushedPieces)
 	{
 		if (!pushed && !HasDirection())
 		{
@@ -87,17 +95,17 @@ public class Knight : Piece
 			if (diff.x != 0 && diff.y == 0)
 			{
 				// Move horizontally.
-				StartCoroutine(MoveX(diff.x));
+				StartCoroutine(MoveX(diff.x, distFromPushingPiece, numPushedPieces, pushed));
 			}
 			else if (diff.y != 0 && diff.x == 0)
 			{
 				// Move vertically.
-				StartCoroutine(MoveY(diff.y));
+				StartCoroutine(MoveY(diff.y, distFromPushingPiece, numPushedPieces, pushed));
 			}
 			else if (diff.x != 0 && diff.y != 0 && Mathf.Abs(diff.x) == Mathf.Abs(diff.y))
 			{
 				// Move diagonally.
-				StartCoroutine(MoveDiagonally(diff.x, diff.y));
+				StartCoroutine(MoveDiagonally(diff.x, diff.y, distFromPushingPiece, numPushedPieces, pushed));
 			}
 
 			return;
@@ -114,13 +122,13 @@ public class Knight : Piece
 		if (initialDirection.x != 0)
 		{
 			// Move horizontally first, then vertically.
-			StartCoroutine(MoveXThenY(diff.x, diff.y));
+			StartCoroutine(MoveXThenY(diff.x, diff.y, pushed));
 			ResetKnight();
 		}
 		else if (initialDirection.y != 0)
 		{
 			// Move vertically first, then horizontally.
-			StartCoroutine(MoveYThenX(diff.x, diff.y));
+			StartCoroutine(MoveYThenX(diff.x, diff.y, pushed));
 			ResetKnight();
 		}
 	}

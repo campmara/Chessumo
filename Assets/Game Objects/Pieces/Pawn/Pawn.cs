@@ -16,6 +16,7 @@ public class Pawn : Piece
 		moveOffsets[1] = new IntVector2(0, -1);
 	}
 
+	/*
 	// This has to be overriden because the pawn's possible moves are sometimes diagonal if there is a piece to push there.
 	public override IntVector2[] GetPossibleMoves()
 	{
@@ -40,22 +41,24 @@ public class Pawn : Piece
 
 		return returnArray;
 	}
+	*/
 
 	public override void DetermineMoveset()
 	{
 		moveset = new InitialMove();
+		moveset.coordinates = currentCoordinates;
 
-		moveset.up = GetUp(moveset);
-		moveset.down = GetDown(moveset);
+		moveset.up = GetUp(ref moveset);
+		moveset.down = GetDown(ref moveset);
 
 		// Check for diagonal pieces.
-		moveset.up_left = GetUpLeft(moveset);
-		moveset.up_right = GetUpRight(moveset);
-		moveset.down_left = GetDownLeft(moveset);
-		moveset.down_right = GetDownRight(moveset);
+		moveset.up_left = GetUpLeft(ref moveset);
+		moveset.up_right = GetUpRight(ref moveset);
+		moveset.down_left = GetDownLeft(ref moveset);
+		moveset.down_right = GetDownRight(ref moveset);
 	}
 
-	protected override MoveUpLeft GetUpLeft(InitialMove init)
+	protected override MoveUpLeft GetUpLeft(ref InitialMove init)
 	{
 		IntVector2 offset = new IntVector2(-1, 1);
 		IntVector2 newCoords = currentCoordinates + offset;
@@ -65,6 +68,8 @@ public class Pawn : Piece
 			ret.coordinates = newCoords;
 			ret.moveOffset = offset;
 			ret.reverse = init;
+			ret.isPossibleEnd = true;
+			init.moveList.Add(ret);
 			return ret;
 		}
 		else
@@ -73,7 +78,7 @@ public class Pawn : Piece
 		}
 	}
 
-	protected override MoveUpRight GetUpRight(InitialMove init)
+	protected override MoveUpRight GetUpRight(ref InitialMove init)
 	{
 		IntVector2 offset = new IntVector2(1, 1);
 		IntVector2 newCoords = currentCoordinates + offset;
@@ -83,6 +88,8 @@ public class Pawn : Piece
 			ret.coordinates = newCoords;
 			ret.moveOffset = offset;
 			ret.reverse = init;
+			ret.isPossibleEnd = true;
+			init.moveList.Add(ret);
 			return ret;
 		}
 		else
@@ -91,7 +98,7 @@ public class Pawn : Piece
 		}
 	}
 
-	protected override MoveDownLeft GetDownLeft(InitialMove init)
+	protected override MoveDownLeft GetDownLeft(ref InitialMove init)
 	{
 		IntVector2 offset = new IntVector2(-1, -1);
 		IntVector2 newCoords = currentCoordinates + offset;
@@ -101,6 +108,8 @@ public class Pawn : Piece
 			ret.coordinates = newCoords;
 			ret.moveOffset = offset;
 			ret.reverse = init;
+			ret.isPossibleEnd = true;
+			init.moveList.Add(ret);
 			return ret;
 		}
 		else
@@ -109,7 +118,7 @@ public class Pawn : Piece
 		}
 	}
 
-	protected override MoveDownRight GetDownRight(InitialMove init)
+	protected override MoveDownRight GetDownRight(ref InitialMove init)
 	{
 		IntVector2 offset = new IntVector2(1, -1);
 		IntVector2 newCoords = currentCoordinates + offset;
@@ -119,6 +128,8 @@ public class Pawn : Piece
 			ret.coordinates = newCoords;
 			ret.moveOffset = offset;
 			ret.reverse = init;
+			ret.isPossibleEnd = true;
+			init.moveList.Add(ret);
 			return ret;
 		}
 		else

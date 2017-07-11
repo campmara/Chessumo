@@ -25,15 +25,16 @@ public class King : Piece
 	public override void DetermineMoveset()
 	{
 		moveset = new InitialMove();
+		moveset.coordinates = currentCoordinates;
 
-		moveset.up = GetUp(moveset);
-		moveset.down = GetDown(moveset);
-		moveset.left = GetLeft(moveset);
-		moveset.right = GetRight(moveset);
+		moveset.up = GetUp(ref moveset);
+		moveset.down = GetDown(ref moveset);
+		moveset.left = GetLeft(ref moveset);
+		moveset.right = GetRight(ref moveset);
 
-		moveset.up_left = GetUpLeft(moveset);
-		moveset.up_right = GetUpRight(moveset);
-		moveset.down_left = GetDownLeft(moveset);
-		moveset.down_right = GetDownRight(moveset);
+		moveset.up_left = GetUpLeft(ref moveset);
+		moveset.up_right = GetUpRight(ref moveset);
+		moveset.down_left = GetDownLeft(ref moveset);
+		moveset.down_right = GetDownRight(ref moveset);
 	}
 }

@@ -21,11 +21,12 @@ public class Rook : Piece
 	public override void DetermineMoveset()
 	{
 		moveset = new InitialMove();
+		moveset.coordinates = currentCoordinates;
 
-		moveset.up = GetUp(moveset);
-		moveset.down = GetDown(moveset);
-		moveset.left = GetLeft(moveset);
-		moveset.right = GetRight(moveset);
+		moveset.up = GetUp(ref moveset);
+		moveset.down = GetDown(ref moveset);
+		moveset.left = GetLeft(ref moveset);
+		moveset.right = GetRight(ref moveset);
 	}
 }
 
