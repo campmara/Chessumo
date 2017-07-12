@@ -23,7 +23,8 @@ public class Tile : MonoBehaviour
 	[SerializeField] private Sprite upSprite;
 
 	[SerializeField] private Color color = Color.white;
-	[SerializeField] private Color alternateColor = Color.grey;
+	[SerializeField] private Color possibleColor = Color.grey;
+	[SerializeField] private Color fingerColor = Color.grey;
 
 	private SpriteRenderer spriteRenderer;
 
@@ -42,9 +43,15 @@ public class Tile : MonoBehaviour
 		spriteRenderer.sortingOrder = 0;
 	}
 
-	public void SetColorAlternate()
+	public void SetColorPossible()
 	{
-		spriteRenderer.color = alternateColor;
+		spriteRenderer.color = possibleColor;
+		spriteRenderer.sortingOrder = 0;
+	}
+
+	public void SetColorFinger()
+	{
+		spriteRenderer.color = fingerColor;
 		spriteRenderer.sortingOrder = 1;
 	}
 
@@ -64,27 +71,55 @@ public class Tile : MonoBehaviour
 		parentGame = game;
 	}
 
-	public bool IsShowingMove()
+	public bool IsShowingPossibleMove()
 	{
-		return spriteRenderer.sprite == upSprite;
+		return spriteRenderer.color == possibleColor;
 	}
 
 	// Public because this gets called by the mode.
-	public void ShowMove()
+	public void ShowPossibleMove()
 	{
-		if (!IsShowingMove())
+		if (!IsShowingPossibleMove())
 		{
-			spriteRenderer.sprite = upSprite;
-			SetColorAlternate();
+			SetColorPossible();
 		}
 	}
 
-	public void HideMove()
+	public void HidePossibleMove()
 	{
-		if (IsShowingMove())
+		if (IsShowingPossibleMove())
 		{
 			spriteRenderer.sprite = downSprite;
 			SetColorDefault();
 		}
+	}
+
+	public bool IsShowingFingerMove()
+	{
+		return spriteRenderer.sprite == upSprite;
+	}
+
+	public void ShowFingerMove()
+	{
+		if (IsShowingPossibleMove() && !IsShowingFingerMove())
+		{
+			spriteRenderer.sprite = upSprite;
+			SetColorFinger();
+		}
+	}
+
+	public void HideFingerMove()
+	{
+		if (IsShowingFingerMove())
+		{
+			spriteRenderer.sprite = downSprite;
+			SetColorPossible();
+		}
+	}
+
+	public void HideAllEffects()
+	{
+		spriteRenderer.sprite = downSprite;
+		SetColorDefault();
 	}
 }

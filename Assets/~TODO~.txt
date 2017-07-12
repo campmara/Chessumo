@@ -4,8 +4,9 @@ T O  D O  L I S T
 
 Arrow-based Move System:
     - Refactor the move class to use only the essential aspects. You don't need all that nested class bullshit.
-    - Make it so the reverse part of the path goes farther than just one reverse.
-    - keep working. ugh
+    - Ok so.
+    - You gotta now start handling input movement with the new move system.
+    - If we make a move we gotta update what our possible moves are, disallowing movement in invalid directions.
 
 Code Refactoring:
     - Maybe try fixing up game class and moving stuff out that doesn't need to be there.

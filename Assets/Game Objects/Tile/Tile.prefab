@@ -97,7 +97,8 @@ MonoBehaviour:
   downSprite: {fileID: 21300000, guid: 679add5a3b7194442bc2229fc3dc83ac, type: 3}
   upSprite: {fileID: 21300000, guid: 6ab5de0b9b8ff40f99647d7043caab5a, type: 3}
   color: {r: 0.75, g: 0.75, b: 0.75, a: 1}
-  alternateColor: {r: 0.44117647, g: 0.44117647, b: 0.44117647, a: 1}
+  possibleColor: {r: 0.63235295, g: 0.63235295, b: 0.63235295, a: 1}
+  fingerColor: {r: 0.49264705, g: 0.49264705, b: 0.49264705, a: 1}
 --- !u!212 &212832862552760176
 SpriteRenderer:
   m_ObjectHideFlags: 1

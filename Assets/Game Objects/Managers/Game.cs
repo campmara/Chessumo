@@ -219,7 +219,6 @@ public class Game : MonoBehaviour
 		else
 		{
 			ResetPossibleMoves();
-			MovePathManager.Instance.EndPath();
 		}
 	}
 
@@ -293,7 +292,7 @@ public class Game : MonoBehaviour
 		else
 		{
 			ResetPossibleMoves();
-			MovePathManager.Instance.Reset();
+			EndDrawingMove();
 		}
 	}
 
@@ -317,9 +316,10 @@ public class Game : MonoBehaviour
 	{
 		if (hit.collider.GetComponent<Piece>() == currentSelectedPiece)
 		{
-			MovePathManager.Instance.BeginPath(currentSelectedPiece.GetCoordinates(), isReturn: true);
-			currentMoveTile = null;
-			currentMovePiece = null;
+			//MovePathManager.Instance.BeginPath(currentSelectedPiece.GetCoordinates());
+			//currentMoveTile = null;
+			//currentMovePiece = null;
+			ClearPreviousDraw();
 			return;
 		}
 
@@ -342,9 +342,11 @@ public class Game : MonoBehaviour
 			}
 
 			Move move = currentSelectedPiece.Moveset.DetermineMove(tile.GetCoordinates());
-			MovePathManager.Instance.DrawPath(move);
+			DrawMove(move);
+			//MovePathManager.Instance.DrawPath(move);
 
 			currentMoveTile = tile;
+			currentMovePiece = null;
 		}
 		else if (piece != null)
 		{
@@ -360,9 +362,11 @@ public class Game : MonoBehaviour
 			}
 
 			Move move = currentSelectedPiece.Moveset.DetermineMove(piece.GetCoordinates());
-			MovePathManager.Instance.DrawPath(move);
+			DrawMove(move);
+			//MovePathManager.Instance.DrawPath(move);
 
 			currentMovePiece = piece;
+			currentMoveTile = null;
 		}
 	}
 
@@ -376,7 +380,7 @@ public class Game : MonoBehaviour
 			{
 				if (currentSelectedPiece.GetType() == typeof(Knight))
 				{
-					currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(MovePathManager.Instance.GetFirstMoveDirection());
+					//currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(MovePathManager.Instance.GetFirstMoveDirection());
 				}
 
 				currentSelectedPiece.MoveTo(piece.GetCoordinates(), false, 0, 0);
@@ -385,30 +389,82 @@ public class Game : MonoBehaviour
 			else
 			{
 				ResetPossibleMoves();
-				MovePathManager.Instance.EndPath();
 			}	
 		}
 		else if (hit.collider.GetComponent<Tile>()) // up on a tile
 		{
 			Tile tile = hit.collider.GetComponent<Tile>();
 
-			if (currentSelectedPiece && tile.IsShowingMove())
+			if (currentSelectedPiece && tile.IsShowingFingerMove())
 			{
 				if (currentSelectedPiece.GetType() == typeof(Knight))
 				{
-					currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(MovePathManager.Instance.GetFirstMoveDirection());
+					//currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(MovePathManager.Instance.GetFirstMoveDirection());
 				}
 
 				// We just made a move!!! omg !!!!
 				currentSelectedPiece.MoveTo(tile.GetCoordinates(), false, 0, 0);
 				OnMoveInitiated();
 			}
-			else if (currentSelectedPiece && !tile.IsShowingMove())
+			else if (currentSelectedPiece && !tile.IsShowingFingerMove())
 			{
 				ResetPossibleMoves();
-				MovePathManager.Instance.EndPath();
 			}
 		}
+	}
+
+	private void BeginDrawingMove()
+	{
+		MovePathManager.Instance.BeginPath(currentSelectedPiece.GetCoordinates());
+	}
+
+	private IntVector2[] tilesToRaise;
+
+	private void DrawMove(Move move)
+	{
+		ClearPreviousDraw();
+
+		// Handle new path.
+		tilesToRaise = MovePathManager.Instance.CalculatePath(move);
+
+		if (tilesToRaise == null) return;
+
+		for (int i = 0; i < tilesToRaise.Length; i++)
+		{
+			tileObjects[tilesToRaise[i].x, tilesToRaise[i].y].GetComponent<Tile>().ShowFingerMove();
+			if (pieces[tilesToRaise[i].x, tilesToRaise[i].y] != null) pieces[tilesToRaise[i].x, tilesToRaise[i].y].PickPieceUp();
+		}
+	}
+
+	private void ClearPreviousDraw()
+	{
+		if (tilesToRaise != null)
+		{
+			for (int i = 0; i < tilesToRaise.Length; i++)
+			{
+				tileObjects[tilesToRaise[i].x, tilesToRaise[i].y].GetComponent<Tile>().HideFingerMove();
+				if (pieces[tilesToRaise[i].x, tilesToRaise[i].y] != null) pieces[tilesToRaise[i].x, tilesToRaise[i].y].SetPieceDown();
+			}
+		}
+	}
+
+	private void EndDrawingMove()
+	{
+		for (int i = 0; i < tileObjects.GetLength(0); i++)
+		{
+			for (int j = 0; j < tileObjects.GetLength(1); j++)
+			{
+				tileObjects[i, j].GetComponent<Tile>().HideAllEffects();
+
+				if (pieces[i, j] != null)
+				{
+					pieces[i, j].SetPieceDown();
+					pieces[i, j].SetPushPotential(false);
+				}
+			}
+		}
+
+		MovePathManager.Instance.EndPath();
 	}
 
 	private bool CheckCoordsWithinPossibleMoves(IntVector2 coords)
@@ -553,12 +609,13 @@ public class Game : MonoBehaviour
 	{
 		// Handle Pickup Effect
 		piece.PickPieceUp();
-		tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>().ShowMove();
+		tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>().ShowPossibleMove();
+		tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>().ShowFingerMove();
 
 		currentSelectedPiece = piece;
 
 		// Begin drawing the path.
-		MovePathManager.Instance.BeginPath(currentSelectedPiece.GetCoordinates(), isReturn: false);
+		BeginDrawingMove();
 
 		currentSelectedPiece.DetermineMoveset();
 		currentPossibleMoves = currentSelectedPiece.GetPossibleMoves();
@@ -567,11 +624,11 @@ public class Game : MonoBehaviour
 			IntVector2 move = currentPossibleMoves[i];
 			if (IsWithinBounds(move))
 			{
-				tileObjects[move.x, move.y].GetComponent<Tile>().ShowMove();
+				tileObjects[move.x, move.y].GetComponent<Tile>().ShowPossibleMove();
 
 				if (pieces[move.x, move.y] != null)
 				{
-					pieces[move.x, move.y].PickPieceUp();
+					//pieces[move.x, move.y].PickPieceUp();
 					pieces[move.x, move.y].SetPushPotential(true);
 				}
 			}
@@ -589,7 +646,6 @@ public class Game : MonoBehaviour
 	public void OnMoveEnded()
 	{
 		ResetPossibleMoves();
-		MovePathManager.Instance.EndPath();
 
 		// Spawn the needed amount of pieces.
 		for (int i = 0; i < numPiecesToSpawn; i++)
@@ -689,19 +745,7 @@ public class Game : MonoBehaviour
 
 	public void ResetPossibleMoves()
 	{
-		for (int i = 0; i < tileObjects.GetLength(0); i++)
-		{
-			for (int j = 0; j < tileObjects.GetLength(1); j++)
-			{
-				tileObjects[i, j].GetComponent<Tile>().HideMove();
-
-				if (pieces[i, j] != null)
-				{
-					pieces[i, j].SetPieceDown();
-					pieces[i, j].SetPushPotential(false);
-				}
-			}
-		}
+		EndDrawingMove();
 
 		if (currentSelectedPiece != null)
 		{

@@ -6,6 +6,7 @@ public class MovePathManager : MonoBehaviour
 {
 	public static MovePathManager Instance = null;
 
+	/*
 	[Header("Move Sprite Prefabs")]
 	[SerializeField] private GameObject closed;
 
@@ -30,16 +31,21 @@ public class MovePathManager : MonoBehaviour
 	[SerializeField] private GameObject passage_UL;
 	[SerializeField] private GameObject passage_UR;
 
-	// A sequential list of move offsets. When we move the knight we'll get the first move from here.
-	// This will also help with determining which arrow sprite to use.
-	private List<IntVector2> moves;
-
 	// Stored list of move objects that are instantiated for easy cleanup.
-	private List<GameObject> moveObjects;
+	[SerializeField] private List<GameObject> moveObjects;
+
+	// Stored list of "deleted" end objects for use when we need to reverse.
+	[SerializeField] private List<GameObject> reverseObjects;
 
 	private GameObject closedStartObj;
+	private GameObject openStartObj;
 
 	private Move mostRecentMove;
+
+	[SerializeField] private IntVector2[] previousPath;
+	*/
+
+	private IntVector2 startCoords;
 
 	void Awake()
 	{
@@ -47,78 +53,153 @@ public class MovePathManager : MonoBehaviour
 		{
 			Instance = this;
 		}
-		
-		moves = new List<IntVector2>();
-		moveObjects = new List<GameObject>();
-		mostRecentMove = null;
+
+		startCoords = IntVector2.NULL;
 	}
 
-	public void BeginPath(IntVector2 coords, bool isReturn)
+	public void BeginPath(IntVector2 coords)
 	{
-		if (isReturn && closedStartObj == null)
+		startCoords = coords;
+	}
+
+	// Done with every piece except the knight.
+	public IntVector2[] CalculatePath(Move move)
+	{
+		if (startCoords == IntVector2.NULL || move.coordinates == startCoords) return null;
+
+		IntVector2 diff = move.coordinates - startCoords;
+
+		if (diff.x != 0 && diff.y == 0) // horizontal!
+		{
+			float sign = Mathf.Sign(diff.x);
+			int count = Mathf.Abs(diff.x);
+
+			IntVector2[] ret = new IntVector2[count];
+			for (int i = 0; i < count; i++)
+			{
+				ret[i] = new IntVector2(startCoords.x + (int)((i+1) * sign), startCoords.y);
+			}
+
+			return ret;
+		}
+		else if (diff.x == 0 && diff.y != 0)
+		{
+			float sign = Mathf.Sign(diff.y);
+			int count = Mathf.Abs(diff.y);
+
+			IntVector2[] ret = new IntVector2[count];
+			for (int i = 0; i < count; i++)
+			{
+				ret[i] = new IntVector2(startCoords.x, startCoords.y + (int)((i+1) * sign));
+			}
+
+			return ret;
+		}
+		else if (diff.x != 0 && diff.y != 0)
+		{
+			float signX = Mathf.Sign(diff.x);
+			float signY = Mathf.Sign(diff.y);
+			int count = Mathf.Abs(diff.x);
+
+			IntVector2[] ret = new IntVector2[count];
+			for (int i = 0; i < count; i++)
+			{
+				ret[i] = new IntVector2(startCoords.x + (int)((i+1) * signX), startCoords.y + (int)((i+1) * signY));
+			}
+
+			return ret;
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public void EndPath()
+	{
+		startCoords = IntVector2.NULL;
+	}
+
+/*
+	public void BeginPath(IntVector2 coords)
+	{
+		if (openStartObj != null && closedStartObj == null)
 		{
 			EndPath();
 			closedStartObj = Instantiate(closed);
 			closedStartObj.transform.position = GameManager.Instance.CoordinateToPosition(coords);
 			closedStartObj.transform.parent = this.transform;
+			startCoords = coords;
 		}
-		else if (!isReturn)
+		else if (openStartObj == null && closedStartObj == null)
 		{
 			closedStartObj = Instantiate(closed);
 			closedStartObj.transform.position = GameManager.Instance.CoordinateToPosition(coords);
 			closedStartObj.transform.parent = this.transform;
+			startCoords = coords;
 		}
 	}
 
 	public void DrawPath(Move move)
-	{
-		// Get rid of the beginning path object.
-		Destroy(closedStartObj.gameObject);
-
-		// check if it's a reverse
-		if (mostRecentMove != null && move.coordinates == mostRecentMove.reverse.coordinates)
+	{	
+		// Handle reverse movements.
+		if (mostRecentMove != null && 
+			move.coordinates == mostRecentMove.reverse.coordinates && 
+			move.coordinates != startCoords)
 		{
-			// Is a reverse.
-			Destroy(moveObjects[moveObjects.Count - 1].gameObject);
-			moveObjects.RemoveAt(moveObjects.Count - 1);
-			moveObjects.TrimExcess();
-			moves.RemoveAt(moves.Count - 1);
-			moves.TrimExcess();
-			move = mostRecentMove.reverse;
+			SpawnReverse();
+
+			return;
 		}
 
 		moves.Add(move.moveOffset);
 
 		if (move.moveOffset == new IntVector2(0, 1)) // up
 		{
+			SpawnStartObjectIfNeeded(end_D);
+			SpawnPassageObjectIfNeeded(passage_V, move);
 			SpawnEndObject(end_U, move.coordinates);
 		}
 		else if (move.moveOffset == new IntVector2(0, -1)) // down
 		{
+			SpawnStartObjectIfNeeded(end_U);
+			SpawnPassageObjectIfNeeded(passage_V, move);
 			SpawnEndObject(end_D, move.coordinates);
 		}
 		else if (move.moveOffset == new IntVector2(-1, 0)) // left
 		{
+			SpawnStartObjectIfNeeded(end_R);
+			SpawnPassageObjectIfNeeded(passage_H, move);
 			SpawnEndObject(end_L, move.coordinates);
 		}
 		else if (move.moveOffset == new IntVector2(1, 0)) // right
 		{
+			SpawnStartObjectIfNeeded(end_L);
+			SpawnPassageObjectIfNeeded(passage_H, move);
 			SpawnEndObject(end_R, move.coordinates);
 		}
 		else if (move.moveOffset == new IntVector2(-1, 1)) // up_left
 		{
+			SpawnStartObjectIfNeeded(end_DR);
+			SpawnPassageObjectIfNeeded(passage_UL, move);
 			SpawnEndObject(end_UL, move.coordinates);
 		}
 		else if (move.moveOffset == new IntVector2(1, 1)) // up_right
 		{
+			SpawnStartObjectIfNeeded(end_DL);
+			SpawnPassageObjectIfNeeded(passage_UR, move);
 			SpawnEndObject(end_UR, move.coordinates);
 		}
 		else if (move.moveOffset == new IntVector2(-1, -1)) // down_left
 		{
+			SpawnStartObjectIfNeeded(end_UR);
+			SpawnPassageObjectIfNeeded(passage_DL, move);
 			SpawnEndObject(end_DL, move.coordinates);
 		}
 		else if (move.moveOffset == new IntVector2(1, -1)) // down_right
 		{
+			SpawnStartObjectIfNeeded(end_UL);
+			SpawnPassageObjectIfNeeded(passage_DR, move);
 			SpawnEndObject(end_DR, move.coordinates);
 		}
 
@@ -131,12 +212,54 @@ public class MovePathManager : MonoBehaviour
 		{
 			Destroy(moveObjects[i].gameObject);
 		}
+		for (int i = 0; i < reverseObjects.Count; i++)
+		{
+			Destroy(reverseObjects[i].gameObject);
+		}
+
 		moveObjects.Clear();
 		moves.Clear();
+		reverseObjects.Clear();
+
+		mostRecentMove = null;
+		startCoords = IntVector2.NULL;
 
 		if (closedStartObj != null)
 		{
 			Destroy(closedStartObj.gameObject);
+		}
+
+		if (openStartObj != null)
+		{
+			Destroy(openStartObj.gameObject);
+		}
+	}
+
+	public void SpawnStartObjectIfNeeded(GameObject prefab)
+	{
+		// if this is the first movement we gotta spawn the different start piece.
+		if (moves.Count == 1 && closedStartObj != null)
+		{
+			Destroy(closedStartObj.gameObject);
+
+			openStartObj = Instantiate(prefab);
+			openStartObj.transform.position = GameManager.Instance.CoordinateToPosition(startCoords);
+			openStartObj.transform.parent = this.transform;
+		}
+	}
+
+	public void SpawnPassageObjectIfNeeded(GameObject prefab, Move move)
+	{
+		if (moves.Count > 1 && move.reverse != null)
+		{
+			reverseObjects.Add(moveObjects[moveObjects.Count - 1]);
+			moveObjects[moveObjects.Count - 1].SetActive(false);
+			moveObjects.RemoveAt(moveObjects.Count - 1);
+
+			GameObject obj = Instantiate(prefab);
+			obj.transform.position = GameManager.Instance.CoordinateToPosition(move.reverse.coordinates);
+			obj.transform.parent = this.transform;
+			moveObjects.Add(obj);
 		}
 	}
 
@@ -148,119 +271,26 @@ public class MovePathManager : MonoBehaviour
 		moveObjects.Add(obj);
 	}
 
-/*
-	public void AddMove(IntVector2 coords, IntVector2 move)
+	public void SpawnReverse()
 	{
-		moves.Add(move);
+		Destroy(moveObjects[moveObjects.Count - 1].gameObject); // Destroy end object.
+		moveObjects.RemoveAt(moveObjects.Count - 1);
+		Destroy(moveObjects[moveObjects.Count - 1].gameObject); // Destroy passage object.
+		moveObjects.RemoveAt(moveObjects.Count - 1);
 
-		GameObject obj = DetermineArrow(move);
-		obj.transform.position = GameManager.Instance.CoordinateToPosition(coords);
-		obj.transform.parent = this.transform;
-		moveObjects.Add(obj);
+		moves.RemoveAt(moves.Count - 1);
 
-		// Now update the previous move to something it needs to be.
-		if (moves.Count > 1)
-		{
-			GameObject newPrevObj = DeterminePreviousMove();
-			newPrevObj.transform.position = moveObjects[moveObjects.Count - 2].gameObject.transform.position;
-			newPrevObj.transform.parent = this.transform;
+		moveObjects.Add(reverseObjects[reverseObjects.Count - 1]);
+		reverseObjects[reverseObjects.Count - 1].SetActive(true);
+		reverseObjects.RemoveAt(reverseObjects.Count - 1);
 
-			Destroy(moveObjects[moveObjects.Count - 2].gameObject);
-			moveObjects[moveObjects.Count - 2] = newPrevObj;
-		}
+		mostRecentMove = mostRecentMove.reverse;
 	}
 
-	private GameObject DetermineArrow(IntVector2 move)
+	public void SetColors(Piece piece)
 	{
-		GameObject obj;
 
-		// Place move object. Determine which one to spawn based on various factors, looking back up to 2 moves.
-		if (move.x > 0 && move.y == 0)
-		{
-			obj = Instantiate(moveEnd_Right) as GameObject;
-		}
-		else if (move.x > 0 && move.y < 0)
-		{
-			obj = Instantiate(moveEnd_DR) as GameObject;
-		}
-		else if (move.x > 0 && move.y > 0)
-		{
-			obj = Instantiate(moveEnd_UR) as GameObject;
-		}
-		else if (move.x < 0 && move.y == 0)
-		{
-			obj = Instantiate(moveEnd_Left) as GameObject;
-		}
-		else if (move.x < 0 && move.y > 0)
-		{
-			obj = Instantiate(moveEnd_UL) as GameObject;
-		}
-		else if (move.x < 0 && move.y < 0)
-		{
-			obj = Instantiate(moveEnd_DL) as GameObject;
-		}
-		else if (move.x == 0 && move.y > 0)
-		{
-			obj = Instantiate(moveEnd_Up) as GameObject;
-		}
-		else if (move.x == 0 && move.y < 0)
-		{
-			obj = Instantiate(moveEnd_Down) as GameObject;
-		}
-		else
-		{
-			Debug.LogError("Invalid Move Path");
-			obj = Instantiate(moveHorizontal) as GameObject;
-		}
-
-		return obj;
 	}
 
-	private GameObject DeterminePreviousMove()
-	{
-		int index = moves.Count - 2;
-		IntVector2 prevMove = moves[index];
-
-		GameObject obj;
-		
-		if ((prevMove.x > 0 && prevMove.y == 0) || (prevMove.x < 0 && prevMove.y == 0))
-		{
-			obj = Instantiate(moveHorizontal);
-		}
-		else if ((prevMove.x > 0 && prevMove.y < 0) || (prevMove.x < 0 && prevMove.y > 0))
-		{
-			obj = Instantiate(moveDiagonal_TL2BR);
-		}
-		else if ((prevMove.x > 0 && prevMove.y > 0) || (prevMove.x < 0 && prevMove.y < 0))
-		{
-			obj = Instantiate(moveDiagonal_BL2TR);
-		}
-		else if ((prevMove.x == 0 && prevMove.y > 0) || (prevMove.x == 0 && prevMove.y < 0))
-		{
-			obj = Instantiate(moveVertical);
-		}
-		else
-		{
-			Debug.LogError("Invalid Move Path");
-			obj = Instantiate(moveCorner_DLRU);
-		}
-
-		return obj;
-	}
-*/
-
-	public IntVector2 GetFirstMoveDirection()
-	{
-		return moves[0];
-	}
-
-	public IntVector2 GetLastMoveDirection()
-	{
-		return moves[moves.Count - 1];
-	}
-
-	public int MoveCount()
-	{
-		return moves.Count;
-	}
+	*/
 }
