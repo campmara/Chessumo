@@ -26,6 +26,12 @@ public class NextPieceViewer : MonoBehaviour
 		GameManager.Instance.GrowMeFromSlit(this.gameObject, 2f, Ease.OutBounce);
 	}
 
+	public void PositionAlongTop(float xPos)
+	{
+		Tween moveTween = transform.DOMoveX(xPos, 0.75f).SetEase(Ease.InOutQuint);
+		//transform.position = new Vector3(xPos, transform.position.y, 0f);
+	}
+
 	public void ShowKing()
 	{
 		pieceSprite.sprite = kingSprite;

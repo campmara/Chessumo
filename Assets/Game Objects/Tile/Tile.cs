@@ -1,30 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum TileState
+{
+	DEFAULT = 0,
+	POSSIBLE, // Subdued version of piece color.
+	DRAWN,    // Full piece color.
+	KNIGHT_TRAVERSABLE,   // Darker grey, showing traversable space
+	KNIGHT_TRAVERSED      // Full Knight color, down sprite
+}
+
 public class Tile : MonoBehaviour 
 {
-	//////////////////////////////////////////////////////////
-	// CONSTANTS
-	//////////////////////////////////////////////////////////
-
-
-
-	//////////////////////////////////////////////////////////
-	// PUBLICS
-	//////////////////////////////////////////////////////////
-
-
-
-	//////////////////////////////////////////////////////////
-	// PRIVATES
-	//////////////////////////////////////////////////////////
-
 	[SerializeField] private Sprite downSprite;
 	[SerializeField] private Sprite upSprite;
 
-	[SerializeField] private Color color = Color.white;
-	[SerializeField] private Color possibleColor = Color.grey;
-	[SerializeField] private Color fingerColor = Color.grey;
+	[SerializeField] private Color defaultColor = Color.white;
+	[SerializeField] private Color knightTraversableColor = Color.grey;
+
+	[SerializeField] private TileState state = TileState.DEFAULT;
 
 	private SpriteRenderer spriteRenderer;
 
@@ -37,22 +31,68 @@ public class Tile : MonoBehaviour
 		SetColorDefault();
 	}
 
+	public TileState GetState() 
+	{
+		return state;
+	}
+
+	public void SetState(TileState newState, Color color)
+	{
+		state = newState;
+
+		switch(newState)
+		{
+			case TileState.DEFAULT:
+				SetColorDefault();
+				break;
+			case TileState.POSSIBLE:
+				SetColorPossible(color);
+				break;
+			case TileState.DRAWN:
+				SetColorDrawn(color);
+				break;
+			case TileState.KNIGHT_TRAVERSABLE:
+				SetColorKnightTraversable();
+				break;
+			case TileState.KNIGHT_TRAVERSED:
+				SetColorKnightTraversed(color);
+				break;
+		}
+	}
+
 	public void SetColorDefault()
+	{
+		spriteRenderer.color = defaultColor;
+		spriteRenderer.sortingOrder = 0;
+		spriteRenderer.sprite = downSprite;
+	}
+
+	public void SetColorPossible(Color color) // takes in a subdued piece color
 	{
 		spriteRenderer.color = color;
 		spriteRenderer.sortingOrder = 0;
+		spriteRenderer.sprite = downSprite;
 	}
 
-	public void SetColorPossible()
+	public void SetColorDrawn(Color color) // takes in a full piece color
 	{
-		spriteRenderer.color = possibleColor;
-		spriteRenderer.sortingOrder = 0;
-	}
-
-	public void SetColorFinger()
-	{
-		spriteRenderer.color = fingerColor;
+		spriteRenderer.color = color;
 		spriteRenderer.sortingOrder = 1;
+		spriteRenderer.sprite = upSprite;
+	}
+
+	public void SetColorKnightTraversable()
+	{
+		spriteRenderer.color = knightTraversableColor;
+		spriteRenderer.sortingOrder = 0;
+		spriteRenderer.sprite = downSprite;
+	}
+
+	public void SetColorKnightTraversed(Color color)
+	{
+		spriteRenderer.color = color;
+		spriteRenderer.sortingOrder = 0;
+		spriteRenderer.sprite = downSprite;
 	}
 
 	void OnEnable()
@@ -69,57 +109,5 @@ public class Tile : MonoBehaviour
 	{
 		currentCoordinates = new IntVector2(x, y);
 		parentGame = game;
-	}
-
-	public bool IsShowingPossibleMove()
-	{
-		return spriteRenderer.color == possibleColor;
-	}
-
-	// Public because this gets called by the mode.
-	public void ShowPossibleMove()
-	{
-		if (!IsShowingPossibleMove())
-		{
-			SetColorPossible();
-		}
-	}
-
-	public void HidePossibleMove()
-	{
-		if (IsShowingPossibleMove())
-		{
-			spriteRenderer.sprite = downSprite;
-			SetColorDefault();
-		}
-	}
-
-	public bool IsShowingFingerMove()
-	{
-		return spriteRenderer.sprite == upSprite;
-	}
-
-	public void ShowFingerMove()
-	{
-		if (IsShowingPossibleMove() && !IsShowingFingerMove())
-		{
-			spriteRenderer.sprite = upSprite;
-			SetColorFinger();
-		}
-	}
-
-	public void HideFingerMove()
-	{
-		if (IsShowingFingerMove())
-		{
-			spriteRenderer.sprite = downSprite;
-			SetColorPossible();
-		}
-	}
-
-	public void HideAllEffects()
-	{
-		spriteRenderer.sprite = downSprite;
-		SetColorDefault();
 	}
 }

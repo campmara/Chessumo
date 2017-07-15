@@ -115,6 +115,44 @@ public class MovePathManager : MonoBehaviour
 		}
 	}
 
+	public IntVector2[] CalculateKnightPath(IntVector2[] path, Move move)
+	{
+		if (startCoords == IntVector2.NULL || move.coordinates == startCoords) return null;
+
+
+		IntVector2[] ret = null;
+
+		if (path != null)
+		{
+			// if reverse we delete the last item of the path.
+			if (move.coordinates == path[path.Length - 1])
+			{
+				ret = new IntVector2[path.Length - 1];
+				for (int i = 0; i < ret.Length; i++)
+				{
+					ret[i] = path[i];
+				}
+			}
+			else
+			{
+				ret = new IntVector2[path.Length + 1];
+				for (int i = 0; i < path.Length; i++)
+				{
+					ret[i] = path[i];
+				}
+
+				ret[ret.Length - 1] = new IntVector2(move.coordinates.x, move.coordinates.y);
+			}
+		}
+		else
+		{
+			ret = new IntVector2[1];
+			ret[0] = new IntVector2(move.coordinates.x, move.coordinates.y);
+		}
+
+		return ret;
+	}
+
 	public void EndPath()
 	{
 		startCoords = IntVector2.NULL;

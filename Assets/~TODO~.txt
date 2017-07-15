@@ -2,12 +2,6 @@
 T O  D O  L I S T
 =================
 
-Arrow-based Move System:
-    - Refactor the move class to use only the essential aspects. You don't need all that nested class bullshit.
-    - Ok so.
-    - You gotta now start handling input movement with the new move system.
-    - If we make a move we gotta update what our possible moves are, disallowing movement in invalid directions.
-
 Code Refactoring:
     - Maybe try fixing up game class and moving stuff out that doesn't need to be there.
 
@@ -23,17 +17,13 @@ Add MENU and LEADERBOARD buttons to the game UI:
 Add an end to the game:
     - Shows a page ad.
 
-Make where the new pieces drop down deterministic:
-    - They will drop on the opposite side of where you pushed off a piece.
-    - Don't do this. You'll get into loops where people will just get continuous lines.
-
 Admob Integration:
     - interstitial ads after every game.
     - watch video ads to get closer to unlocking an ad-less version of the game.
         - the quantity watched of video ads must be worth more than it costs to pay for ad removal.
 
 GameCenter Integration:
-    - high scores and leaderboards, baby!
+    - get a gamecenter id
 
 Grid Size Testing:
     - Just try the game with a 4x4 grid and see how that feels.
@@ -45,6 +35,8 @@ Sound:
 Art:
     - Draw your own original piece icons.
     - Make sure Now typeface is free.
+        - It is. I can use it.
+    - Make the trail fade out behind the piece that's moving as it moves.
 
 Company:
     - Incorporate
@@ -55,4 +47,7 @@ Tutorialization:
     - Little tutorial. Threes-esque, just very simple walkthrough of game rules.
 
 Known Bugs:
-    - Piece selection sprite doesn't deselect when we move certain pieces.
+    - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.
+    - Sometimes pushing pieces with the knight jumps the gun and a piece gets pushed prematurely
+    - Pushing a piece off the board from > 1 space away by pushing another piece to the edge causes
+      the jumping of the gun issue as well.

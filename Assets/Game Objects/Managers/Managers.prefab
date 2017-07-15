@@ -11,6 +11,22 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1394661597705114}
   m_IsPrefabParent: 1
+--- !u!1 &1160054614883474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4756406271545244}
+  - component: {fileID: 114323579811205322}
+  m_Layer: 0
+  m_Name: Game Center Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1331984024737046
 GameObject:
   m_ObjectHideFlags: 0
@@ -113,6 +129,19 @@ Transform:
   m_Father: {fileID: 4784648523644196}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4756406271545244
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1160054614883474}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4784648523644196}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4784648523644196
 Transform:
   m_ObjectHideFlags: 1
@@ -126,9 +155,21 @@ Transform:
   - {fileID: 4396443629367798}
   - {fileID: 4147359200214742}
   - {fileID: 4348620837229550}
+  - {fileID: 4756406271545244}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114323579811205322
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1160054614883474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a501bdcdd4ec44b48b95176399222e45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114487204147449816
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -184,39 +225,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8567541052dd04840b7f8087cc60baac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  topColor: {r: 0, g: 0, b: 0, a: 0}
-  bottomColor: {r: 0, g: 0, b: 0, a: 0}
-  bishopColorTop: {r: 0.47450984, g: 0.7568628, b: 0.6117647, a: 1}
-  bishopColorBot: {r: 0.4156863, g: 0.6627451, b: 0.53333336, a: 0}
-  kingColorTop: {r: 0.9568628, g: 0.8235295, b: 0.4156863, a: 0}
-  kingColorBot: {r: 0.8352942, g: 0.72156864, b: 0.3647059, a: 0}
-  knightColorTop: {r: 0.7058824, g: 0.5372549, b: 0.85098046, a: 0}
-  knightColorBot: {r: 0.6156863, g: 0.47058827, b: 0.74509805, a: 0}
-  pawnColorTop: {r: 0.43529415, g: 0.6039216, b: 0.79215693, a: 0}
-  pawnColorBot: {r: 0.3803922, g: 0.5294118, b: 0.69411767, a: 0}
-  queenColorTop: {r: 1, g: 0.50980395, b: 0.50980395, a: 0}
-  queenColorBot: {r: 0.8745099, g: 0.44705886, b: 0.44705886, a: 0}
-  rookColorTop: {r: 0.9921569, g: 0.64705884, b: 0.43529415, a: 0}
-  rookColorBot: {r: 0.86666673, g: 0.5647059, b: 0.3803922, a: 0}
-  closed: {fileID: 1818772064662148, guid: 2a620f31b79724148bedda473f1a80c1, type: 2}
-  corner_DL: {fileID: 1474304643464576, guid: 96fdc68fd1d704cafbc78d2f67cb7760, type: 2}
-  corner_DR: {fileID: 1000119386179062, guid: ee8ae8cd4c1404302b2c58cf273f5fc9, type: 2}
-  corner_UL: {fileID: 1494651258928996, guid: 7156d491929a04094a429483f7bbd198, type: 2}
-  corner_UR: {fileID: 1049293911781420, guid: 6969a24d9da144183901cc1b5c1ae576, type: 2}
-  end_D: {fileID: 1131884041811850, guid: 3c59a811e96fa4033b6ffc170b9cd08a, type: 2}
-  end_L: {fileID: 1024498225249208, guid: 467f4a426afc14ddd8b1c84ccad46f2b, type: 2}
-  end_R: {fileID: 1397271968429122, guid: d8160a84504804b568474544e92c67c4, type: 2}
-  end_U: {fileID: 1273540857187186, guid: dbff8d870823b420ab360aa1cbdb9cc8, type: 2}
-  end_DL: {fileID: 1787487671554694, guid: 2700a3ddb5cdf49a7bc56a6cf194c3a6, type: 2}
-  end_DR: {fileID: 1964591576758202, guid: 5db142c95eb3541f386acd3e738fa8d5, type: 2}
-  end_UL: {fileID: 1678778802820548, guid: 15c1f1965939c4d61a46659cdf095ffa, type: 2}
-  end_UR: {fileID: 1163692731035630, guid: 2c5b60d29442c4b0b8c1e7994dfd9ebd, type: 2}
-  passage_H: {fileID: 1923752269470412, guid: 567fb640b27bd468ea3d39f4e5c0e56b, type: 2}
-  passage_V: {fileID: 1835592223161746, guid: 0f58c02ef63db4f3ebf4ec78e4370f84, type: 2}
-  passage_DL: {fileID: 1393763928560326, guid: 8174fa56d592042cea1b2084106ef9ea, type: 2}
-  passage_DR: {fileID: 1277422399301536, guid: 1e414b11141f0481986abf2e76ceecd9, type: 2}
-  passage_UL: {fileID: 1967039930873632, guid: a458baf8f933b4225b815560c9e9a399, type: 2}
-  passage_UR: {fileID: 1566683425575992, guid: 5ed63ad8ab39441da86edc30f340dc4c, type: 2}
-  moves: []
-  moveObjects: []
-  reverseObjects: []

@@ -47,7 +47,19 @@ public class InitialMove : Move
 			}
 		}
 
-		Debug.LogError("[PIECE]: Invalid Move");
+		return null;
+	}
+
+	public Move DetermineKnightMove(IntVector2 coordinates, IntVector2 offset)
+	{
+		for (int i = 0; i < moveList.Count; i++)
+		{
+			if (moveList[i].coordinates == coordinates && offset == moveList[i].moveOffset)
+			{
+				return moveList[i];
+			}
+		}
+
 		return null;
 	}
 }
@@ -106,7 +118,12 @@ public class MoveDownRight : Move
 
 public abstract class Piece : MonoBehaviour 
 {
-	[SerializeField] Color tint = Color.white;
+	public Color FullColor { get { return fullColor; } }
+	public Color SubduedColor { get { return subduedColor; } }
+	[Header("Piece Colors"), SerializeField] private Color fullColor = Color.white;
+	[SerializeField] private Color subduedColor = Color.white;
+
+	[Header("Other Variables"), SerializeField] Color tint = Color.white;
 	[SerializeField] Color disabledTint = Color.black;
 	[ReadOnly] public bool potentialPush = false;
 
@@ -543,10 +560,6 @@ public abstract class Piece : MonoBehaviour
 				SetMoveDisabled(false);
 			}
 		}
-		else
-		{
-			SetMoveDisabled(true);
-		}
 
 		// Determine how many times we must repeat the movement to get to the desired point.
 		IntVector2 diff = coordinates - GetCoordinates();
@@ -583,16 +596,18 @@ public abstract class Piece : MonoBehaviour
 		return moveDisabled;
 	}
 
-	protected void SetMoveDisabled(bool disabled)
+	public void SetMoveDisabled(bool disabled)
 	{
 		moveDisabled = disabled;
 		if (disabled)
 		{
-			sprite.color = disabledTint;
+			sprite.DOColor(disabledTint, 0.75f);
+			//sprite.color = disabledTint;
 		}
 		else
 		{
-			sprite.color = tint;
+			sprite.DOColor(tint, 0.75f);
+			//sprite.color = tint;
 		}
 	}
 

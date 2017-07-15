@@ -45,6 +45,8 @@ public class Game : MonoBehaviour
 	private GameObject pieceViewerObj;
 	private NextPieceViewer pieceViewer;
 
+	private IntVector2 nextRandomCoords;
+
 	private bool moveInProgress = false;
 
 	[ReadOnly, SerializeField] private Piece currentSelectedPiece;
@@ -79,6 +81,11 @@ public class Game : MonoBehaviour
 	public bool CoordsOccupied(IntVector2 coordinates)
 	{
 		return pieces[coordinates.x, coordinates.y] != null;
+	}
+
+	public bool CurrentIsKnight()
+	{
+		return currentSelectedPiece.GetType() == typeof(Knight);
 	}
 
 	public void Load() 
@@ -250,7 +257,7 @@ public class Game : MonoBehaviour
 		if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended)
 		{
 			Touch touch = Input.GetTouch(0);
-			OnFingerUp();
+			OnFingerUp(touch);
 		}
 	}
 
@@ -312,6 +319,8 @@ public class Game : MonoBehaviour
 		}
 	}
 
+	private IntVector2 lastMoveCoords;
+
 	void HandleMoveRayHit(RaycastHit hit)
 	{
 		if (hit.collider.GetComponent<Piece>() == currentSelectedPiece)
@@ -319,7 +328,7 @@ public class Game : MonoBehaviour
 			//MovePathManager.Instance.BeginPath(currentSelectedPiece.GetCoordinates());
 			//currentMoveTile = null;
 			//currentMovePiece = null;
-			ClearPreviousDraw();
+			DrawReturnedToStartPiece();
 			return;
 		}
 
@@ -341,11 +350,23 @@ public class Game : MonoBehaviour
 				return;
 			}
 
-			Move move = currentSelectedPiece.Moveset.DetermineMove(tile.GetCoordinates());
-			DrawMove(move);
-			//MovePathManager.Instance.DrawPath(move);
+			
+			if (CurrentIsKnight())
+			{
+				Move move = currentSelectedPiece.Moveset.DetermineKnightMove(tile.GetCoordinates(), tile.GetCoordinates() - lastMoveCoords);
+				if (currentSelectedPiece.GetComponent<Knight>().IsValidMove(move))
+				{
+					DrawMove(move);
+				}
+			}
+			else
+			{
+				Move move = currentSelectedPiece.Moveset.DetermineMove(tile.GetCoordinates());
+				DrawMove(move);
+			}
 
 			currentMoveTile = tile;
+			lastMoveCoords = tile.GetCoordinates();
 			currentMovePiece = null;
 		}
 		else if (piece != null)
@@ -361,11 +382,22 @@ public class Game : MonoBehaviour
 				return;
 			}
 
-			Move move = currentSelectedPiece.Moveset.DetermineMove(piece.GetCoordinates());
-			DrawMove(move);
-			//MovePathManager.Instance.DrawPath(move);
+			if (CurrentIsKnight()) // Check to make sure this is a valid movement.
+			{
+				Move move = currentSelectedPiece.Moveset.DetermineKnightMove(piece.GetCoordinates(), piece.GetCoordinates() - lastMoveCoords);
+				if (currentSelectedPiece.GetComponent<Knight>().IsValidMove(move))
+				{
+					DrawMove(move);
+				}
+			}
+			else
+			{
+				Move move = currentSelectedPiece.Moveset.DetermineMove(piece.GetCoordinates());
+				DrawMove(move);
+			}
 
 			currentMovePiece = piece;
+			lastMoveCoords = piece.GetCoordinates();
 			currentMoveTile = null;
 		}
 	}
@@ -376,11 +408,12 @@ public class Game : MonoBehaviour
 		{
 			Piece piece = hit.collider.GetComponent<Piece>();
 
-			if (piece.potentialPush)
+			if (piece.potentialPush && MoveIsOnPath(piece.GetCoordinates()))
 			{
-				if (currentSelectedPiece.GetType() == typeof(Knight))
+				if (CurrentIsKnight())
 				{
-					//currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(MovePathManager.Instance.GetFirstMoveDirection());
+					IntVector2 dir = tilesToRaise[0] - currentSelectedPiece.GetCoordinates();
+					currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(dir);
 				}
 
 				currentSelectedPiece.MoveTo(piece.GetCoordinates(), false, 0, 0);
@@ -395,26 +428,38 @@ public class Game : MonoBehaviour
 		{
 			Tile tile = hit.collider.GetComponent<Tile>();
 
-			if (currentSelectedPiece && tile.IsShowingFingerMove())
+			if (currentSelectedPiece && tile.GetState() == TileState.DRAWN)
 			{
-				if (currentSelectedPiece.GetType() == typeof(Knight))
+				if (CurrentIsKnight())
 				{
-					//currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(MovePathManager.Instance.GetFirstMoveDirection());
+					IntVector2 dir = tilesToRaise[0] - currentSelectedPiece.GetCoordinates();
+					currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(dir);
 				}
 
 				// We just made a move!!! omg !!!!
 				currentSelectedPiece.MoveTo(tile.GetCoordinates(), false, 0, 0);
 				OnMoveInitiated();
 			}
-			else if (currentSelectedPiece && !tile.IsShowingFingerMove())
+			else if (currentSelectedPiece && tile.GetState() != TileState.DRAWN)
 			{
 				ResetPossibleMoves();
 			}
 		}
 	}
 
+	private bool MoveIsOnPath(IntVector2 coords)
+	{
+		for (int i = 0; i < tilesToRaise.Length; i++)
+		{
+			if (tilesToRaise[i] == coords) return true;
+		}
+		
+		return false;
+	}
+
 	private void BeginDrawingMove()
 	{
+		tilesToRaise = null;
 		MovePathManager.Instance.BeginPath(currentSelectedPiece.GetCoordinates());
 	}
 
@@ -425,14 +470,32 @@ public class Game : MonoBehaviour
 		ClearPreviousDraw();
 
 		// Handle new path.
-		tilesToRaise = MovePathManager.Instance.CalculatePath(move);
+		if (CurrentIsKnight())
+		{
+			currentSelectedPiece.GetComponent<Knight>().UpdateKnightMove(move);
+
+			IntVector2[] temp = MovePathManager.Instance.CalculateKnightPath(tilesToRaise, move);
+			tilesToRaise = temp;
+		}
+		else
+		{
+			tilesToRaise = MovePathManager.Instance.CalculatePath(move);
+		}
 
 		if (tilesToRaise == null) return;
 
 		for (int i = 0; i < tilesToRaise.Length; i++)
 		{
-			tileObjects[tilesToRaise[i].x, tilesToRaise[i].y].GetComponent<Tile>().ShowFingerMove();
-			if (pieces[tilesToRaise[i].x, tilesToRaise[i].y] != null) pieces[tilesToRaise[i].x, tilesToRaise[i].y].PickPieceUp();
+			Tile tile = tileObjects[tilesToRaise[i].x, tilesToRaise[i].y].GetComponent<Tile>();
+			if (tile.GetState() == TileState.KNIGHT_TRAVERSABLE)
+			{
+				tile.SetState(TileState.KNIGHT_TRAVERSED, currentSelectedPiece.FullColor);
+			}
+			else
+			{
+				tile.SetState(TileState.DRAWN, currentSelectedPiece.FullColor);
+				if (pieces[tilesToRaise[i].x, tilesToRaise[i].y] != null) pieces[tilesToRaise[i].x, tilesToRaise[i].y].PickPieceUp();
+			}
 		}
 	}
 
@@ -442,9 +505,46 @@ public class Game : MonoBehaviour
 		{
 			for (int i = 0; i < tilesToRaise.Length; i++)
 			{
-				tileObjects[tilesToRaise[i].x, tilesToRaise[i].y].GetComponent<Tile>().HideFingerMove();
+				Tile tile = tileObjects[tilesToRaise[i].x, tilesToRaise[i].y].GetComponent<Tile>();
+				if(tile.GetState() == TileState.KNIGHT_TRAVERSED)
+				{
+					tile.SetState(TileState.KNIGHT_TRAVERSABLE, Color.black);
+				}
+				else
+				{
+					tile.SetState(TileState.POSSIBLE, currentSelectedPiece.SubduedColor);
+				}
 				if (pieces[tilesToRaise[i].x, tilesToRaise[i].y] != null) pieces[tilesToRaise[i].x, tilesToRaise[i].y].SetPieceDown();
 			}
+		}
+	}
+
+	private void DrawReturnedToStartPiece()
+	{
+		if (tilesToRaise != null)
+		{
+			for (int i = 0; i < tilesToRaise.Length; i++)
+			{
+				Tile tile = tileObjects[tilesToRaise[i].x, tilesToRaise[i].y].GetComponent<Tile>();
+				if(tile.GetState() == TileState.KNIGHT_TRAVERSED)
+				{
+					tile.SetState(TileState.KNIGHT_TRAVERSABLE, Color.black);
+				}
+				else
+				{
+					tile.SetState(TileState.POSSIBLE, currentSelectedPiece.SubduedColor);
+				}
+				if (pieces[tilesToRaise[i].x, tilesToRaise[i].y] != null) pieces[tilesToRaise[i].x, tilesToRaise[i].y].SetPieceDown();
+			}
+		}
+
+		tilesToRaise = null;
+		lastMoveCoords = currentSelectedPiece.GetCoordinates();
+		if (CurrentIsKnight())
+		{
+			currentSelectedPiece.GetComponent<Knight>().ResetKnight();
+			currentMovePiece = null;
+			currentMoveTile = null;
 		}
 	}
 
@@ -454,7 +554,7 @@ public class Game : MonoBehaviour
 		{
 			for (int j = 0; j < tileObjects.GetLength(1); j++)
 			{
-				tileObjects[i, j].GetComponent<Tile>().HideAllEffects();
+				tileObjects[i, j].GetComponent<Tile>().SetState(TileState.DEFAULT, Color.black);
 
 				if (pieces[i, j] != null)
 				{
@@ -469,7 +569,7 @@ public class Game : MonoBehaviour
 
 	private bool CheckCoordsWithinPossibleMoves(IntVector2 coords)
 	{
-		if (currentSelectedPiece.GetType() == typeof(Knight))
+		if (CurrentIsKnight())
 		{
 			IntVector2[] secondaryMoves = currentSelectedPiece.GetComponent<Knight>().GetSecondaryMoves();
 
@@ -609,10 +709,10 @@ public class Game : MonoBehaviour
 	{
 		// Handle Pickup Effect
 		piece.PickPieceUp();
-		tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>().ShowPossibleMove();
-		tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>().ShowFingerMove();
+		tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>().SetState(TileState.DRAWN, piece.FullColor);
 
 		currentSelectedPiece = piece;
+		lastMoveCoords = piece.GetCoordinates();
 
 		// Begin drawing the path.
 		BeginDrawingMove();
@@ -624,12 +724,27 @@ public class Game : MonoBehaviour
 			IntVector2 move = currentPossibleMoves[i];
 			if (IsWithinBounds(move))
 			{
-				tileObjects[move.x, move.y].GetComponent<Tile>().ShowPossibleMove();
+				tileObjects[move.x, move.y].GetComponent<Tile>().SetState(TileState.POSSIBLE, currentSelectedPiece.SubduedColor);
 
 				if (pieces[move.x, move.y] != null)
 				{
 					//pieces[move.x, move.y].PickPieceUp();
 					pieces[move.x, move.y].SetPushPotential(true);
+				}
+			}
+		}
+
+		// Handle Knight selection. We gotta get its secondary moves and highlight those too.
+		if (CurrentIsKnight())
+		{
+			IntVector2[] secondaryMoves = currentSelectedPiece.GetComponent<Knight>().GetSecondaryMoves();
+
+			for (int i = 0; i < secondaryMoves.Length; i++)
+			{
+				IntVector2 move = secondaryMoves[i];
+				if (IsWithinBounds(move))
+				{
+					tileObjects[move.x, move.y].GetComponent<Tile>().SetState(TileState.KNIGHT_TRAVERSABLE, Color.black);
 				}
 			}
 		}
@@ -645,6 +760,7 @@ public class Game : MonoBehaviour
 
 	public void OnMoveEnded()
 	{
+		currentSelectedPiece.SetMoveDisabled(true);
 		ResetPossibleMoves();
 
 		// Spawn the needed amount of pieces.
@@ -749,6 +865,11 @@ public class Game : MonoBehaviour
 
 		if (currentSelectedPiece != null)
 		{
+			if (CurrentIsKnight())
+			{
+				currentSelectedPiece.GetComponent<Knight>().ResetKnight();
+			}
+
 			currentSelectedPiece.SetPieceDown();
 			currentSelectedPiece.SetPushPotential(false);
 			currentSelectedPiece = null;
@@ -762,6 +883,11 @@ public class Game : MonoBehaviour
 	IntVector2 RandomCoordinates()
 	{
 		return new IntVector2(Random.Range(0, Constants.I.GridSize.x), Random.Range(0, Constants.I.GridSize.y));
+	}
+
+	IntVector2 RandomCoordinatesInColumn(int x)
+	{
+		return new IntVector2(x, Random.Range(0, Constants.I.GridSize.y));
 	}
 
 	protected void PlaceRandomPiece()
@@ -832,36 +958,45 @@ public class Game : MonoBehaviour
 			default:
 				break;
 		}
+
+		nextRandomCoords = RandomCoordinates();
+
+		while (pieces[nextRandomCoords.x, nextRandomCoords.y] != null)
+		{
+			nextRandomCoords = RandomCoordinates();
+		}
+
+		// Position the piece viewer at the top above the column it needs to be at.
+		Vector2 pos = GameManager.Instance.CoordinateToPosition(nextRandomCoords);
+		pieceViewer.PositionAlongTop(pos.x);
 	}
 
 	protected void PlaceNextRandomPiece()
 	{
-		IntVector2 randCoords = RandomCoordinates();
-
-		while (pieces[randCoords.x, randCoords.y] != null)
+		while (pieces[nextRandomCoords.x, nextRandomCoords.y] != null)
 		{
-			randCoords = RandomCoordinates();
+			nextRandomCoords = RandomCoordinatesInColumn(nextRandomCoords.x);
 		}
 
 		switch (nextRandomPieceType)
 		{
 			case PieceType.KING:
-				CreateKing(randCoords.x, randCoords.y);
+				CreateKing(nextRandomCoords.x, nextRandomCoords.y);
 				break;
 			case PieceType.QUEEN:
-				CreateQueen(randCoords.x, randCoords.y);
+				CreateQueen(nextRandomCoords.x, nextRandomCoords.y);
 				break;
 			case PieceType.ROOK:
-				CreateRook(randCoords.x, randCoords.y);
+				CreateRook(nextRandomCoords.x, nextRandomCoords.y);
 				break;
 			case PieceType.BISHOP:
-				CreateBishop(randCoords.x, randCoords.y);
+				CreateBishop(nextRandomCoords.x, nextRandomCoords.y);
 				break;
 			case PieceType.KNIGHT:
-				CreateKnight(randCoords.x, randCoords.y);
+				CreateKnight(nextRandomCoords.x, nextRandomCoords.y);
 				break;
 			case PieceType.PAWN:
-				CreatePawn(randCoords.x, randCoords.y);
+				CreatePawn(nextRandomCoords.x, nextRandomCoords.y);
 				break;
 			default:
 				break;

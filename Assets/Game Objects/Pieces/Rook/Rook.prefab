@@ -94,9 +94,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78ea5c04549d0485db8b7713b38a0d61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  fullColor: {r: 0.9921569, g: 0.64705884, b: 0.43529415, a: 1}
+  subduedColor: {r: 0.86764705, g: 0.7213619, b: 0.631596, a: 1}
   tint: {r: 1, g: 1, b: 1, a: 1}
   disabledTint: {r: 0.75, g: 0.75, b: 0.75, a: 1}
   potentialPush: 0
+  currentCoordinates:
+    x: 0
+    y: 0
 --- !u!212 &212000012930413336
 SpriteRenderer:
   m_ObjectHideFlags: 1

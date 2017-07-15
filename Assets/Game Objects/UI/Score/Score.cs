@@ -2,6 +2,7 @@
 using System.Collections;
 using TMPro;
 using DG.Tweening;
+using UnityEngine.SocialPlatforms;
 
 public class Score : MonoBehaviour 
 {
@@ -29,6 +30,7 @@ public class Score : MonoBehaviour
 	public void SubmitScore()
 	{
 		SaveDataManager.Instance.TrySubmitHighScore(score);
+		GameCenterManager.Instance.ReportScore(score);
 	}
 
 	public void ScorePoint()
