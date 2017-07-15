@@ -27,18 +27,19 @@ public class GameCenterManager : MonoBehaviour
     {
         if (success) 
         {
-            Debug.Log ("Authenticated, checking achievements");
+            Debug.Log ("Authenticated.");
         }
         else
         {
-            Debug.Log ("Failed to authenticate");
+            Debug.Log ("Failed to authenticate.");
         }
     }
 
     public void ReportScore(int score)
     {
         long scoreLong = score;
-        Social.ReportScore(scoreLong, GAMECENTER_LEADERBOARD_ID, HighScoreCheck);
+        
+        //Social.ReportScore(scoreLong, GAMECENTER_LEADERBOARD_ID, HighScoreCheck);
     }
     
     void HighScoreCheck(bool result) 

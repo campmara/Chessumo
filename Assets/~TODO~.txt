@@ -2,6 +2,10 @@
 T O  D O  L I S T
 =================
 
+Random Coords:
+    - Figure out a better way of getting a random coordinate that isn't a while loop.
+    - Just make a new array of the unoccupied spaces and random on that!
+
 Code Refactoring:
     - Maybe try fixing up game class and moving stuff out that doesn't need to be there.
 

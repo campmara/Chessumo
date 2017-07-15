@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Name: Constants
   m_EditorClassIdentifier: 
   GridSize:
-    x: 5
-    y: 5
-  StartingPieceCount: 7
+    x: 4
+    y: 4
+  StartingPieceCount: 5
   CombosEnabled: 1
   GridOffsetX: 0
   GridOffsetY: -0.5
-  PieceMoveTime: 0.25
+  PieceMoveTime: 0.3
   StartButtonRaisedY: -4
   StartButtonLoweredY: -7
   StartButtonTweenTime: 0.75
   MaxScore: 2147483647
-  ScoreRaisedY: 6.5
+  ScoreRaisedY: 5.8
   ScoreLoweredY: 0
   ScoreTweenTime: 1
