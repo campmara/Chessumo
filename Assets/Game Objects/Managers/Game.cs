@@ -880,14 +880,46 @@ public class Game : MonoBehaviour
 		currentMoveTile = null;
 	}
 
+	List<IntVector2> tempListUnoccupied = new List<IntVector2>();
 	IntVector2 RandomCoordinates()
 	{
-		return new IntVector2(Random.Range(0, Constants.I.GridSize.x), Random.Range(0, Constants.I.GridSize.y));
+		tempListUnoccupied.Clear();
+		for (int i = 0; i < tileObjects.GetLength(0); i++)
+		{
+			for (int j = 0; j < tileObjects.GetLength(1); j++)
+			{
+				IntVector2 tileCoords = tileObjects[i, j].GetComponent<Tile>().GetCoordinates();
+				if (pieces[tileCoords.x, tileCoords.y] == null)
+				{
+					tempListUnoccupied.Add(tileCoords);
+				}
+			}
+		}
+
+		return tempListUnoccupied[Random.Range(0, tempListUnoccupied.Count)];
+
+		//return new IntVector2(Random.Range(0, Constants.I.GridSize.x), Random.Range(0, Constants.I.GridSize.y));
 	}
 
 	IntVector2 RandomCoordinatesInColumn(int x)
 	{
-		return new IntVector2(x, Random.Range(0, Constants.I.GridSize.y));
+		int count = 0;
+		for (int i = 0; i < tileObjects.GetLength(1); i++)
+		{
+			if (pieces[x, i] != null)
+			{
+				count++;
+			}
+		}
+
+		if (count >= Constants.I.GridSize.y - 1)
+		{
+			return RandomCoordinates();
+		}
+		else
+		{
+			return new IntVector2(x, Random.Range(0, Constants.I.GridSize.y));
+		}
 	}
 
 	protected void PlaceRandomPiece()
@@ -961,10 +993,12 @@ public class Game : MonoBehaviour
 
 		nextRandomCoords = RandomCoordinates();
 
+		/*
 		while (pieces[nextRandomCoords.x, nextRandomCoords.y] != null)
 		{
 			nextRandomCoords = RandomCoordinates();
 		}
+		*/
 
 		// Position the piece viewer at the top above the column it needs to be at.
 		Vector2 pos = GameManager.Instance.CoordinateToPosition(nextRandomCoords);

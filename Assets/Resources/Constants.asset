@@ -14,7 +14,7 @@ MonoBehaviour:
   GridSize:
     x: 4
     y: 4
-  StartingPieceCount: 5
+  StartingPieceCount: 6
   CombosEnabled: 1
   GridOffsetX: 0
   GridOffsetY: -0.5

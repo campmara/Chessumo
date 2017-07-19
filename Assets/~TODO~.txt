@@ -2,10 +2,6 @@
 T O  D O  L I S T
 =================
 
-Random Coords:
-    - Figure out a better way of getting a random coordinate that isn't a while loop.
-    - Just make a new array of the unoccupied spaces and random on that!
-
 Code Refactoring:
     - Maybe try fixing up game class and moving stuff out that doesn't need to be there.
 
@@ -21,12 +17,12 @@ Add MENU and LEADERBOARD buttons to the game UI:
 Add an end to the game:
     - Shows a page ad.
 
-Admob Integration:
+Admob Integration (c):
     - interstitial ads after every game.
     - watch video ads to get closer to unlocking an ad-less version of the game.
         - the quantity watched of video ads must be worth more than it costs to pay for ad removal.
 
-GameCenter Integration:
+GameCenter Integration (c):
     - get a gamecenter id
 
 Grid Size Testing:
@@ -42,7 +38,7 @@ Art:
         - It is. I can use it.
     - Make the trail fade out behind the piece that's moving as it moves.
 
-Company:
+Company (c):
     - Incorporate
     - Protect through copyright
 
