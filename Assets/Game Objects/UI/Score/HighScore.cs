@@ -17,7 +17,7 @@ public class HighScore : MonoBehaviour
 
 	void OnEnable()
 	{
-		GameManager.Instance.GrowMeFromSlit(this.gameObject, 1f, Ease.OutBounce);
+		GameManager.Instance.GrowMe(this.gameObject, 1.5f, Ease.OutBounce);
 	}
 
 	public void PullHighScore()

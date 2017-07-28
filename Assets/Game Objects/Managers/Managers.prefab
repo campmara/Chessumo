@@ -196,7 +196,15 @@ MonoBehaviour:
     type: 2}
   startButtonPrefab: {fileID: 1000011827934488, guid: 901b17a8d691a4ab8908e1af58b0d57d,
     type: 2}
+  scoresButtonPrefab: {fileID: 1490100644976496, guid: 62f99dee0bcc84935aafb236135be757,
+    type: 2}
+  menuButtonPrefab: {fileID: 1895835230142028, guid: 45053641ea0424612ad5696082f44cd7,
+    type: 2}
+  resetButtonPrefab: {fileID: 1845201844506824, guid: 0fc0f1e7f6d184529bbaa58613be71c3,
+    type: 2}
   tilePrefab: {fileID: 1345034203562220, guid: 1bc957b08614540c08670a641b668e3d, type: 2}
+  topUIBarPrefab: {fileID: 1901250137628206, guid: c02676bcdf4fc4ddfb5a066334bca260,
+    type: 2}
   scorePrefab: {fileID: 1000011452536478, guid: 396667be61c144e91b7b9e1693fac3c1,
     type: 2}
   scoreEffectPrefab: {fileID: 1382382347676286, guid: ab3e49c51e1104119a0554eecd5e1d87,

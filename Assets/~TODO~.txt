@@ -6,9 +6,6 @@ Code Refactoring:
     - Maybe try fixing up game class and moving stuff out that doesn't need to be there.
 
 Game Balancing:
-    - Make it so if you get more than one off the board, the points you get are doubled.
-        - This will put more of an emphasis on lining up pieces.
-        - Only do this for getting 3 off the board.
     - Try taking away a piece and then making it so getting a piece off the board re-enables all the pieces on the board.
 
 Add MENU and LEADERBOARD buttons to the game UI:

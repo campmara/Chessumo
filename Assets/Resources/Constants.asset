@@ -22,7 +22,7 @@ MonoBehaviour:
   StartButtonRaisedY: -4
   StartButtonLoweredY: -7
   StartButtonTweenTime: 0.75
-  MaxScore: 2147483647
+  MaxScore: 999999999
   ScoreRaisedY: 5.8
   ScoreLoweredY: 0
   ScoreTweenTime: 1

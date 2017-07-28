@@ -20,9 +20,14 @@ public class GameManager : MonoBehaviour
 
 	[Header("Game Prefab")]
 	public Game gamePrefab;
-	[Header("General Prefabs")]
+	[Header("Button Prefabs")]
 	public GameObject startButtonPrefab;
+	public GameObject scoresButtonPrefab;
+	public GameObject menuButtonPrefab;
+	public GameObject resetButtonPrefab;
+	[Header("UI Prefabs")]
 	public GameObject tilePrefab;
+	public GameObject topUIBarPrefab;
 	public GameObject scorePrefab;
 	public GameObject scoreEffectPrefab;
 	public GameObject highScorePrefab;

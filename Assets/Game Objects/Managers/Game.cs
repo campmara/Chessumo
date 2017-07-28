@@ -27,6 +27,11 @@ public class Game : MonoBehaviour
 	// PRIVATES
 	/////////////////////////////////////////////////////////////////////
 
+	private GameObject topUIBarObj;
+	private GameObject scoresButtonObj;
+	private GameObject menuButtonObj;
+	private GameObject resetButtonObj;
+
 	private GameObject[,] tileObjects;
 	private Piece[,] pieces;
 	private PieceType nextRandomPieceType;
@@ -92,8 +97,28 @@ public class Game : MonoBehaviour
 	{
 		StartCoroutine(SetupBoard());
 
+		SetupUI();
 		SetupScore();
 		SetupPieceViewer();
+	}
+
+	void SetupUI()
+	{
+		topUIBarObj = Instantiate(GameManager.Instance.topUIBarPrefab) as GameObject;
+		topUIBarObj.name = "Top UI Bar";
+		topUIBarObj.transform.parent = transform;
+
+		scoresButtonObj = Instantiate(GameManager.Instance.scoresButtonPrefab) as GameObject;
+		scoresButtonObj.name = "Scores Button";
+		scoresButtonObj.transform.parent = transform;
+
+		menuButtonObj = Instantiate(GameManager.Instance.menuButtonPrefab) as GameObject;
+		menuButtonObj.name = "Menu Button";
+		menuButtonObj.transform.parent = transform;
+
+		resetButtonObj = Instantiate(GameManager.Instance.resetButtonPrefab) as GameObject;
+		resetButtonObj.name = "Reset Button";
+		resetButtonObj.transform.parent = transform;
 	}
 
 	void SetupScore()
@@ -101,7 +126,7 @@ public class Game : MonoBehaviour
 		scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
 		scoreObj.name = "Score";
 		scoreObj.transform.parent = transform;
-		scoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
+		//scoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
 		score = scoreObj.GetComponent<Score>();
 		score.Reset();
 
@@ -113,7 +138,7 @@ public class Game : MonoBehaviour
 		highScoreObj = Instantiate(GameManager.Instance.highScorePrefab) as GameObject;
 		highScoreObj.name = "High Score";
 		highScoreObj.transform.parent = transform;
-		highScoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
+		//highScoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
 		highScore = highScoreObj.GetComponent<HighScore>();
 		highScore.PullHighScore();
 	}
@@ -123,7 +148,7 @@ public class Game : MonoBehaviour
 		pieceViewerObj = Instantiate(GameManager.Instance.nextPieceViewerPrefab) as GameObject;
 		pieceViewerObj.name = "Piece Viewer";
 		pieceViewerObj.transform.parent = transform;
-		pieceViewerObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY - 1f, 0f);
+		//pieceViewerObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY - 1f, 0f);
 		pieceViewer = pieceViewerObj.GetComponent<NextPieceViewer>();
 
 		DecideNextRandomPiece();
