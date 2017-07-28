@@ -14,13 +14,13 @@ MonoBehaviour:
   GridSize:
     x: 4
     y: 4
-  StartingPieceCount: 6
+  StartingPieceCount: 5
   CombosEnabled: 1
   GridOffsetX: 0
   GridOffsetY: -0.5
   PieceMoveTime: 0.3
-  StartButtonRaisedY: -4
-  StartButtonLoweredY: -7
+  StartButtonRaisedY: -3.5
+  StartButtonLoweredY: -6
   StartButtonTweenTime: 0.75
   MaxScore: 999999999
   ScoreRaisedY: 5.8

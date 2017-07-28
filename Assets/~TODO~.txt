@@ -2,14 +2,14 @@
 T O  D O  L I S T
 =================
 
-Code Refactoring:
-    - Maybe try fixing up game class and moving stuff out that doesn't need to be there.
-
 Game Balancing:
     - Try taking away a piece and then making it so getting a piece off the board re-enables all the pieces on the board.
 
-Add MENU and LEADERBOARD buttons to the game UI:
-    - Right underneath the score and high score text fields.
+Menu:
+    - Make a menu for the game, make sure the game menu button takes you there.
+    - Maybe if you hit menu in the middle of a game you can just continue to come back.
+    - Wait, if i only have one mode of play, what is the point of having a menu.
+    - maybe i should just have that top bar be the menu and have it appear in the beginning.
 
 Add an end to the game:
     - Shows a page ad.

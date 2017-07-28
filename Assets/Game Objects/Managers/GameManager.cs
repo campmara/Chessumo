@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
 	[Header("Button Prefabs")]
 	public GameObject startButtonPrefab;
 	public GameObject scoresButtonPrefab;
-	public GameObject menuButtonPrefab;
 	public GameObject resetButtonPrefab;
 	[Header("UI Prefabs")]
 	public GameObject tilePrefab;
@@ -205,6 +204,33 @@ public class GameManager : MonoBehaviour
 		if (obj)
 		{
 			obj.transform.DOScaleY(0f, 1f)
+				.SetEase(ease);
+		}
+
+		yield return null;
+	}
+
+	public void IntroduceFromSide(GameObject obj, float delay, bool isRight, Ease ease = Ease.OutBounce)
+	{
+		StartCoroutine(IntroduceFromSideRoutine(obj, delay, isRight, ease));
+	}
+
+	IEnumerator IntroduceFromSideRoutine(GameObject obj, float delay, bool isRight, Ease ease)
+	{
+		int sign = isRight ? 1 : -1;
+		Vector3 startPos = new Vector3(5f * sign, obj.transform.position.y, obj.transform.position.z);
+		Vector3 endPos = obj.transform.position;
+
+		// send off to the side first.
+		obj.transform.position = startPos;
+
+		// Then wait the delay.
+		yield return new WaitForSeconds(delay);
+
+		// Then rescale via tween.
+		if (obj)
+		{
+			obj.transform.DOMove(endPos, 1f)
 				.SetEase(ease);
 		}
 

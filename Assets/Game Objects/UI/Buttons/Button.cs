@@ -17,10 +17,7 @@ public class Button : MonoBehaviour
 		text = GetComponentInChildren(typeof(TextMeshPro)) as TextMeshPro;
 	}
 
-	void OnEnable()
-	{
-		GameManager.Instance.GrowMe(this.gameObject, 1.5f, Ease.OutBounce);
-	}
+	protected virtual void OnEnable(){}
 
 	private void OnMouseDown()
 	{
@@ -44,7 +41,16 @@ public class Button : MonoBehaviour
 			pos.y += 0.1f;
 			text.transform.localPosition = pos;
 
-			OnPress();
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+
+			if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+			{
+				if (hit.collider.gameObject == this.gameObject)
+				{
+					OnPress();
+				}
+			}
 		}
 	}
 

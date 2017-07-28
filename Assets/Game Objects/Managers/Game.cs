@@ -110,22 +110,18 @@ public class Game : MonoBehaviour
 
 		scoresButtonObj = Instantiate(GameManager.Instance.scoresButtonPrefab) as GameObject;
 		scoresButtonObj.name = "Scores Button";
-		scoresButtonObj.transform.parent = transform;
-
-		menuButtonObj = Instantiate(GameManager.Instance.menuButtonPrefab) as GameObject;
-		menuButtonObj.name = "Menu Button";
-		menuButtonObj.transform.parent = transform;
-
+		scoresButtonObj.transform.parent = topUIBarObj.transform;
+		
 		resetButtonObj = Instantiate(GameManager.Instance.resetButtonPrefab) as GameObject;
 		resetButtonObj.name = "Reset Button";
-		resetButtonObj.transform.parent = transform;
+		resetButtonObj.transform.parent = topUIBarObj.transform;
 	}
 
 	void SetupScore()
 	{
 		scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
 		scoreObj.name = "Score";
-		scoreObj.transform.parent = transform;
+		scoreObj.transform.parent = topUIBarObj.transform;
 		//scoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
 		score = scoreObj.GetComponent<Score>();
 		score.Reset();
@@ -137,7 +133,7 @@ public class Game : MonoBehaviour
 
 		highScoreObj = Instantiate(GameManager.Instance.highScorePrefab) as GameObject;
 		highScoreObj.name = "High Score";
-		highScoreObj.transform.parent = transform;
+		highScoreObj.transform.parent = topUIBarObj.transform;
 		//highScoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
 		highScore = highScoreObj.GetComponent<HighScore>();
 		highScore.PullHighScore();

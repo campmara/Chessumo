@@ -24,7 +24,7 @@ public class Score : MonoBehaviour
 
 	void OnEnable()
 	{
-		GameManager.Instance.GrowMe(this.gameObject, 1.5f, Ease.OutBounce);
+		//GameManager.Instance.IntroduceFromSide(this.gameObject, 1.9f, true);
 	}
 
 	public void SubmitScore()
