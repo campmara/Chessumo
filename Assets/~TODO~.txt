@@ -2,14 +2,12 @@
 T O  D O  L I S T
 =================
 
-Game Balancing:
-    - Try taking away a piece and then making it so getting a piece off the board re-enables all the pieces on the board.
+Feel:
+    - make it so you can let go of a move past the board and it will still register as a move.
+    - you gotta give the piece movements more weight somehow. do the math.
 
-Menu:
-    - Make a menu for the game, make sure the game menu button takes you there.
-    - Maybe if you hit menu in the middle of a game you can just continue to come back.
-    - Wait, if i only have one mode of play, what is the point of having a menu.
-    - maybe i should just have that top bar be the menu and have it appear in the beginning.
+UI:
+    - next piece viewer should have an arrow underneath it, the box should be pointed to show more that the piece is going to drop in that row. give it the under-shadow too.
 
 Add an end to the game:
     - Shows a page ad.
@@ -20,24 +18,24 @@ Admob Integration (c):
         - the quantity watched of video ads must be worth more than it costs to pay for ad removal.
 
 GameCenter Integration (c):
-    - get a gamecenter id
+    - Keep troubleshooting game center problems
 
 Grid Size Testing:
     - Just try the game with a 4x4 grid and see how that feels.
 
 Sound:
     - Very light sound design.
-    - Reserved, just enough blips and blops to give it the cold, inhuman lifelessness it deserves.
+    - make it on the op-1
 
 Art:
     - Draw your own original piece icons.
+    - Fix the app logo. try a couple different permutations. one with like a grid of pieces, one with just the icon of the queen or something, etc.
     - Make sure Now typeface is free.
         - It is. I can use it.
     - Make the trail fade out behind the piece that's moving as it moves.
 
 Company (c):
-    - Incorporate
-    - Protect through copyright
+    - COPYRIGHT
 
 Tutorialization:
     - Save tutorial completion.

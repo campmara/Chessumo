@@ -5,7 +5,7 @@ public class GameCenterManager : MonoBehaviour
 {
     public static GameCenterManager Instance = null;
 
-    private const string GAMECENTER_LEADERBOARD_ID = "yourLeaderboardIDinQuotes";
+    private const string GAMECENTER_LEADERBOARD_ID = "grp.chessumoHighScores";
 
 	private void Awake()
 	{
@@ -39,7 +39,7 @@ public class GameCenterManager : MonoBehaviour
     {
         long scoreLong = score;
         
-        //Social.ReportScore(scoreLong, GAMECENTER_LEADERBOARD_ID, HighScoreCheck);
+        Social.ReportScore(scoreLong, GAMECENTER_LEADERBOARD_ID, HighScoreCheck);
     }
     
     void HighScoreCheck(bool result) 
