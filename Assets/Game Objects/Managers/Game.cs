@@ -37,15 +37,7 @@ public class Game : MonoBehaviour
 	private PieceType nextRandomPieceType;
 	private int numPiecesToSpawn = 0;
 
-	private GameObject scoreObj;
-	private Score score;
-	private GameObject scoreEffectObj;
-	private ScoreEffect scoreEffect;
-
 	private int scoreCombo;
-	
-	private GameObject highScoreObj;
-	private HighScore highScore;
 
 	private GameObject pieceViewerObj;
 	private NextPieceViewer pieceViewer;
@@ -97,46 +89,7 @@ public class Game : MonoBehaviour
 	{
 		StartCoroutine(SetupBoard());
 
-		SetupUI();
-		SetupScore();
 		SetupPieceViewer();
-	}
-
-	void SetupUI()
-	{
-		topUIBarObj = Instantiate(GameManager.Instance.topUIBarPrefab) as GameObject;
-		topUIBarObj.name = "Top UI Bar";
-		topUIBarObj.transform.parent = transform;
-
-		scoresButtonObj = Instantiate(GameManager.Instance.scoresButtonPrefab) as GameObject;
-		scoresButtonObj.name = "Scores Button";
-		scoresButtonObj.transform.parent = topUIBarObj.transform;
-		
-		resetButtonObj = Instantiate(GameManager.Instance.resetButtonPrefab) as GameObject;
-		resetButtonObj.name = "Reset Button";
-		resetButtonObj.transform.parent = topUIBarObj.transform;
-	}
-
-	void SetupScore()
-	{
-		scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
-		scoreObj.name = "Score";
-		scoreObj.transform.parent = topUIBarObj.transform;
-		//scoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
-		score = scoreObj.GetComponent<Score>();
-		score.Reset();
-
-		scoreEffectObj = Instantiate(GameManager.Instance.scoreEffectPrefab) as GameObject;
-		scoreEffectObj.name = "Score Effect";
-		scoreEffectObj.transform.parent = transform;
-		scoreEffect = scoreEffectObj.GetComponent<ScoreEffect>();
-
-		highScoreObj = Instantiate(GameManager.Instance.highScorePrefab) as GameObject;
-		highScoreObj.name = "High Score";
-		highScoreObj.transform.parent = topUIBarObj.transform;
-		//highScoreObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY, 0f);
-		highScore = highScoreObj.GetComponent<HighScore>();
-		highScore.PullHighScore();
 	}
 
 	void SetupPieceViewer()
@@ -697,8 +650,8 @@ public class Game : MonoBehaviour
 		yield return tween.WaitForCompletion();
 
 		// Score a point and handle the score combo.
-		score.ScorePoint();
-		scoreEffect.OnPointScored();
+		GameManager.Instance.score.ScorePoint();
+		GameManager.Instance.scoreEffect.OnPointScored();
 		IncrementScoreCombo();
 
 		Destroy(pieceObj);
@@ -721,7 +674,7 @@ public class Game : MonoBehaviour
 
 			for (int i = 0; i < scoreCombo; i++)
 			{
-				score.ScorePoint();
+				GameManager.Instance.score.ScorePoint();
 			}
 		}
 	}
@@ -835,8 +788,8 @@ public class Game : MonoBehaviour
 
 		yield return new WaitForSeconds(2f);
 
-		score.SubmitScore();
-		highScore.PullHighScore();
+		GameManager.Instance.score.SubmitScore();
+		GameManager.Instance.highScore.PullHighScore();
 		GameManager.Instance.OnGameEnd();
 	}
 

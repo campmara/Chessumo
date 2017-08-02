@@ -9,6 +9,7 @@ public class SaveDataManager : MonoBehaviour
 	/////////////////////////////////////////////////////////////////////
 
 	private const string HIGH_SCORE_KEY = "HIGHSCORE";
+	private const string BATTERY_SAVER_KEY = "BATTERY_SAVER";
 
 	/////////////////////////////////////////////////////////////////////
 	// PUBLICS
@@ -31,6 +32,8 @@ public class SaveDataManager : MonoBehaviour
 			Instance = this;
 		}
 	}
+
+	// HIGH SCORE
 
 	public void TrySubmitHighScore(int score)
 	{
@@ -59,5 +62,33 @@ public class SaveDataManager : MonoBehaviour
 	public int GetHighScore()
 	{
 		return PlayerPrefs.GetInt(HIGH_SCORE_KEY, 0);
+	}
+
+	// BATTERY SAVER
+
+	public void ToggleBatterySaver()
+	{
+		int num = PlayerPrefs.GetInt(BATTERY_SAVER_KEY, -1);
+
+		if (num == 0) // Set to false
+		{
+			PlayerPrefs.SetInt(BATTERY_SAVER_KEY, 1);
+			Application.targetFrameRate = 30;
+		}
+		else if (num == 1) // Set to true
+		{
+			PlayerPrefs.SetInt(BATTERY_SAVER_KEY, 0);
+			Application.targetFrameRate = 60;
+		}
+		else if (num == -1) // First time setup.
+		{
+			PlayerPrefs.SetInt(BATTERY_SAVER_KEY, 0);
+			Application.targetFrameRate = 60;
+		}
+	}
+
+	public bool IsBatterySaverOn()
+	{
+		return PlayerPrefs.GetInt(BATTERY_SAVER_KEY, -1) == 1;
 	}
 }

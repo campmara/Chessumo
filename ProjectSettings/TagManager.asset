@@ -53,3 +53,6 @@ TagManager:
   - name: Moves
     uniqueID: 1157744391
     locked: 0
+  - name: Menus
+    uniqueID: 3681538631
+    locked: 0

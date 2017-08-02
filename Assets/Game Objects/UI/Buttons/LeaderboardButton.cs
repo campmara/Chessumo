@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
-public class ScoresButton : Button 
+public class LeaderboardButton : Button 
 {
 	protected override void OnEnable()
 	{

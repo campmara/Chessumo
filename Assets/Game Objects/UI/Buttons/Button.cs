@@ -19,7 +19,29 @@ public class Button : MonoBehaviour
 
 	protected virtual void OnEnable(){}
 
-	private void OnMouseDown()
+	public void Introduce(float delay)
+	{
+		LowerButton();
+		Invoke("RaiseButton", delay);
+	}
+	private void RaiseButton() 
+	{
+		Vector3 pos = text.transform.localPosition;
+		pos.y = 0f;
+		text.transform.localPosition = pos;
+
+		spriteRenderer.sprite = upSprite;
+	}
+	private void LowerButton()
+	{
+		Vector3 pos = text.transform.localPosition;
+		pos.y = -0.1f;
+		text.transform.localPosition = pos;
+
+		spriteRenderer.sprite = downSprite;
+	}
+
+	protected virtual void OnMouseDown()
 	{
 		if (spriteRenderer.sprite == upSprite)
 		{
@@ -31,7 +53,7 @@ public class Button : MonoBehaviour
 		}
 	}
 
-	private void OnMouseUp()
+	protected virtual void OnMouseUp()
 	{
 		if (spriteRenderer.sprite == downSprite)
 		{

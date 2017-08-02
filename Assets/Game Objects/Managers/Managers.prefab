@@ -196,11 +196,11 @@ MonoBehaviour:
     type: 2}
   startButtonPrefab: {fileID: 1000011827934488, guid: 901b17a8d691a4ab8908e1af58b0d57d,
     type: 2}
-  scoresButtonPrefab: {fileID: 1490100644976496, guid: 62f99dee0bcc84935aafb236135be757,
+  leaderboardButtonPrefab: {fileID: 1490100644976496, guid: 62f99dee0bcc84935aafb236135be757,
     type: 2}
-  menuButtonPrefab: {fileID: 1895835230142028, guid: 45053641ea0424612ad5696082f44cd7,
+  restartButtonPrefab: {fileID: 1845201844506824, guid: 0fc0f1e7f6d184529bbaa58613be71c3,
     type: 2}
-  resetButtonPrefab: {fileID: 1845201844506824, guid: 0fc0f1e7f6d184529bbaa58613be71c3,
+  settingsButtonPrefab: {fileID: 1895835230142028, guid: 45053641ea0424612ad5696082f44cd7,
     type: 2}
   tilePrefab: {fileID: 1345034203562220, guid: 1bc957b08614540c08670a641b668e3d, type: 2}
   topUIBarPrefab: {fileID: 1901250137628206, guid: c02676bcdf4fc4ddfb5a066334bca260,
@@ -213,6 +213,8 @@ MonoBehaviour:
     type: 2}
   nextPieceViewerPrefab: {fileID: 1000013728354998, guid: 405155a372c254fb888f166ea3a1d160,
     type: 2}
+  settingsMenuPrefab: {fileID: 1446733621370044, guid: e095af804914a485abf6366fbe88fc02,
+    type: 2}
   kingPrefab: {fileID: 1000012858214770, guid: 8bf9b3f6f39cb414bab1b115e88e82d2, type: 2}
   queenPrefab: {fileID: 1000014152563984, guid: 139782790f45f48859be2aed79c5296b,
     type: 2}
@@ -222,6 +224,9 @@ MonoBehaviour:
   knightPrefab: {fileID: 1000014186337950, guid: b2fa396e2e2154dc6b5f0eaf7893b868,
     type: 2}
   pawnPrefab: {fileID: 1000013607600190, guid: 39259fa6fcd5a4acb87767b411bb6583, type: 2}
+  score: {fileID: 0}
+  scoreEffect: {fileID: 0}
+  highScore: {fileID: 0}
 --- !u!114 &114973944548852378
 MonoBehaviour:
   m_ObjectHideFlags: 1

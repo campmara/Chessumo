@@ -22,8 +22,9 @@ public class GameManager : MonoBehaviour
 	public Game gamePrefab;
 	[Header("Button Prefabs")]
 	public GameObject startButtonPrefab;
-	public GameObject scoresButtonPrefab;
-	public GameObject resetButtonPrefab;
+	public GameObject leaderboardButtonPrefab;
+	public GameObject restartButtonPrefab;
+	public GameObject settingsButtonPrefab;
 	[Header("UI Prefabs")]
 	public GameObject tilePrefab;
 	public GameObject topUIBarPrefab;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
 	public GameObject scoreEffectPrefab;
 	public GameObject highScorePrefab;
 	public GameObject nextPieceViewerPrefab;
+	public GameObject settingsMenuPrefab;
 	[Header("Piece Prefabs")]
 	public GameObject kingPrefab;
 	public GameObject queenPrefab;
@@ -39,6 +41,10 @@ public class GameManager : MonoBehaviour
 	public GameObject knightPrefab;
 	public GameObject pawnPrefab;
 
+	[HideInInspector] public Score score;
+	[HideInInspector] public ScoreEffect scoreEffect;
+	[HideInInspector] public HighScore highScore;
+
 	/////////////////////////////////////////////////////////////////////
 	// PRIVATES
 	/////////////////////////////////////////////////////////////////////
@@ -46,9 +52,13 @@ public class GameManager : MonoBehaviour
 	private Game game;
 	private State currentState;
 
-	private DebugStartButton startButton;
+	//private DebugStartButton startButton;
+	private TopUIBar topUIBar;
+	private RestartButton restartButton;
+	private LeaderboardButton leaderboardButton;
+	private SettingsButton settingsButton;
 
-	void Awake()
+	void Start()
 	{
 		if (Instance == null)
 		{
@@ -57,17 +67,19 @@ public class GameManager : MonoBehaviour
 
 		// This will eat battery, but threes does it so w/e.
 		// Eventually, adding a "conserve battery" option that sets this to 30 would be good.
-		Application.targetFrameRate = 60;
+		Application.targetFrameRate = SaveDataManager.Instance.IsBatterySaverOn() ? 30 : 60;
 
 		// Init DOTween.
 		DOTween.Init();
 
 		currentState = State.MENU;
 
-		// Create the start button 1 second in. Just to make sure we don't jitter at the start.
-		Invoke("CreateStartButton", 1f);
+		// Create the UI first, before introducing to avoid introductory jitter.
+		CreateTopUI();
+		topUIBar.Introduce(1f);
 	}
 
+	/*
 	void CreateStartButton()
 	{
 		GameObject startButtonObj = Instantiate(startButtonPrefab) as GameObject;
@@ -78,18 +90,62 @@ public class GameManager : MonoBehaviour
 		startButton = startButtonObj.GetComponent(typeof(DebugStartButton)) as DebugStartButton;
 		startButton.Raise();
 	}
+	*/
+
+	void CreateTopUI()
+	{
+		GameObject topUIBarObj = Instantiate(GameManager.Instance.topUIBarPrefab) as GameObject;
+		topUIBarObj.name = "Top UI Bar";
+		topUIBarObj.transform.parent = transform;
+		topUIBar = topUIBarObj.GetComponent(typeof(TopUIBar)) as TopUIBar;
+
+		GameObject settingsMenuObj = Instantiate(GameManager.Instance.settingsMenuPrefab) as GameObject;
+		settingsMenuObj.name = "Settings Menu";
+		settingsMenuObj.transform.parent = transform;
+		SettingsMenu menu = settingsMenuObj.GetComponent(typeof(SettingsMenu)) as SettingsMenu;
+
+		GameObject settingsButtonObj = Instantiate(GameManager.Instance.settingsButtonPrefab) as GameObject;
+		settingsButtonObj.name = "Reset Button";
+		settingsButtonObj.transform.parent = topUIBarObj.transform;
+		settingsButton = settingsButtonObj.GetComponent(typeof(SettingsButton)) as SettingsButton;
+		settingsButton.Introduce(2.5f);
+		settingsButton.HookUpToMenu(menu);
+
+		GameObject leaderboardButtonObj = Instantiate(GameManager.Instance.leaderboardButtonPrefab) as GameObject;
+		leaderboardButtonObj.name = "Scores Button";
+		leaderboardButtonObj.transform.parent = topUIBarObj.transform;
+		leaderboardButton = leaderboardButtonObj.GetComponent(typeof(LeaderboardButton)) as LeaderboardButton;
+		leaderboardButton.Introduce(2.5f);
+		
+		GameObject resetButtonObj = Instantiate(GameManager.Instance.restartButtonPrefab) as GameObject;
+		resetButtonObj.name = "Reset Button";
+		resetButtonObj.transform.parent = topUIBarObj.transform;
+		restartButton = resetButtonObj.GetComponent(typeof(RestartButton)) as RestartButton;
+		restartButton.ShowStart();
+		restartButton.Introduce(2.5f);
+
+		GameObject scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
+		scoreObj.name = "Score";
+		scoreObj.transform.parent = topUIBarObj.transform;
+		score = scoreObj.GetComponent<Score>();
+		score.Reset();
+
+		GameObject scoreEffectObj = Instantiate(GameManager.Instance.scoreEffectPrefab) as GameObject;
+		scoreEffectObj.name = "Score Effect";
+		scoreEffectObj.transform.parent = transform;
+		scoreEffect = scoreEffectObj.GetComponent<ScoreEffect>();
+
+		GameObject highScoreObj = Instantiate(GameManager.Instance.highScorePrefab) as GameObject;
+		highScoreObj.name = "High Score";
+		highScoreObj.transform.parent = topUIBarObj.transform;
+		highScore = highScoreObj.GetComponent<HighScore>();
+		highScore.PullHighScore();
+	}
 
 	public void OnGameEnd()
 	{
-		startButton.Raise();
-	}
-
-	void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			BeginGame();
-		}
+		restartButton.ShowReplay();
+		//startButton.Raise();
 	}
 
 	public void BeginGame()
@@ -107,6 +163,11 @@ public class GameManager : MonoBehaviour
 		else
 		{
 			Debug.Log("[GAME MANAGER] Unloading Game");
+
+			GameManager.Instance.score.SubmitScore();
+			GameManager.Instance.highScore.PullHighScore();
+			score.Reset();
+
 			game.Unload();
 
 			game = null;

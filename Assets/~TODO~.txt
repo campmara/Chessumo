@@ -2,12 +2,14 @@
 T O  D O  L I S T
 =================
 
+UI:
+    - have a little settings icon button in between the reset and leaderboard buttons
+    - allow players to set conserve energy mode, run the tutorial again, etc.
+    - check to see what it looks like when you make the board fit the width of the screen, just letting shit get cut off.
+
 Feel:
     - make it so you can let go of a move past the board and it will still register as a move.
     - you gotta give the piece movements more weight somehow. do the math.
-
-UI:
-    - next piece viewer should have an arrow underneath it, the box should be pointed to show more that the piece is going to drop in that row. give it the under-shadow too.
 
 Add an end to the game:
     - Shows a page ad.
@@ -22,6 +24,7 @@ GameCenter Integration (c):
 
 Grid Size Testing:
     - Just try the game with a 4x4 grid and see how that feels.
+    - It's ok. doesn't break the game.
 
 Sound:
     - Very light sound design.
@@ -40,6 +43,10 @@ Company (c):
 Tutorialization:
     - Save tutorial completion.
     - Little tutorial. Threes-esque, just very simple walkthrough of game rules.
+
+Saving Battery and Filesize:
+    - Figure out how to reduce file size.
+    - Convert all onmouse() functions to use touch input exclusively.
 
 Known Bugs:
     - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResetButton : Button 
+public class RestartButton : Button 
 {
 	protected override void OnEnable()
 	{
@@ -12,5 +12,16 @@ public class ResetButton : Button
 	protected override void OnPress()
 	{
 		GameManager.Instance.BeginGame();
+		text.text = "RESTART";
+	}
+
+	public void ShowStart()
+	{
+		text.text = "START";
+	}
+
+	public void ShowReplay()
+	{
+		text.text = "PLAY AGAIN";
 	}
 }
