@@ -268,6 +268,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upSprite: {fileID: 21300000, guid: 0943416854a31427e84b8bc3492db523, type: 3}
   downSprite: {fileID: 21300000, guid: 29433f8e03f764d9690b99580413af51, type: 3}
+  spriteRenderer: {fileID: 212198339391892492}
+  text: {fileID: 114349420900774430}
 --- !u!212 &212198339391892492
 SpriteRenderer:
   m_ObjectHideFlags: 1

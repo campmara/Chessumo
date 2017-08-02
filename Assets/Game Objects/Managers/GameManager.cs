@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using GoogleMobileAds.Api;
 
 public class GameManager : MonoBehaviour 
 {
@@ -144,6 +145,8 @@ public class GameManager : MonoBehaviour
 
 	public void OnGameEnd()
 	{
+		AdManager.Instance.Interstitial.Show();
+
 		restartButton.ShowReplay();
 		//startButton.Raise();
 	}

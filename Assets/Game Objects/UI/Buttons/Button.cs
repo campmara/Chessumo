@@ -8,14 +8,8 @@ public class Button : MonoBehaviour
 {
 	[SerializeField] protected Sprite upSprite;
 	[SerializeField] protected Sprite downSprite;
-	protected SpriteRenderer spriteRenderer;
-	protected TextMeshPro text;
-
-	void Awake()
-	{
-		spriteRenderer = GetComponentInChildren(typeof(SpriteRenderer)) as SpriteRenderer;
-		text = GetComponentInChildren(typeof(TextMeshPro)) as TextMeshPro;
-	}
+	[SerializeField] protected SpriteRenderer spriteRenderer;
+	[SerializeField] protected TextMeshPro text;
 
 	protected virtual void OnEnable(){}
 
@@ -24,7 +18,7 @@ public class Button : MonoBehaviour
 		LowerButton();
 		Invoke("RaiseButton", delay);
 	}
-	private void RaiseButton() 
+	protected virtual void RaiseButton() 
 	{
 		Vector3 pos = text.transform.localPosition;
 		pos.y = 0f;
@@ -32,7 +26,7 @@ public class Button : MonoBehaviour
 
 		spriteRenderer.sprite = upSprite;
 	}
-	private void LowerButton()
+	protected virtual void LowerButton()
 	{
 		Vector3 pos = text.transform.localPosition;
 		pos.y = -0.1f;

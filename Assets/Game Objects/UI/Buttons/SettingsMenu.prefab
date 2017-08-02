@@ -1203,6 +1203,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   upSprite: {fileID: 21300000, guid: c051cb411bef74027ae264be97288a13, type: 3}
   downSprite: {fileID: 21300000, guid: 5cbfee95afd1044aa989d58b4be094e1, type: 3}
+  spriteRenderer: {fileID: 212042870200090374}
+  text: {fileID: 114113085875677928}
 --- !u!114 &114608448428917502
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1214,6 +1216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0e6eba3584c5430ea922e0d387cff75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  button: {fileID: 0}
 --- !u!114 &114625099550794802
 MonoBehaviour:
   m_ObjectHideFlags: 1
