@@ -49,6 +49,7 @@ public class AdManager : MonoBehaviour
 	{
 		// Create a 320x50 banner at the top of the screen.
 		banner = new BannerView(bannerAdUnitID, AdSize.Banner, AdPosition.Bottom);
+		banner.OnAdClosed += HandleOnBAdClosed;
 		// Create an empty ad request.
 		AdRequest request = new AdRequest.Builder().Build();
 		// Load the banner with the request.
@@ -60,7 +61,7 @@ public class AdManager : MonoBehaviour
 	{
 		// Initialize an InterstitialAd.
 		interstitial = new InterstitialAd(interstitialAdUnitID);
-		interstitial.OnAdClosed += HandleOnAdClosed;
+		interstitial.OnAdClosed += HandleOnIAdClosed;
 		// Create an empty ad request.
 		AdRequest request = new AdRequest.Builder().Build();
 		// Load the interstitial with the request.
@@ -73,9 +74,15 @@ public class AdManager : MonoBehaviour
 		interstitial.Destroy();
 	}
 
-	public void HandleOnAdClosed(object sender, EventArgs args)
+	public void HandleOnIAdClosed(object sender, EventArgs args)
 	{
-		interstitial.OnAdClosed -= HandleOnAdClosed;
+		interstitial.OnAdClosed -= HandleOnIAdClosed;
 		RequestInterstitial();
+	}
+
+	public void HandleOnBAdClosed(object sender, EventArgs args)
+	{
+		banner.OnAdClosed -= HandleOnBAdClosed;
+		RequestBanner();
 	}
 }
