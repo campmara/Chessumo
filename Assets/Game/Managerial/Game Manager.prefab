@@ -1,0 +1,88 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1532335507684556}
+  m_IsPrefabParent: 1
+--- !u!1 &1532335507684556
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4493659066402104}
+  - component: {fileID: 114680103542703548}
+  m_Layer: 0
+  m_Name: Game Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4493659066402104
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1532335507684556}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114680103542703548
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1532335507684556}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 796525c4c6ee746b4a557d251819e3f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gamePrefab: {fileID: 114710873267322822, guid: 18f3f23bdbbec4beb820f9e90d96091d,
+    type: 2}
+  startButtonPrefab: {fileID: 1000011827934488, guid: 901b17a8d691a4ab8908e1af58b0d57d,
+    type: 2}
+  leaderboardButtonPrefab: {fileID: 1490100644976496, guid: 62f99dee0bcc84935aafb236135be757,
+    type: 2}
+  restartButtonPrefab: {fileID: 1845201844506824, guid: 0fc0f1e7f6d184529bbaa58613be71c3,
+    type: 2}
+  settingsButtonPrefab: {fileID: 1895835230142028, guid: 45053641ea0424612ad5696082f44cd7,
+    type: 2}
+  tilePrefab: {fileID: 1345034203562220, guid: 1bc957b08614540c08670a641b668e3d, type: 2}
+  topUIBarPrefab: {fileID: 1901250137628206, guid: c02676bcdf4fc4ddfb5a066334bca260,
+    type: 2}
+  scorePrefab: {fileID: 1000011452536478, guid: 396667be61c144e91b7b9e1693fac3c1,
+    type: 2}
+  scoreEffectPrefab: {fileID: 1382382347676286, guid: ab3e49c51e1104119a0554eecd5e1d87,
+    type: 2}
+  highScorePrefab: {fileID: 1000011452536478, guid: ab260fe38f00446d9ab6ac4da73de75f,
+    type: 2}
+  nextPieceViewerPrefab: {fileID: 1000013728354998, guid: 405155a372c254fb888f166ea3a1d160,
+    type: 2}
+  settingsMenuPrefab: {fileID: 1446733621370044, guid: e095af804914a485abf6366fbe88fc02,
+    type: 2}
+  kingPrefab: {fileID: 1000012858214770, guid: 8bf9b3f6f39cb414bab1b115e88e82d2, type: 2}
+  queenPrefab: {fileID: 1000014152563984, guid: 139782790f45f48859be2aed79c5296b,
+    type: 2}
+  rookPrefab: {fileID: 1000012555973908, guid: 261991bbba4274642a4754b18fe09e59, type: 2}
+  bishopPrefab: {fileID: 1000014037119332, guid: 8a6e93d5f36c14091ab6ff8eb118f0d0,
+    type: 2}
+  knightPrefab: {fileID: 1000014186337950, guid: b2fa396e2e2154dc6b5f0eaf7893b868,
+    type: 2}
+  pawnPrefab: {fileID: 1000013607600190, guid: 39259fa6fcd5a4acb87767b411bb6583, type: 2}
+  score: {fileID: 0}
+  scoreEffect: {fileID: 0}
+  highScore: {fileID: 0}

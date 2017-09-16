@@ -3,22 +3,21 @@ T O  D O  L I S T
 =================
 
 UI:
-    - check to see what it looks like when you make the board fit the width of the screen, just letting shit get cut off.
+    - make the board a tiny bit bigger
 
 Feel:
     - make it so you can let go of a move past the board and it will still register as a move.
     - you gotta give the piece movements more weight somehow. do the math.
 
 GameCenter Integration (c):
-    - Keep troubleshooting game center problems
+    - Game Center works now I guess.
+    - Implement localization.
 
 Grid Size Testing:
-    - Just try the game with a 4x4 grid and see how that feels.
-    - It's ok. doesn't break the game.
+    - is 4x4 what we're going to go with here? i hope it's ok
 
 Sound:
     - Very light sound design.
-    - make it on the op-1
 
 Art:
     - Draw your own original piece icons.
@@ -31,16 +30,28 @@ Company (c):
     - COPYRIGHT
 
 Tutorialization:
-    - Save tutorial completion.
-    - Little tutorial. Threes-esque, just very simple walkthrough of game rules.
-    - implement the How To Play menu button
+    - Draw tutorial pages using Sketch
 
 Saving Battery and Filesize:
     - Figure out how to reduce file size.
     - Convert all onmouse() functions to use touch input exclusively.
+
+Localization:
+    - Find and implement chinese / japanese / whatever character fonts.
 
 Known Bugs:
     - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.
     - Sometimes pushing pieces with the knight jumps the gun and a piece gets pushed prematurely
     - Pushing a piece off the board from > 1 space away by pushing another piece to the edge causes
       the jumping of the gun issue as well.
+
+
+
+
+
+
+-------------
+R E L E A S E :
+-------------
+    - Set up ad campaigns for (maybe) adwords, twitter, instagram, facebook.
+    - Soft launch in Australia

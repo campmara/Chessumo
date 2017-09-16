@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: tutorial
+  m_EditorData:
+    textureSettings:
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      colorSpace: 1
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+    platformSettings: []
+    packingParameters:
+      paddingPower: 2
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    packedHash:
+      serializedVersion: 2
+      Hash: 32d20c347b7d6a3a24466e7e7c72caba
+    variantMultiplier: 1
+    bindAsDefault: 1
+    finalFormat: 4
+    hashString: 32d20c347b7d6a3a24466e7e7c72caba
+    totalSpriteSurfaceArea: 16384
+    packables:
+    - {fileID: 2800000, guid: 2cb7d28a0f2c04d44b76caca1a88e4c6, type: 3}
+    packedSpriteRenderDataKeys:
+    - 2cb7d28a0f2c04d44b76caca1a88e4c6: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 2cb7d28a0f2c04d44b76caca1a88e4c6, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - tutorialdot
+  m_Tag: tutorial
+  m_IsVariant: 0

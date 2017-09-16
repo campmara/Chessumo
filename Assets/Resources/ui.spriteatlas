@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: ui
+  m_EditorData:
+    textureSettings:
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      colorSpace: 1
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+    platformSettings: []
+    packingParameters:
+      paddingPower: 2
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+    packedHash:
+      serializedVersion: 2
+      Hash: 2ce90ff8d3ec833f1c77a2351f654b24
+    variantMultiplier: 1
+    bindAsDefault: 1
+    finalFormat: 4
+    hashString: 2ce90ff8d3ec833f1c77a2351f654b24
+    totalSpriteSurfaceArea: 1875000
+    packables:
+    - {fileID: 2800000, guid: 5cbfee95afd1044aa989d58b4be094e1, type: 3}
+    - {fileID: 2800000, guid: c051cb411bef74027ae264be97288a13, type: 3}
+    - {fileID: 2800000, guid: 29433f8e03f764d9690b99580413af51, type: 3}
+    - {fileID: 2800000, guid: 0943416854a31427e84b8bc3492db523, type: 3}
+    - {fileID: 2800000, guid: 8b6afded90db64077811a2ec1571b3a4, type: 3}
+    - {fileID: 2800000, guid: 9f51bc02b074c40dcbd6181d9b28581b, type: 3}
+    - {fileID: 2800000, guid: 513a5ada57b504410ad8ee221ee9bf87, type: 3}
+    packedSpriteRenderDataKeys:
+    - 8b6afded90db64077811a2ec1571b3a4: 21300000
+    - 513a5ada57b504410ad8ee221ee9bf87: 21300000
+    - 9f51bc02b074c40dcbd6181d9b28581b: 21300000
+    - 29433f8e03f764d9690b99580413af51: 21300000
+    - 5cbfee95afd1044aa989d58b4be094e1: 21300000
+    - c051cb411bef74027ae264be97288a13: 21300000
+    - 0943416854a31427e84b8bc3492db523: 21300000
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 8b6afded90db64077811a2ec1571b3a4, type: 3}
+  - {fileID: 21300000, guid: 513a5ada57b504410ad8ee221ee9bf87, type: 3}
+  - {fileID: 21300000, guid: 9f51bc02b074c40dcbd6181d9b28581b, type: 3}
+  - {fileID: 21300000, guid: 29433f8e03f764d9690b99580413af51, type: 3}
+  - {fileID: 21300000, guid: 5cbfee95afd1044aa989d58b4be094e1, type: 3}
+  - {fileID: 21300000, guid: c051cb411bef74027ae264be97288a13, type: 3}
+  - {fileID: 21300000, guid: 0943416854a31427e84b8bc3492db523, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - s_nextPieceViewer
+  - Settings X
+  - Settings O
+  - Color Band Button Down
+  - Checkbox Ticked
+  - Checkbox Unticked
+  - Color Band Button Up
+  m_Tag: ui
+  m_IsVariant: 0
