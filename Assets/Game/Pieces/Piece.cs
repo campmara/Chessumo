@@ -452,7 +452,8 @@ public abstract class Piece : MonoBehaviour
 
 		// Determine how many times we must repeat the movement to get to the desired point.
 		IntVector2 diff = coordinates - GetCoordinates();
-        float pushWaitTime = CalculatePushWaitTime(distFromPushingPiece, numPushedPieces);
+        //float pushWaitTime = CalculatePushWaitTime(distFromPushingPiece, numPushedPieces);
+        float pushWaitTime = parentGame.GetWaitTime();
 
 		if (diff.x != 0 && diff.y == 0)
 		{
@@ -463,16 +464,6 @@ public abstract class Piece : MonoBehaviour
 		{
 			// Move vertically.
             StartCoroutine(MoveY(diff.y, pushed, pushWaitTime));
-		}
-		else if (diff.x != 0 && diff.y != 0 && Mathf.Abs(diff.x) > Mathf.Abs(diff.y))
-		{
-			// Move horizontally first, then vertically.
-			StartCoroutine(MoveXThenY(diff.x, diff.y, pushed));
-		}
-		else if (diff.x != 0 && diff.y != 0 && Mathf.Abs(diff.x) < Mathf.Abs(diff.y))
-		{
-			// Move vertically first, then horizontally.
-			StartCoroutine(MoveYThenX(diff.x, diff.y, pushed));
 		}
 		else if (diff.x != 0 && diff.y != 0 && Mathf.Abs(diff.x) == Mathf.Abs(diff.y))
 		{
@@ -518,6 +509,8 @@ public abstract class Piece : MonoBehaviour
 		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(xDistance)).SetEase(moveEase);
 		yield return tween.WaitForCompletion();
 
+        parentGame.ResetWaitTimeOnChangeDirection();
+
 		///////////////////////////////
 		// Y MOVEMENT
 		///////////////////////////////
@@ -555,6 +548,8 @@ public abstract class Piece : MonoBehaviour
 
 		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(yDistance)).SetEase(moveEase);
 		yield return tween.WaitForCompletion();
+
+        parentGame.ResetWaitTimeOnChangeDirection();
 
 		///////////////////////////////
 		// X MOVEMENT

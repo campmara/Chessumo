@@ -398,8 +398,9 @@ public class Knight : Piece
 				SetMoveDisabled(false);
 			}
 
-			// Get Pushed.
-            float pushWaitTime = CalculatePushWaitTime(distFromPushingPiece, numPushedPieces);
+            // Get Pushed.
+            //float pushWaitTime = CalculatePushWaitTime(distFromPushingPiece, numPushedPieces);
+            float pushWaitTime = parentGame.GetWaitTime();
 
 			if (diff.x != 0 && diff.y == 0)
 			{

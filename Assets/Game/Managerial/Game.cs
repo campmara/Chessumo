@@ -577,6 +577,20 @@ public class Game : MonoBehaviour
 		return false;
 	}
 
+    private float waitTime = 0f;
+    public float GetWaitTime()
+    {
+        return waitTime;
+    }
+    public void IncrementWaitTime()
+    {
+        waitTime += Constants.I.PieceMoveTime;
+    }
+    public void ResetWaitTimeOnChangeDirection() // for use specifically with MoveXThenY functions
+    {
+        waitTime = 0f;
+    }
+
 	public void OnPieceMove(Piece piece, IntVector2 direction, int distance)
 	{
 		IntVector2 oldCoordinates = piece.GetCoordinates();
@@ -599,21 +613,20 @@ public class Game : MonoBehaviour
 				if (IsWithinBounds(push))
 				{
 					// Push in the grid.
-					//Debug.Log("Pushing within bounds.");
 					pieces[currentCheckingCoords.x, currentCheckingCoords.y].MoveTo(push, true, distFromPushingPiece, numPushedPieces);
+                    break;
 				}
 				else
 				{
 					// PUSH OFF THE GRID.
-					//Debug.Log("YOU JUST PUSHED A PIECE OFF THE GRID");
 					PieceOffGrid(pieces[currentCheckingCoords.x, currentCheckingCoords.y], push, absDist, distFromPushingPiece, numPushedPieces);
 					pieces[currentCheckingCoords.x, currentCheckingCoords.y] = null;
 				}
 			}
-			else
-			{
-				//Debug.Log("Normal Move. No Push");
-			}
+            else
+            {
+                IncrementWaitTime();
+            }
 		}
 	}
 
@@ -628,8 +641,9 @@ public class Game : MonoBehaviour
 
 	protected IEnumerator MovePieceOffGrid(Piece piece, Vector2 position, int travelDist, int distFromPushingPiece, int numPushedPieces)
 	{
-        float waitTime = piece.CalculatePushWaitTime(distFromPushingPiece, numPushedPieces);
-		yield return new WaitForSeconds(waitTime);
+        //float waitTime = piece.CalculatePushWaitTime(distFromPushingPiece, numPushedPieces);
+        //yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(GetWaitTime());
 
 		GameObject pieceObj = piece.gameObject;
 
@@ -734,6 +748,8 @@ public class Game : MonoBehaviour
 	{
 		currentSelectedPiece.SetMoveDisabled(true);
 		ResetPossibleMoves();
+
+        waitTime = 0f;
 
 		// Spawn the needed amount of pieces.
 		for (int i = 0; i < numPiecesToSpawn; i++)

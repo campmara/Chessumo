@@ -39,8 +39,6 @@ public class AppManager : MonoBehaviour
 
 		while (!op.isDone)
 		{
-			float progress = Mathf.Clamp01(op.progress / 0.9f);
-
 			// Loading completed
 			if (Mathf.Abs(op.progress - 0.9f) < Mathf.Epsilon)
 			{
