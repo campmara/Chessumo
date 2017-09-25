@@ -4,13 +4,13 @@ T O  D O  L I S T
 
 UI:
     - make the board a tiny bit bigger
+    - turn the camera size to 5.25
 
 Feel:
     - make it so you can let go of a move past the board and it will still register as a move.
     - you gotta give the piece movements more weight somehow. do the math.
 
 GameCenter Integration (c):
-    - Game Center works now I guess.
     - Implement localization.
 
 Grid Size Testing:
@@ -41,12 +41,6 @@ Localization:
 
 Known Bugs:
     - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.
-    - Sometimes pushing pieces with the knight jumps the gun and a piece gets pushed prematurely
-    - Pushing a piece off the board from > 1 space away by pushing another piece to the edge causes
-      the jumping of the gun issue as well.
-
-
-
 
 
 
