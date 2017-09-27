@@ -26,48 +26,48 @@ SpriteAtlas:
       enableTightPacking: 1
     packedHash:
       serializedVersion: 2
-      Hash: b5d99164ad6a0a69ffec874570c03fa4
+      Hash: d716ff521bad612c5237b8412b7d253d
     variantMultiplier: 1
     bindAsDefault: 1
     finalFormat: 4
-    hashString: b5d99164ad6a0a69ffec874570c03fa4
+    hashString: d716ff521bad612c5237b8412b7d253d
     totalSpriteSurfaceArea: 2050000
     packables:
-    - {fileID: 2800000, guid: 1b905fcc3a21142c590cdbf173bee6fa, type: 3}
-    - {fileID: 2800000, guid: ee0291ee9cdf740fdbd8044de6f1477c, type: 3}
-    - {fileID: 2800000, guid: 5f5275068823d4b819fa3fbabb22f586, type: 3}
-    - {fileID: 2800000, guid: d781d73eb0257485d80dc2f048876fa0, type: 3}
-    - {fileID: 2800000, guid: 158f03bacf0fa41a3a43d39b90b98ea4, type: 3}
-    - {fileID: 2800000, guid: 22d3022c7d66a4f1f8efbb410e88fbbe, type: 3}
+    - {fileID: 21300000, guid: de4d604723d0f42efb379b4be784cce6, type: 3}
+    - {fileID: 21300000, guid: 037866c8e7d124b24809e6317242d1cd, type: 3}
+    - {fileID: 21300000, guid: eb635268c31c746e49065fbbc842652c, type: 3}
+    - {fileID: 21300000, guid: fe39e1199ec1c47ccbb90ca3743b1ceb, type: 3}
+    - {fileID: 21300000, guid: f5ad358d8db2642f6ac668284c363d8e, type: 3}
+    - {fileID: 21300000, guid: 79f5d3f303a5e40718d0c6c51ff463a4, type: 3}
     - {fileID: 2800000, guid: 679add5a3b7194442bc2229fc3dc83ac, type: 3}
     - {fileID: 2800000, guid: 6ab5de0b9b8ff40f99647d7043caab5a, type: 3}
     packedSpriteRenderDataKeys:
     - 6ab5de0b9b8ff40f99647d7043caab5a: 21300000
     - 679add5a3b7194442bc2229fc3dc83ac: 21300000
-    - 22d3022c7d66a4f1f8efbb410e88fbbe: 21300000
-    - 5f5275068823d4b819fa3fbabb22f586: 21300000
-    - 158f03bacf0fa41a3a43d39b90b98ea4: 21300000
-    - 1b905fcc3a21142c590cdbf173bee6fa: 21300000
-    - ee0291ee9cdf740fdbd8044de6f1477c: 21300000
-    - d781d73eb0257485d80dc2f048876fa0: 21300000
+    - fe39e1199ec1c47ccbb90ca3743b1ceb: 21300000
+    - de4d604723d0f42efb379b4be784cce6: 21300000
+    - eb635268c31c746e49065fbbc842652c: 21300000
+    - 79f5d3f303a5e40718d0c6c51ff463a4: 21300000
+    - 037866c8e7d124b24809e6317242d1cd: 21300000
+    - f5ad358d8db2642f6ac668284c363d8e: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: 6ab5de0b9b8ff40f99647d7043caab5a, type: 3}
   - {fileID: 21300000, guid: 679add5a3b7194442bc2229fc3dc83ac, type: 3}
-  - {fileID: 21300000, guid: 22d3022c7d66a4f1f8efbb410e88fbbe, type: 3}
-  - {fileID: 21300000, guid: 5f5275068823d4b819fa3fbabb22f586, type: 3}
-  - {fileID: 21300000, guid: 158f03bacf0fa41a3a43d39b90b98ea4, type: 3}
-  - {fileID: 21300000, guid: 1b905fcc3a21142c590cdbf173bee6fa, type: 3}
-  - {fileID: 21300000, guid: ee0291ee9cdf740fdbd8044de6f1477c, type: 3}
-  - {fileID: 21300000, guid: d781d73eb0257485d80dc2f048876fa0, type: 3}
+  - {fileID: 21300000, guid: fe39e1199ec1c47ccbb90ca3743b1ceb, type: 3}
+  - {fileID: 21300000, guid: de4d604723d0f42efb379b4be784cce6, type: 3}
+  - {fileID: 21300000, guid: eb635268c31c746e49065fbbc842652c, type: 3}
+  - {fileID: 21300000, guid: 79f5d3f303a5e40718d0c6c51ff463a4, type: 3}
+  - {fileID: 21300000, guid: 037866c8e7d124b24809e6317242d1cd, type: 3}
+  - {fileID: 21300000, guid: f5ad358d8db2642f6ac668284c363d8e, type: 3}
   m_PackedSpriteNamesToIndex:
   - Tile Up HalfRes
   - Tile Down HalfRes
-  - Rook_1_HalfRes
-  - Knight_1_HalfRes
-  - Queen_1_HalfRes
-  - Bishop_1_HalfRes
-  - King_1_HalfRes
-  - Pawn_1_HalfRes
+  - Pawn 2
+  - Bishop 2
+  - Knight 2
+  - Rook 2
+  - King 2
+  - Queen 2
   m_Tag: game
   m_IsVariant: 0
