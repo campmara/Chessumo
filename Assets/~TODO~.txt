@@ -7,45 +7,29 @@ UI:
     - turn the camera size to 5.25
 
 Feel:
-    - make it so you can let go of a move past the board and it will still register as a move.
     - you gotta give the piece movements more weight somehow. do the math.
 
-GameCenter Integration (c):
-    - Implement localization.
-
-Grid Size Testing:
-    - is 4x4 what we're going to go with here? i hope it's ok
-
-Sound:
-    - Very light sound design.
-
 Art:
-    - Draw your own original piece icons.
     - Fix the app logo. try a couple different permutations. one with like a grid of pieces, one with just the icon of the queen or something, etc.
     - Make sure Now typeface is free.
         - It is. I can use it.
     - Make the trail fade out behind the piece that's moving as it moves.
 
-Company (c):
-    - COPYRIGHT
-
-Tutorialization:
-    - Draw tutorial pages using Sketch
-
 Saving Battery and Filesize:
     - Figure out how to reduce file size.
     - Convert all onmouse() functions to use touch input exclusively.
-
-Localization:
-    - Find and implement chinese / japanese / whatever character fonts.
 
 Known Bugs:
     - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.
 
 
-
--------------
-R E L E A S E :
--------------
+RELEASE CHECKLIST:
+    - Finish tutorial.
+    - Make it so you can let go of a move past the board and it will still register as a move.
+    - Do sound design.
+    - Test for bugs.
+    - Finish copywriting.
     - Set up ad campaigns for (maybe) adwords, twitter, instagram, facebook.
-    - Soft launch in Australia
+    - Soft launch in Australia.
+    - Localize GameCenter Leaderboards.
+    - Find and implement chinese / japanese / whatever character fonts. Localize.

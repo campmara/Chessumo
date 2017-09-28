@@ -15,7 +15,7 @@ public class ProgressDots : MonoBehaviour
 
 	void Awake()
 	{
-		CreateDots(4);
+		CreateDots(6);
 	}
 
 	public void CreateDots(int numDots)
