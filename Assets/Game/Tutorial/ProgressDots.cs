@@ -22,10 +22,11 @@ public class ProgressDots : MonoBehaviour
 	{
 		dots = new SpriteRenderer[numDots];
 		Vector3 pos = transform.position;
+        float startX = (-(numDots / 2f) * 0.8333333f) * 0.25f;
 
 		for (int i = 0; i < numDots; i++)
 		{
-			pos.x = (i - ((float)numDots / 2f)) * dotDistance;
+            pos.x = startX + (dotDistance * i);
 			GameObject obj = Instantiate(dotPrefab, pos, Quaternion.identity);
 			obj.transform.parent = this.transform;
 			dots[i] = obj.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer;

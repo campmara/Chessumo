@@ -41,6 +41,12 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Score Effect
+    uniqueID: 3638406369
+    locked: 0
+  - name: Score Effect White
+    uniqueID: 2996888545
+    locked: 0
   - name: Falling Pieces
     uniqueID: 1886867361
     locked: 0

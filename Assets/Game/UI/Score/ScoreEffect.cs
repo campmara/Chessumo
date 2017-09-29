@@ -5,31 +5,65 @@ using DG.Tweening;
 
 public class ScoreEffect : MonoBehaviour 
 {
-	private SpriteRenderer sprite;
-	private Tween fadeTween;
+    [SerializeField] private SpriteRenderer one;
+    [SerializeField] private SpriteRenderer two;
+    [SerializeField] private SpriteRenderer three;
+
+    private const float DESIRED_Y = 0f;
+
+    private Tween oneTween;
+    private Tween twoTween;
+    private Tween threeTween;
 
 	private void Awake()
 	{
-		sprite = GetComponentInChildren(typeof(SpriteRenderer)) as SpriteRenderer;
+        one.transform.localPosition = Vector3.down * 2f;
+        two.transform.localPosition = Vector3.down * 2f;
+        three.transform.localPosition = Vector3.down * 2f;
 	}
 
-	public void OnPointScored()
+    public void OnOneScored(Color col)
+    {
+        if (oneTween != null)
+        {
+            oneTween.Kill();
+            one.transform.localPosition = Vector3.down * 2f;
+        }
+
+        one.color = col;
+
+        oneTween = one.transform.DOLocalMoveY(DESIRED_Y, 0.5f)
+                      .SetEase(Ease.OutQuint)
+                      .OnComplete(() => oneTween = one.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint));
+    }
+
+	public void OnTwoScored(Color col)
 	{
-		if (fadeTween != null)
+        if (twoTween != null)
 		{
-			fadeTween.Kill();
-			SetAlpha(0f);
+			twoTween.Kill();
+			two.transform.localPosition = Vector3.down * 2f;
 		}
 
-		float alpha = 1f;
-		SetAlpha(alpha);
+		two.color = col;
 
-		fadeTween = DOTween.To(()=> alpha, x=> alpha = x, 0f, 0.75f)
-			.OnUpdate(()=> SetAlpha(alpha));
+        twoTween = two.transform.DOLocalMoveY(DESIRED_Y, 0.5f)
+                      .SetEase(Ease.OutQuint)
+                      .OnComplete(() => twoTween = two.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint));
 	}
 
-	private void SetAlpha(float alpha)
+	public void OnThreeScored(Color col)
 	{
-		sprite.color = new Color(sprite.color.r, sprite.color.g, sprite.color.b, alpha);
+		if (threeTween != null)
+		{
+			threeTween.Kill();
+			three.transform.localPosition = Vector3.down * 2f;
+		}
+
+		three.color = col;
+
+        threeTween = three.transform.DOLocalMoveY(DESIRED_Y, 0.5f)
+                      .SetEase(Ease.OutQuint)
+                      .OnComplete(() => threeTween = three.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint));
 	}
 }

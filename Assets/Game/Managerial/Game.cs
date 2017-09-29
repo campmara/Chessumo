@@ -663,13 +663,12 @@ public class Game : MonoBehaviour
 
 		// Score a point and handle the score combo.
 		GameManager.Instance.score.ScorePoint();
-		GameManager.Instance.scoreEffect.OnPointScored();
-		IncrementScoreCombo();
+        IncrementScoreCombo(piece);
 
 		Destroy(pieceObj);
 	}
 
-	void IncrementScoreCombo()
+    void IncrementScoreCombo(Piece piece)
 	{
 		if (!Constants.I.CombosEnabled)
 		{
@@ -683,12 +682,21 @@ public class Game : MonoBehaviour
 		{
 			// We've scored the combo!
 			Debug.Log("Scored Combo.");
+            GameManager.Instance.scoreEffect.OnThreeScored(piece.FullColor);
 
 			for (int i = 0; i < scoreCombo; i++)
 			{
 				GameManager.Instance.score.ScorePoint();
 			}
 		}
+        else if (scoreCombo >= 2)
+        {
+            GameManager.Instance.scoreEffect.OnTwoScored(piece.FullColor);
+        }
+        else if (scoreCombo >= 1)
+        {
+            GameManager.Instance.scoreEffect.OnOneScored(piece.FullColor);
+        }
 	}
 
 	void SelectPiece(Piece piece)
