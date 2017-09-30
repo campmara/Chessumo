@@ -53,13 +53,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gamePrefab: {fileID: 114710873267322822, guid: 18f3f23bdbbec4beb820f9e90d96091d,
     type: 2}
-  startButtonPrefab: {fileID: 1000011827934488, guid: 901b17a8d691a4ab8908e1af58b0d57d,
-    type: 2}
   leaderboardButtonPrefab: {fileID: 1490100644976496, guid: 62f99dee0bcc84935aafb236135be757,
     type: 2}
-  restartButtonPrefab: {fileID: 1845201844506824, guid: 0fc0f1e7f6d184529bbaa58613be71c3,
-    type: 2}
   settingsButtonPrefab: {fileID: 1895835230142028, guid: 45053641ea0424612ad5696082f44cd7,
+    type: 2}
+  restartButtonPrefab: {fileID: 1359618656498248, guid: 0fc0f1e7f6d184529bbaa58613be71c3,
     type: 2}
   tilePrefab: {fileID: 1345034203562220, guid: 1bc957b08614540c08670a641b668e3d, type: 2}
   topUIBarPrefab: {fileID: 1901250137628206, guid: c02676bcdf4fc4ddfb5a066334bca260,
@@ -86,3 +84,4 @@ MonoBehaviour:
   score: {fileID: 0}
   scoreEffect: {fileID: 0}
   highScore: {fileID: 0}
+  restartButton: {fileID: 0}

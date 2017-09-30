@@ -10,5 +10,6 @@ public class TutorialButton : Button
         // Loads the tutorial.
         TutorialManager.Instance.SetVisibility(true);
         GameManager.Instance.SetVisibility(false);
+        GameManager.Instance.restartButton.SetReadyForInput(false);
 	}
 }

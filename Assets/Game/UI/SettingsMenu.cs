@@ -25,14 +25,12 @@ public class SettingsMenu : MonoBehaviour
         if (IsOpen())
         {
             transform.localScale = new Vector3(transform.localScale.x, 0f, transform.localScale.z);
-            button.SetO();
             child.SetActive(false);
         }
         else
         {
             child.SetActive(true);
             transform.localScale = new Vector3(transform.localScale.x, 1f, transform.localScale.z);
-            button.SetX();
         }
     }
 
@@ -59,7 +57,6 @@ public class SettingsMenu : MonoBehaviour
 
 		yield return tween.WaitForCompletion();
 
-		button.SetX();
 		inProgress = false;
 	}
 
@@ -71,7 +68,6 @@ public class SettingsMenu : MonoBehaviour
 
 		yield return tween.WaitForCompletion();
 
-		button.SetO();
 		child.SetActive(false);
 		inProgress = false;
 	}

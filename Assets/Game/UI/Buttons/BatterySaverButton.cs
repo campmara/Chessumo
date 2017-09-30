@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class BatterySaverButton : Button 
 {
+    [SerializeField] private Sprite unfilled;
+    [SerializeField] private Sprite filled;
+
 	void Start()
 	{
 		UpdateCheckbox();
@@ -19,11 +22,11 @@ public class BatterySaverButton : Button
 	{
 		if (SaveDataManager.Instance.IsBatterySaverOn())
 		{
-			spriteRenderer.sprite = downSprite;
+            spriteRenderer.sprite = filled;
 		}
 		else
 		{
-			spriteRenderer.sprite = upSprite;
+            spriteRenderer.sprite = unfilled;
 		}
 	}
 

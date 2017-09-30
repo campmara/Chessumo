@@ -2,18 +2,41 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RestartButton : Button 
+public class RestartButton : MonoBehaviour 
 {
 	private bool gameStartedForTheFirstTime = false;
-	private int numTimesReset = 0;
+    private bool isTakingInput = false;
 
-	protected override void OnEnable()
+    public void SetReadyForInput(bool isReady)
+    {
+        isTakingInput = isReady;
+    }
+
+	void OnMouseDown()
 	{
-		//GameManager.Instance.IntroduceFromSide(this.gameObject, 1.7f, false);
+        if (!isTakingInput) return;
+
+		// drag the circle trail effect around.
 	}
 
-	protected override void OnPress()
+	void OnMouseUp()
 	{
+        if (!isTakingInput) return;
+
+		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+		RaycastHit hit;
+
+		if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+		{
+			if (hit.collider.gameObject == this.gameObject)
+			{
+				OnPress();
+			}
+		}
+	}
+
+	void OnPress() 
+    {
 		if (!gameStartedForTheFirstTime)
 		{
 			// Show the banner ad.
@@ -21,30 +44,6 @@ public class RestartButton : Button
 			gameStartedForTheFirstTime = true;
 		}
 
-		if (text.text == "RESTART")
-		{
-			numTimesReset++;
-			if (numTimesReset >= 4)
-			{
-				AdManager.Instance.Interstitial.Show();
-				numTimesReset = 0;
-			}
-		}
-		else
-		{
-			text.text = "RESTART";
-		}
-
 		GameManager.Instance.BeginGame();
-	}
-
-	public void ShowStart()
-	{
-		text.text = "START";
-	}
-
-	public void ShowReplay()
-	{
-		text.text = "PLAY AGAIN";
-	}
+    }
 }

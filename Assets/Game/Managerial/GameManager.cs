@@ -22,10 +22,9 @@ public class GameManager : MonoBehaviour
 	[Header("Game Prefab")]
 	public Game gamePrefab;
 	[Header("Button Prefabs")]
-	public GameObject startButtonPrefab;
 	public GameObject leaderboardButtonPrefab;
-	public GameObject restartButtonPrefab;
 	public GameObject settingsButtonPrefab;
+    public GameObject restartButtonPrefab;
 	[Header("UI Prefabs")]
 	public GameObject tilePrefab;
 	public GameObject topUIBarPrefab;
@@ -45,6 +44,7 @@ public class GameManager : MonoBehaviour
 	[HideInInspector] public Score score;
 	[HideInInspector] public ScoreEffect scoreEffect;
 	[HideInInspector] public HighScore highScore;
+    [HideInInspector] public RestartButton restartButton;
 
 	/////////////////////////////////////////////////////////////////////
 	// PRIVATES
@@ -55,7 +55,6 @@ public class GameManager : MonoBehaviour
 
 	//private DebugStartButton startButton;
 	private TopUIBar topUIBar;
-	private RestartButton restartButton;
 	private LeaderboardButton leaderboardButton;
 	private SettingsButton settingsButton;
     private SettingsMenu settingsMenu;
@@ -119,48 +118,47 @@ public class GameManager : MonoBehaviour
 
 	void CreateTopUI()
 	{
-		GameObject topUIBarObj = Instantiate(GameManager.Instance.topUIBarPrefab) as GameObject;
+        GameObject restartButtonObj = Instantiate(restartButtonPrefab) as GameObject;
+		restartButtonObj.name = "Top UI Bar";
+		restartButtonObj.transform.parent = transform;
+        restartButton = restartButtonObj.GetComponent(typeof(RestartButton)) as RestartButton;
+        restartButton.SetReadyForInput(true);
+
+		GameObject topUIBarObj = Instantiate(topUIBarPrefab) as GameObject;
 		topUIBarObj.name = "Top UI Bar";
 		topUIBarObj.transform.parent = transform;
 		topUIBar = topUIBarObj.GetComponent(typeof(TopUIBar)) as TopUIBar;
 
-		GameObject settingsMenuObj = Instantiate(GameManager.Instance.settingsMenuPrefab) as GameObject;
+		GameObject settingsMenuObj = Instantiate(settingsMenuPrefab) as GameObject;
 		settingsMenuObj.name = "Settings Menu";
 		settingsMenuObj.transform.parent = transform;
         settingsMenu = settingsMenuObj.GetComponent(typeof(SettingsMenu)) as SettingsMenu;
 
-		GameObject settingsButtonObj = Instantiate(GameManager.Instance.settingsButtonPrefab) as GameObject;
-		settingsButtonObj.name = "Reset Button";
+		GameObject settingsButtonObj = Instantiate(settingsButtonPrefab) as GameObject;
+		settingsButtonObj.name = "Settings Button";
 		settingsButtonObj.transform.parent = topUIBarObj.transform;
 		settingsButton = settingsButtonObj.GetComponent(typeof(SettingsButton)) as SettingsButton;
 		settingsButton.Introduce(2.5f);
         settingsButton.HookUpToMenu(settingsMenu);
 
-		GameObject leaderboardButtonObj = Instantiate(GameManager.Instance.leaderboardButtonPrefab) as GameObject;
+		GameObject leaderboardButtonObj = Instantiate(leaderboardButtonPrefab) as GameObject;
 		leaderboardButtonObj.name = "Scores Button";
 		leaderboardButtonObj.transform.parent = topUIBarObj.transform;
 		leaderboardButton = leaderboardButtonObj.GetComponent(typeof(LeaderboardButton)) as LeaderboardButton;
 		leaderboardButton.Introduce(2.5f);
-		
-		GameObject resetButtonObj = Instantiate(GameManager.Instance.restartButtonPrefab) as GameObject;
-		resetButtonObj.name = "Reset Button";
-		resetButtonObj.transform.parent = topUIBarObj.transform;
-		restartButton = resetButtonObj.GetComponent(typeof(RestartButton)) as RestartButton;
-		restartButton.ShowStart();
-		restartButton.Introduce(2.5f);
 
-		GameObject scoreObj = Instantiate(GameManager.Instance.scorePrefab) as GameObject;
+		GameObject scoreObj = Instantiate(scorePrefab) as GameObject;
 		scoreObj.name = "Score";
 		scoreObj.transform.parent = topUIBarObj.transform;
 		score = scoreObj.GetComponent<Score>();
 		score.Reset();
 
-		GameObject scoreEffectObj = Instantiate(GameManager.Instance.scoreEffectPrefab) as GameObject;
+		GameObject scoreEffectObj = Instantiate(scoreEffectPrefab) as GameObject;
 		scoreEffectObj.name = "Score Effect";
 		scoreEffectObj.transform.parent = transform;
 		scoreEffect = scoreEffectObj.GetComponent<ScoreEffect>();
 
-		GameObject highScoreObj = Instantiate(GameManager.Instance.highScorePrefab) as GameObject;
+		GameObject highScoreObj = Instantiate(highScorePrefab) as GameObject;
 		highScoreObj.name = "High Score";
 		highScoreObj.transform.parent = topUIBarObj.transform;
 		highScore = highScoreObj.GetComponent<HighScore>();
@@ -170,13 +168,13 @@ public class GameManager : MonoBehaviour
 	public void OnGameEnd()
 	{
 		AdManager.Instance.Interstitial.Show();
-
-		restartButton.ShowReplay();
-		//startButton.Raise();
+        restartButton.SetReadyForInput(true);
 	}
 
 	public void BeginGame()
 	{
+        restartButton.SetReadyForInput(false);
+
 		if (game == null)
 		{
 			Debug.Log("[GAME MANAGER] Loading and Beginning Game.");
@@ -191,8 +189,8 @@ public class GameManager : MonoBehaviour
 		{
 			Debug.Log("[GAME MANAGER] Unloading Game");
 
-			GameManager.Instance.score.SubmitScore();
-			GameManager.Instance.highScore.PullHighScore();
+			score.SubmitScore();
+			highScore.PullHighScore();
 			score.Reset();
 
 			game.Unload();

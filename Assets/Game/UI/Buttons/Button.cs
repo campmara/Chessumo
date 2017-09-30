@@ -6,8 +6,8 @@ using TMPro;
 
 public class Button : MonoBehaviour 
 {
-	[SerializeField] protected Sprite upSprite;
-	[SerializeField] protected Sprite downSprite;
+	[SerializeField] protected Color color;
+	[SerializeField] protected Color pressedColor;
 	[SerializeField] protected SpriteRenderer spriteRenderer;
 	[SerializeField] protected TextMeshPro text;
 
@@ -20,42 +20,26 @@ public class Button : MonoBehaviour
 	}
 	protected virtual void RaiseButton() 
 	{
-		Vector3 pos = text.transform.localPosition;
-		pos.y = 0f;
-		text.transform.localPosition = pos;
-
-		spriteRenderer.sprite = upSprite;
+		spriteRenderer.color = color;
 	}
 	protected virtual void LowerButton()
 	{
-		Vector3 pos = text.transform.localPosition;
-		pos.y = -0.1f;
-		text.transform.localPosition = pos;
-
-		spriteRenderer.sprite = downSprite;
+        spriteRenderer.color = pressedColor;
 	}
 
 	protected virtual void OnMouseDown()
 	{
-		if (spriteRenderer.sprite == upSprite)
+		if (spriteRenderer.color == color)
 		{
-			spriteRenderer.sprite = downSprite;
-
-			Vector3 pos = text.transform.localPosition;
-			pos.y -= 0.1f;
-			text.transform.localPosition = pos;
+            spriteRenderer.color = pressedColor;
 		}
 	}
 
 	protected virtual void OnMouseUp()
 	{
-		if (spriteRenderer.sprite == downSprite)
+        if (spriteRenderer.color == pressedColor)
 		{
-			spriteRenderer.sprite = upSprite;
-
-			Vector3 pos = text.transform.localPosition;
-			pos.y += 0.1f;
-			text.transform.localPosition = pos;
+            spriteRenderer.color = color;
 
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;

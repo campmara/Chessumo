@@ -17,7 +17,10 @@ public class TutorialManager : MonoBehaviour
     {
         gameObject.SetActive(isVisible);
 
-        if (isVisible) Restart();
+        if (isVisible) 
+        {
+            Restart();
+        }
     }
 
     private void Restart()
@@ -99,6 +102,7 @@ public class TutorialManager : MonoBehaviour
 	{
         SaveDataManager.Instance.OnTutorialComplete();
         GameManager.Instance.SetVisibility(true);
+        GameManager.Instance.restartButton.SetReadyForInput(true);
         SetVisibility(false);
 	}
 }
