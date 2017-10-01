@@ -11,6 +11,7 @@ public class SaveDataManager : MonoBehaviour
 	private const string HIGH_SCORE_KEY = "HIGHSCORE";
 	private const string BATTERY_SAVER_KEY = "BATTERY_SAVER";
     private const string TUTORIAL_COMPLETE_KEY = "TUTORIAL_COMPLETE";
+	private const string ADS_REMOVED_KEY = "ADS_REMOVED";
 
 	/////////////////////////////////////////////////////////////////////
 	// PUBLICS
@@ -109,4 +110,16 @@ public class SaveDataManager : MonoBehaviour
     {
         return PlayerPrefs.GetInt(TUTORIAL_COMPLETE_KEY, 0) == 1 ? true : false;
     }
+
+	// REMOVE ADS
+
+	public void OnPayToRemoveAds()
+	{
+		PlayerPrefs.SetInt(ADS_REMOVED_KEY, 1);
+	}
+
+	public bool HasPaidToRemoveAds()
+	{
+		return PlayerPrefs.GetInt(ADS_REMOVED_KEY, 0) == 1 ? true : false;
+	}
 }

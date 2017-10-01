@@ -11,7 +11,7 @@ public class SettingsRestartButton : Button
 		numTimesReset++;
 		if (numTimesReset >= 4)
 		{
-			AdManager.Instance.Interstitial.Show();
+            AdManager.Instance.ShowVideoAd();
 			numTimesReset = 0;
 		}
 

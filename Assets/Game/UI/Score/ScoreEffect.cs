@@ -34,8 +34,13 @@ public class ScoreEffect : MonoBehaviour
 
         oneTween = one.transform.DOLocalMoveY(DESIRED_Y, 0.5f)
                       .SetEase(Ease.OutQuint)
-                      .OnComplete(() => oneTween = one.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint));
+                      .OnComplete(OnOneComplete);
     }
+
+	public void OnOneComplete()
+	{
+        oneTween = one.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint);
+	}
 
 	public void OnTwoScored(Color col)
 	{
@@ -49,7 +54,12 @@ public class ScoreEffect : MonoBehaviour
 
         twoTween = two.transform.DOLocalMoveY(DESIRED_Y, 0.5f)
                       .SetEase(Ease.OutQuint)
-                      .OnComplete(() => twoTween = two.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint));
+                      .OnComplete(OnTwoComplete);
+	}
+
+	public void OnTwoComplete()
+	{
+        twoTween = two.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint);
 	}
 
 	public void OnThreeScored(Color col)
@@ -63,7 +73,12 @@ public class ScoreEffect : MonoBehaviour
 		three.color = col;
 
         threeTween = three.transform.DOLocalMoveY(DESIRED_Y, 0.5f)
-                      .SetEase(Ease.OutQuint)
-                      .OnComplete(() => threeTween = three.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint));
+                          .SetEase(Ease.OutQuint)
+                          .OnComplete(OnThreeComplete);
 	}
+
+    public void OnThreeComplete()
+    {
+        threeTween = three.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint);
+    }
 }

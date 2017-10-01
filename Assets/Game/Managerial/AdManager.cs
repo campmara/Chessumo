@@ -3,86 +3,162 @@ using UnityEngine;
 using GoogleMobileAds;
 using GoogleMobileAds.Api;
 
-public class AdManager : MonoBehaviour 
+using UnityEngine.Advertisements;
+using UnityEngine.Purchasing;
+
+public class AdManager : MonoBehaviour, IStoreListener
 {
 	public static AdManager Instance;
 
-	#if UNITY_EDITOR
-		const string bannerAdUnitID = "unused";
-	#elif UNITY_ANDROID
-		const string bannerAdUnitID = "ca-app-pub-3659931559103391/1881623548";
-	#elif UNITY_IPHONE
-		const string bannerAdUnitID = "ca-app-pub-3659931559103391/2531881309";
-	#else
-		const string bannerAdUnitID = "unexpected_platform";
-	#endif
+	private static IStoreController m_StoreController;          // The Unity Purchasing system.
+    private static IExtensionProvider m_StoreExtensionProvider; // The store-specific Purchasing subsystems.
 
+	// remove ads product id for IAP
+	public static string kProductIDRemoveAds =    "removeads";
 
-	#if UNITY_EDITOR
-		const string interstitialAdUnitID = "unused";
-	#elif UNITY_ANDROID
-		const string interstitialAdUnitID = "ca-app-pub-3659931559103391/1690051859";
-	#elif UNITY_IPHONE
-		const string interstitialAdUnitID = "ca-app-pub-3659931559103391/3805789747";
-	#else
-		const string interstitialAdUnitID = "unexpected_platform";
-	#endif
+#if UNITY_EDITOR
+    	private const string GAME_ID = "unused";
+#elif UNITY_ANDROID
+        private const string GAME_ID = "1561516";
+#elif UNITY_IPHONE
+        private const string GAME_ID = "1561515";
+#else
+        private const string GAME_ID = "unexpected_platform";
+#endif
 
-	public InterstitialAd Interstitial { get { return interstitial; } }
-	private InterstitialAd interstitial;
-
-	public BannerView Banner { get { return banner; } }
-	private BannerView banner;
-
-	void Awake()
+	private void Awake()
 	{
 		if (Instance == null)
 		{
 			Instance = this;
 		}
 
-		RequestBanner();
-		RequestInterstitial();
+        Advertisement.Initialize(GAME_ID);
+
+		// If we haven't set up the Unity Purchasing reference
+		if (m_StoreController == null)
+		{
+			// Begin to configure our connection to Purchasing
+			InitializePurchasing();
+		}
 	}
 
-	private void RequestBanner()
+    public void ShowVideoAd()
+    {
+		// Don't show ads if user has paid to remove them.
+		if (SaveDataManager.Instance.HasPaidToRemoveAds()) return;
+
+        Advertisement.Show();
+    }
+
+	public void InitializePurchasing() 
 	{
-		// Create a 320x50 banner at the top of the screen.
-		banner = new BannerView(bannerAdUnitID, AdSize.Banner, AdPosition.Bottom);
-		banner.OnAdClosed += HandleOnBAdClosed;
-		// Create an empty ad request.
-		AdRequest request = new AdRequest.Builder().Build();
-		// Load the banner with the request.
-		banner.LoadAd(request);
-		banner.Hide();
+		if (IsIAPInitialized())
+		{
+			return;
+		}
+		
+		var builder = ConfigurationBuilder.Instance(StandardPurchasingModule.Instance());
+		
+		// Add a product to sell / restore by way of its identifier, associating the general identifier
+		// with its store-specific identifiers.
+		builder.AddProduct(kProductIDRemoveAds, ProductType.NonConsumable);
+		
+		// Kick off the remainder of the set-up with an asynchrounous call, passing the configuration 
+		// and this class' instance. Expect a response either in OnInitialized or OnInitializeFailed.
+		UnityPurchasing.Initialize(this, builder);
 	}
 
-	private void RequestInterstitial()
+	private bool IsIAPInitialized()
 	{
-		// Initialize an InterstitialAd.
-		interstitial = new InterstitialAd(interstitialAdUnitID);
-		interstitial.OnAdClosed += HandleOnIAdClosed;
-		// Create an empty ad request.
-		AdRequest request = new AdRequest.Builder().Build();
-		// Load the interstitial with the request.
-		interstitial.LoadAd(request);
+		// Only say we are initialized if both the Purchasing references are set.
+		return m_StoreController != null && m_StoreExtensionProvider != null;
 	}
 
-	private void OnDestroy()
+	public void BuyRemoveAds()
 	{
-		banner.Destroy();
-		interstitial.Destroy();
+		BuyProductID(kProductIDRemoveAds);
 	}
 
-	public void HandleOnIAdClosed(object sender, EventArgs args)
+	void BuyProductID(string productId)
 	{
-		interstitial.OnAdClosed -= HandleOnIAdClosed;
-		RequestInterstitial();
+		if (IsIAPInitialized())
+		{
+			Product product = m_StoreController.products.WithID(productId);
+			
+			if (product != null && product.availableToPurchase)
+			{
+				Debug.Log(string.Format("Purchasing product asychronously: '{0}'", product.definition.id));
+				m_StoreController.InitiatePurchase(product);
+			}
+			else
+			{
+				Debug.Log("BuyProductID: FAIL. Not purchasing product, either is not found or is not available for purchase");
+			}
+		}
+		else
+		{
+			Debug.Log("BuyProductID FAIL. Not initialized.");
+		}
 	}
 
-	public void HandleOnBAdClosed(object sender, EventArgs args)
+	public void RestorePurchases()
 	{
-		banner.OnAdClosed -= HandleOnBAdClosed;
-		RequestBanner();
+		if (!IsIAPInitialized())
+		{
+			Debug.Log("RestorePurchases FAIL. Not initialized.");
+			return;
+		}
+		
+		if (Application.platform == RuntimePlatform.IPhonePlayer || 
+			Application.platform == RuntimePlatform.OSXPlayer)
+		{
+			Debug.Log("RestorePurchases started ...");
+			
+			var apple = m_StoreExtensionProvider.GetExtension<IAppleExtensions>();
+			apple.RestoreTransactions((result) => {
+				Debug.Log("RestorePurchases continuing: " + result + ". If no further messages, no purchases available to restore.");
+			});
+		}
+		else
+		{
+			Debug.Log("RestorePurchases FAIL. Not supported on this platform. Current = " + Application.platform);
+		}
+	}
+
+	//  
+	// --- IStoreListener
+	//
+	public void OnInitialized(IStoreController controller, IExtensionProvider extensions)
+	{
+		Debug.Log("OnInitialized: PASS");
+		m_StoreController = controller;
+		m_StoreExtensionProvider = extensions;
+	}
+	
+	public void OnInitializeFailed(InitializationFailureReason error)
+	{
+		Debug.Log("OnInitializeFailed InitializationFailureReason:" + error);
+	}
+
+	public PurchaseProcessingResult ProcessPurchase(PurchaseEventArgs args) 
+	{
+		if (String.Equals(args.purchasedProduct.definition.id, kProductIDRemoveAds, StringComparison.Ordinal))
+		{
+			Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
+			// TODO: PLAYER HAS PURCHASED REMOVE ADS, REMOVE ADS.
+			SaveDataManager.Instance.OnPayToRemoveAds(); // Set playerprefs and tell em we've removed ads.
+		}
+		else 
+		{
+			Debug.Log(string.Format("ProcessPurchase: FAIL. Unrecognized product: '{0}'", args.purchasedProduct.definition.id));
+		}
+
+		return PurchaseProcessingResult.Complete;
+	}
+
+	public void OnPurchaseFailed(Product product, PurchaseFailureReason failureReason)
+	{
+		Debug.Log(string.Format("OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
 	}
 }

@@ -119,7 +119,7 @@ public class GameManager : MonoBehaviour
 	void CreateTopUI()
 	{
         GameObject restartButtonObj = Instantiate(restartButtonPrefab) as GameObject;
-		restartButtonObj.name = "Top UI Bar";
+		restartButtonObj.name = "Restart Button";
 		restartButtonObj.transform.parent = transform;
         restartButton = restartButtonObj.GetComponent(typeof(RestartButton)) as RestartButton;
         restartButton.SetReadyForInput(true);
@@ -167,7 +167,7 @@ public class GameManager : MonoBehaviour
 
 	public void OnGameEnd()
 	{
-		AdManager.Instance.Interstitial.Show();
+        AdManager.Instance.ShowVideoAd();
         restartButton.SetReadyForInput(true);
 	}
 
