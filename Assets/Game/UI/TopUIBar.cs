@@ -21,7 +21,7 @@ public class TopUIBar : MonoBehaviour
 		yield return new WaitForSeconds(delay);
 
 		// Then rescale via tween.
-		transform.DOScaleY(desiredScaleY, 1f).SetEase(Ease.OutBounce);
+		transform.DOScaleY(desiredScaleY, 1f).SetEase(Ease.OutBounce).OnComplete(() => GameManager.Instance.restartButton.SetReadyForInput(true));
 
 		yield return null;
 	}

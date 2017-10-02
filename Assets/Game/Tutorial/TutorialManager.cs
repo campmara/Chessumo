@@ -102,7 +102,6 @@ public class TutorialManager : MonoBehaviour
 	{
         SaveDataManager.Instance.OnTutorialComplete();
         GameManager.Instance.SetVisibility(true);
-        GameManager.Instance.restartButton.SetReadyForInput(true);
         SetVisibility(false);
 	}
 }

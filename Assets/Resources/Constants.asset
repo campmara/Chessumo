@@ -17,7 +17,7 @@ MonoBehaviour:
   StartingPieceCount: 5
   CombosEnabled: 1
   GridOffsetX: 0
-  GridOffsetY: 0
+  GridOffsetY: 0.5
   PieceMoveTime: 0.3
   StartButtonRaisedY: -3.5
   StartButtonLoweredY: -6

@@ -26,6 +26,9 @@ public class AdManager : MonoBehaviour, IStoreListener
         private const string GAME_ID = "unexpected_platform";
 #endif
 
+	public delegate void AdsRemovedDelegate();
+	public AdsRemovedDelegate OnAdsRemoved;
+
 	private void Awake()
 	{
 		if (Instance == null)
@@ -148,6 +151,7 @@ public class AdManager : MonoBehaviour, IStoreListener
 			Debug.Log(string.Format("ProcessPurchase: PASS. Product: '{0}'", args.purchasedProduct.definition.id));
 			// TODO: PLAYER HAS PURCHASED REMOVE ADS, REMOVE ADS.
 			SaveDataManager.Instance.OnPayToRemoveAds(); // Set playerprefs and tell em we've removed ads.
+			OnAdsRemoved();
 		}
 		else 
 		{

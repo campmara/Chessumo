@@ -4,61 +4,47 @@ using DG.Tweening;
 
 public class NextPieceViewer : MonoBehaviour 
 {
-	[SerializeField] SpriteRenderer pieceSprite;
+	[SerializeField] SpriteRenderer sprite;
 
-	[SerializeField] Sprite kingSprite;
-	[SerializeField] Sprite queenSprite;
-	[SerializeField] Sprite rookSprite;
-	[SerializeField] Sprite bishopSprite;
-	[SerializeField] Sprite knightSprite;
-	[SerializeField] Sprite pawnSprite;
-	
-	void Awake()
-	{
-		if (!pieceSprite)
-		{
-			Debug.LogError("NEXTPIECEVIEWER : You forgot to assign the piece sprite.");
-		}
-	}
-
-	void OnEnable()
-	{
-		GameManager.Instance.GrowMeFromSlit(this.gameObject, 2f, Ease.OutBounce);
-	}
+	[SerializeField] Color kingColor;
+	[SerializeField] Color queenColor;
+	[SerializeField] Color rookColor;
+	[SerializeField] Color bishopColor;
+	[SerializeField] Color knightColor;
+	[SerializeField] Color pawnColor;
 
 	public void PositionAlongTop(float xPos)
 	{
 		transform.DOMoveX(xPos, 0.75f).SetEase(Ease.InOutQuint);
-		//transform.position = new Vector3(xPos, transform.position.y, 0f);
 	}
 
 	public void ShowKing()
 	{
-		pieceSprite.sprite = kingSprite;
+		sprite.DOColor(kingColor, 0.75f);
 	}
 
 	public void ShowQueen()
 	{
-		pieceSprite.sprite = queenSprite;
+		sprite.DOColor(queenColor, 0.75f);
 	}
 
 	public void ShowRook()
 	{
-		pieceSprite.sprite = rookSprite;
+		sprite.DOColor(rookColor, 0.75f);
 	}
 
 	public void ShowBishop()
 	{
-		pieceSprite.sprite = bishopSprite;
+		sprite.DOColor(bishopColor, 0.75f);
 	}
 
 	public void ShowKnight()
 	{
-		pieceSprite.sprite = knightSprite;
+		sprite.DOColor(knightColor, 0.75f);
 	}
 
 	public void ShowPawn()
 	{
-		pieceSprite.sprite = pawnSprite;
+		sprite.DOColor(pawnColor, 0.75f);
 	}
 }

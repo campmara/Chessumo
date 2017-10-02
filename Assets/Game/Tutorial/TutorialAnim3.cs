@@ -88,20 +88,20 @@ public class TutorialAnim3 : MonoBehaviour
         rook.transform.DOMoveX(bishop.transform.position.x, 0.75f);
         bishop.transform.DOMoveX(king.transform.position.x, 0.75f);
         king.transform.DOMoveX(queen.transform.position.x, 0.75f);
-        tween = queen.transform.DOMoveX(2.5f, 0.75f);
+        tween = queen.transform.DOMoveX(queen.transform.position.x + 1f, 0.75f);
 		yield return tween.WaitForCompletion();
         queen.transform.DOMoveY(-6f, 0.75f).SetEase(Ease.InCubic).OnComplete(() => scoreEffect.OnOneScored(queenColor));
 
 		// KING GETS KNOCKED
 		rook.transform.DOMoveX(bishop.transform.position.x, 0.75f);
 		bishop.transform.DOMoveX(king.transform.position.x, 0.75f);
-		tween = king.transform.DOMoveX(2.5f, 0.75f);
+		tween = king.transform.DOMoveX(king.transform.position.x + 1f, 0.75f);
 		yield return tween.WaitForCompletion();
 		king.transform.DOMoveY(-6f, 0.75f).SetEase(Ease.InCubic).OnComplete(() => scoreEffect.OnTwoScored(kingColor));
 
 		// BISHOP GETS KNOCKED
 		rook.transform.DOMoveX(bishop.transform.position.x, 0.75f);
-        tween = bishop.transform.DOMoveX(2.5f, 0.75f);
+        tween = bishop.transform.DOMoveX(bishop.transform.position.x + 1f, 0.75f);
 		yield return tween.WaitForCompletion();
         bishop.transform.DOMoveY(-6f, 0.75f).SetEase(Ease.InCubic).OnComplete(() => scoreEffect.OnThreeScored(bishopColor));
 
@@ -117,17 +117,17 @@ public class TutorialAnim3 : MonoBehaviour
 		yield return new WaitForSeconds(1f);
 
         // RESET THE BOARD
-        bishop.transform.position = new Vector3(-0.5f, 20f, 0f);
-        king.transform.position = new Vector3(0.5f, 20f, 0f);
-        queen.transform.position = new Vector3(1.5f, 20f, 0f);
+        bishop.transform.position = new Vector3(tileB.transform.position.x, 20f, 0f);
+        king.transform.position = new Vector3(tileC.transform.position.x, 20f, 0f);
+        queen.transform.position = new Vector3(tileD.transform.position.x, 20f, 0f);
 
-        rook.transform.DOMoveX(-1.5f, 1f).OnComplete(() => (rook.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).color = Color.white);
+        rook.transform.DOMoveX(tileA.transform.position.x, 1f).OnComplete(() => (rook.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).color = Color.white);
         yield return new WaitForSeconds(0.25f);
-        queen.transform.DOMoveY(-2f, 1f);
+        queen.transform.DOMoveY(tileB.transform.position.y, 1f);
 		yield return new WaitForSeconds(0.25f);
-		king.transform.DOMoveY(-2f, 1f);
+		king.transform.DOMoveY(tileC.transform.position.y, 1f);
 		yield return new WaitForSeconds(0.25f);
-        bishop.transform.DOMoveY(-2f, 1f);
+        bishop.transform.DOMoveY(tileD.transform.position.y, 1f);
 
         yield return new WaitForSeconds(2f);
 

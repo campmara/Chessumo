@@ -28,6 +28,7 @@ public class AppManager : MonoBehaviour
         }
         else
         {
+            GameManager.Instance.restartButton.SetReadyForInput(false);
             TutorialManager.Instance.SetVisibility(true);
         }
     }

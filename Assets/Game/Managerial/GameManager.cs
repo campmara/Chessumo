@@ -122,7 +122,6 @@ public class GameManager : MonoBehaviour
 		restartButtonObj.name = "Restart Button";
 		restartButtonObj.transform.parent = transform;
         restartButton = restartButtonObj.GetComponent(typeof(RestartButton)) as RestartButton;
-        restartButton.SetReadyForInput(true);
 
 		GameObject topUIBarObj = Instantiate(topUIBarPrefab) as GameObject;
 		topUIBarObj.name = "Top UI Bar";

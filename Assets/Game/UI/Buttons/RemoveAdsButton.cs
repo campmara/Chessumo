@@ -13,6 +13,8 @@ public class RemoveAdsButton : Button
 			spriteRenderer.color = disabledColor;
 			text.text = "ADS REMOVED";
 		}
+
+		AdManager.Instance.OnAdsRemoved += OnUserPaidToRemoveAds;
 	}
 
 	protected override void OnPress()
@@ -26,5 +28,11 @@ public class RemoveAdsButton : Button
 		{
 			AdManager.Instance.BuyRemoveAds();
 		}
+	}
+
+	private void OnUserPaidToRemoveAds()
+	{
+		spriteRenderer.color = disabledColor;
+		text.text = "ADS REMOVED";
 	}
 }

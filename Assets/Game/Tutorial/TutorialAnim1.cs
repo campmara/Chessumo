@@ -64,8 +64,8 @@ public class TutorialAnim1 : MonoBehaviour
         touch.transform.DOScale(initialTouchScale, 0.5f);
         (touch.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).DOFade(0f, 0.5f);
 
-        pawn.transform.DOMoveY(-2f, 0.75f);
-        tween = king.transform.DOMoveY(-1f, 0.75f);
+        pawn.transform.DOMoveY(topTile.transform.position.y, 0.75f);
+        tween = king.transform.DOMoveY(king.transform.position.y + 1f, 0.75f);
 
         yield return tween.WaitForCompletion();
 
@@ -86,8 +86,8 @@ public class TutorialAnim1 : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-		pawn.transform.DOMoveY(-3f, 0.75f);
-		tween = king.transform.DOMoveY(-2f, 0.75f);
+		king.transform.DOMoveY(topTile.transform.position.y, 0.75f);
+        tween = pawn.transform.DOMoveY(bottomTile.transform.position.y, 0.75f);
 
         yield return tween.WaitForCompletion();
 

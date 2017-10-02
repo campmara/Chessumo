@@ -24,13 +24,12 @@ Known Bugs:
 
 
 RELEASE CHECKLIST:
-    - Add option to remove ads.
-    - Design Logo.
     - Make it so you can let go of a move past the board and it will still register as a move.
     - Do sound design.
     - Test for bugs.
     - Do an about section with copyright references, special thanks, licensing info, etc.
     - Get marketing campaign ready. (maybe) adwords, twitter, instagram, facebook.
+    - Set up app store page.
     - Draft Press Emails.
     - Finish copywriting.
     - Soft launch in Australia.

@@ -23,13 +23,25 @@ public class RestartButton : MonoBehaviour
         touchDesignator.transform.localScale = new Vector3(0f, 0f, 0f);
     }
 
+    private void ResetEffect()
+    {
+        touchDesignator.color = new Color(touchDesignator.color.r, touchDesignator.color.g, touchDesignator.color.b, 1f);
+        touchDesignator.transform.localScale = new Vector3(0f, 0f, 0f);
+    }
+
     public void SetReadyForInput(bool isReady)
     {
         isTakingInput = isReady;
+        GetComponent<BoxCollider>().enabled = isReady;
+
+        pulseTween.Kill();
+        fadeTween.Kill();
 
         if (isReady)
         {
             touchDesignator.gameObject.SetActive(true);
+
+            touchDesignator.transform.position = new Vector3(Constants.I.GridOffsetX, Constants.I.GridOffsetY, 0f);
 
 			pulseTween = touchDesignator.transform.DOScale(Vector3.one * 5f, 2f).SetLoops(-1);
             fadeTween = touchDesignator.DOFade(0f, 2f).SetLoops(-1);
