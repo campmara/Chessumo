@@ -2,10 +2,6 @@
 T O  D O  L I S T
 =================
 
-UI:
-    - make the board a tiny bit bigger
-    - turn the camera size to 5.25
-
 Feel:
     - you gotta give the piece movements more weight somehow. do the math.
 

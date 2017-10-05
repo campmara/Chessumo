@@ -26,36 +26,44 @@ SpriteAtlas:
       enableTightPacking: 1
     packedHash:
       serializedVersion: 2
-      Hash: 235ec7366ffb5038f58a5b717edf2a70
+      Hash: 1b847f5401ceaf689e933598ebbd8c6e
     variantMultiplier: 1
     bindAsDefault: 1
     finalFormat: 4
-    hashString: 235ec7366ffb5038f58a5b717edf2a70
-    totalSpriteSurfaceArea: 1375000
+    hashString: 1b847f5401ceaf689e933598ebbd8c6e
+    totalSpriteSurfaceArea: 2500000
     packables:
     - {fileID: 21300000, guid: 5cbfee95afd1044aa989d58b4be094e1, type: 3}
     - {fileID: 21300000, guid: c051cb411bef74027ae264be97288a13, type: 3}
-    - {fileID: 21300000, guid: 8b6afded90db64077811a2ec1571b3a4, type: 3}
+    - {fileID: 21300000, guid: b7480c7ba1be447b491bdb09e7b5d854, type: 3}
     - {fileID: 21300000, guid: d2cb50bdc495c4fb7aeeab678cf9aaca, type: 3}
     - {fileID: 21300000, guid: 00d3bdf1bb9f446fa83075867cffec8d, type: 3}
+    - {fileID: 21300000, guid: 18aa5c90c351e4800a7a7e27768403ad, type: 3}
+    - {fileID: 21300000, guid: f715ab10aec21423bbcf451c02249503, type: 3}
     packedSpriteRenderDataKeys:
-    - 8b6afded90db64077811a2ec1571b3a4: 21300000
+    - f715ab10aec21423bbcf451c02249503: 21300000
     - d2cb50bdc495c4fb7aeeab678cf9aaca: 21300000
     - 00d3bdf1bb9f446fa83075867cffec8d: 21300000
     - 5cbfee95afd1044aa989d58b4be094e1: 21300000
     - c051cb411bef74027ae264be97288a13: 21300000
+    - b7480c7ba1be447b491bdb09e7b5d854: 21300000
+    - 18aa5c90c351e4800a7a7e27768403ad: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
-  - {fileID: 21300000, guid: 8b6afded90db64077811a2ec1571b3a4, type: 3}
+  - {fileID: 21300000, guid: f715ab10aec21423bbcf451c02249503, type: 3}
   - {fileID: 21300000, guid: d2cb50bdc495c4fb7aeeab678cf9aaca, type: 3}
   - {fileID: 21300000, guid: 00d3bdf1bb9f446fa83075867cffec8d, type: 3}
   - {fileID: 21300000, guid: 5cbfee95afd1044aa989d58b4be094e1, type: 3}
   - {fileID: 21300000, guid: c051cb411bef74027ae264be97288a13, type: 3}
+  - {fileID: 21300000, guid: b7480c7ba1be447b491bdb09e7b5d854, type: 3}
+  - {fileID: 21300000, guid: 18aa5c90c351e4800a7a7e27768403ad, type: 3}
   m_PackedSpriteNamesToIndex:
-  - s_nextPieceViewer
+  - selector
   - color_band
   - restart-button-designator
   - Checkbox Ticked
   - Checkbox Unticked
+  - IAP RESTORE Button
+  - Remove Ads Button
   m_Tag: ui
   m_IsVariant: 0

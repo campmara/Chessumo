@@ -53,9 +53,9 @@ public abstract class Piece : MonoBehaviour
 		parentGame = game;
 	}
 
-	public void HandleFallingSortingOrder()
+	public void SetSortingLayer(string layer)
 	{
-		sprite.sortingLayerName = "Falling Pieces";
+		sprite.sortingLayerName = layer;
 	}
 
 	public void SetPushPotential(bool hasPotential)
@@ -450,6 +450,8 @@ public abstract class Piece : MonoBehaviour
 			}
 		}
 
+		SetSortingLayer("Moving Pieces");
+
 		// Determine how many times we must repeat the movement to get to the desired point.
 		IntVector2 diff = coordinates - GetCoordinates();
         //float pushWaitTime = CalculatePushWaitTime(distFromPushingPiece, numPushedPieces);
@@ -526,6 +528,8 @@ public abstract class Piece : MonoBehaviour
 		tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(yDistance)).SetEase(moveEase);
 		yield return tween.WaitForCompletion();
 
+		SetSortingLayer("Pieces");
+
 		if (!pushed)
 		{
 			parentGame.OnMoveEnded();
@@ -566,6 +570,8 @@ public abstract class Piece : MonoBehaviour
 		tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(xDistance)).SetEase(moveEase);
 		yield return tween.WaitForCompletion();
 
+		SetSortingLayer("Pieces");
+
 		if (!pushed)
 		{
 			parentGame.OnMoveEnded();
@@ -589,6 +595,8 @@ public abstract class Piece : MonoBehaviour
 
 		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(distance)).SetEase(moveEase);
 		yield return tween.WaitForCompletion();
+
+		SetSortingLayer("Pieces");
 
 		if (!pushed)
 		{
@@ -614,6 +622,8 @@ public abstract class Piece : MonoBehaviour
 		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(distance)).SetEase(moveEase);
 		yield return tween.WaitForCompletion();
 
+		SetSortingLayer("Pieces");
+
 		if (!pushed)
 		{
 			parentGame.OnMoveEnded();
@@ -638,6 +648,8 @@ public abstract class Piece : MonoBehaviour
 
 		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(xDistance)).SetEase(moveEase);
 		yield return tween.WaitForCompletion();
+
+		SetSortingLayer("Pieces");
 
 		if (!pushed)
 		{

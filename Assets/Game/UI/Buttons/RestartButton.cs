@@ -7,6 +7,9 @@ public class RestartButton : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer touchDesignator;
 
+    private const float MIN_S = 4f;
+    private const float MAX_S = 5f;
+
     private const float FOLLOW_SPEED = 5f;
 
     private bool isTakingInput = false;
@@ -20,19 +23,18 @@ public class RestartButton : MonoBehaviour
     {
         touchDesignator.gameObject.SetActive(false);
         touchDesignator.color = new Color(touchDesignator.color.r, touchDesignator.color.g, touchDesignator.color.b, 1f);
-        touchDesignator.transform.localScale = new Vector3(0f, 0f, 0f);
+        touchDesignator.transform.localScale = new Vector3(MIN_S, MIN_S, MIN_S);
     }
 
     private void ResetEffect()
     {
         touchDesignator.color = new Color(touchDesignator.color.r, touchDesignator.color.g, touchDesignator.color.b, 1f);
-        touchDesignator.transform.localScale = new Vector3(0f, 0f, 0f);
+        touchDesignator.transform.localScale = new Vector3(MIN_S, MIN_S, MIN_S);
     }
 
     public void SetReadyForInput(bool isReady)
     {
-        isTakingInput = isReady;
-        GetComponent<BoxCollider>().enabled = isReady;
+        Debug.Log("Ready for input? " + isReady);
 
         pulseTween.Kill();
         fadeTween.Kill();
@@ -42,10 +44,14 @@ public class RestartButton : MonoBehaviour
             touchDesignator.gameObject.SetActive(true);
 
             touchDesignator.transform.position = new Vector3(Constants.I.GridOffsetX, Constants.I.GridOffsetY, 0f);
+            ResetEffect();
 
-			pulseTween = touchDesignator.transform.DOScale(Vector3.one * 5f, 2f).SetLoops(-1);
+			pulseTween = touchDesignator.transform.DOScale(Vector3.one * MAX_S, 2f).SetLoops(-1);
             fadeTween = touchDesignator.DOFade(0f, 2f).SetLoops(-1);
         }
+
+        isTakingInput = isReady;
+        GetComponent<BoxCollider>().enabled = isReady;
     }
 
 	void OnMouseDown()
@@ -55,7 +61,7 @@ public class RestartButton : MonoBehaviour
         pulseTween.Kill();
         fadeTween.Kill();
 
-        pulseTween = touchDesignator.transform.DOScale(Vector3.one, 0.5f);
+        pulseTween = touchDesignator.transform.DOScale(Vector3.one * MIN_S, 0.5f);
         fadeTween = touchDesignator.DOFade(1f, 0.5f);
 	}
 
@@ -63,7 +69,7 @@ public class RestartButton : MonoBehaviour
 	{
         if (!isTakingInput) return;
 
-		touchDesignator.transform.DOScale(Vector3.one * 5f, 1f);
+		touchDesignator.transform.DOScale(Vector3.one * MAX_S, 1f);
         touchDesignator.DOFade(0f, 1f).OnComplete(() => touchDesignator.gameObject.SetActive(false));
 
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

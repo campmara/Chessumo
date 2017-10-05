@@ -654,7 +654,7 @@ public class Game : MonoBehaviour
 			.SetEase(Ease.Linear);
 		yield return tween.WaitForCompletion();
 
-		piece.HandleFallingSortingOrder();
+		piece.SetSortingLayer("Falling Pieces");
 		Destroy(piece); // Destroy the piece class so it won't get touched.
 
 		tween = pieceObj.transform.DOMoveY(-6f, 0.75f)
@@ -801,7 +801,7 @@ public class Game : MonoBehaviour
 
 	IEnumerator GameEndRoutine()
 	{
-		GameManager.Instance.ShrinkMeToSlit(pieceViewerObj, 0f, Ease.OutQuint);
+		pieceViewer.FadeOut();
 
 		yield return new WaitForSeconds(0.5f);
 

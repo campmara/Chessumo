@@ -13,9 +13,20 @@ public class NextPieceViewer : MonoBehaviour
 	[SerializeField] Color knightColor;
 	[SerializeField] Color pawnColor;
 
+	public void OnEnable()
+	{
+		transform.position = new Vector3(transform.position.x, 20f, transform.position.z);
+		transform.DOMoveY(1.5f, 0.8f).SetEase(Ease.Linear).SetDelay(1.5f);
+	}
+
 	public void PositionAlongTop(float xPos)
 	{
 		transform.DOMoveX(xPos, 0.75f).SetEase(Ease.InOutQuint);
+	}
+
+	public void FadeOut()
+	{
+		sprite.DOFade(0f, 0.75f);
 	}
 
 	public void ShowKing()

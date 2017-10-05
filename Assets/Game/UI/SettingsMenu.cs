@@ -14,7 +14,7 @@ public class SettingsMenu : MonoBehaviour
 
 	void Awake()
 	{
-		transform.localScale = new Vector3(1f, 0f, 1f);
+		transform.localScale = new Vector3(0f, 0f, 0f);
 
 		child = transform.GetChild(0).gameObject; // Gets the offset object.
 		child.SetActive(false);
@@ -24,13 +24,13 @@ public class SettingsMenu : MonoBehaviour
     {
         if (IsOpen())
         {
-            transform.localScale = new Vector3(transform.localScale.x, 0f, transform.localScale.z);
+            transform.localScale = Vector3.zero;
             child.SetActive(false);
         }
         else
         {
             child.SetActive(true);
-            transform.localScale = new Vector3(transform.localScale.x, 1f, transform.localScale.z);
+            transform.localScale = Vector3.one;
         }
     }
 
@@ -53,7 +53,7 @@ public class SettingsMenu : MonoBehaviour
 		inProgress = true;
 		child.SetActive(true);
 
-		tween = transform.DOScaleY(1f, 1f).SetEase(Ease.OutBounce);
+		tween = transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBack);
 
 		yield return tween.WaitForCompletion();
 
@@ -64,7 +64,7 @@ public class SettingsMenu : MonoBehaviour
 	{
 		inProgress = true;
 
-		tween = transform.DOScaleY(0f, 1f).SetEase(Ease.OutQuint);
+		tween = transform.DOScale(Vector3.zero, 1f).SetEase(Ease.OutQuint);
 
 		yield return tween.WaitForCompletion();
 

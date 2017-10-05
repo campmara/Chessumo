@@ -11,7 +11,6 @@ public class RemoveAdsButton : Button
 		if (SaveDataManager.Instance.HasPaidToRemoveAds())
 		{
 			spriteRenderer.color = disabledColor;
-			text.text = "ADS REMOVED";
 		}
 
 		AdManager.Instance.OnAdsRemoved += OnUserPaidToRemoveAds;
@@ -22,7 +21,6 @@ public class RemoveAdsButton : Button
 		if (SaveDataManager.Instance.HasPaidToRemoveAds())
 		{
 			spriteRenderer.color = disabledColor;
-			text.text = "ADS REMOVED";
 		}
 		else
 		{
@@ -33,6 +31,5 @@ public class RemoveAdsButton : Button
 	private void OnUserPaidToRemoveAds()
 	{
 		spriteRenderer.color = disabledColor;
-		text.text = "ADS REMOVED";
 	}
 }

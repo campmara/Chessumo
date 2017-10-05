@@ -386,6 +386,8 @@ public class Knight : Piece
 	{
 		// Determine where it is we're actually moving.
 		IntVector2 diff = coordinates - GetCoordinates();
+
+		SetSortingLayer("Moving Pieces");
 		
 		//
 		// PUSHED

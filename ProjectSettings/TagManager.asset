@@ -56,7 +56,7 @@ TagManager:
   - name: Pieces
     uniqueID: 1832453563
     locked: 0
-  - name: Moves
+  - name: Moving Pieces
     uniqueID: 1157744391
     locked: 0
   - name: Menus
