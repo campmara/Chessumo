@@ -19,9 +19,10 @@ public class NextPieceViewer : MonoBehaviour
 		transform.DOMoveY(1.5f, 0.8f).SetEase(Ease.Linear).SetDelay(1.5f);
 	}
 
-	public void PositionAlongTop(float xPos)
+	public void PositionAlongTop(IntVector2 coords)
 	{
-		transform.DOMoveX(xPos, 0.75f).SetEase(Ease.InOutQuint);
+		Vector2 pos = GameManager.Instance.CoordinateToPosition(coords);
+		transform.DOMoveX(pos.x, 0.75f).SetEase(Ease.InOutQuint);
 	}
 
 	public void FadeOut()

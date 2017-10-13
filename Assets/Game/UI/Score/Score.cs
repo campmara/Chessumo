@@ -13,11 +13,6 @@ public class Score : MonoBehaviour
 
 	void Awake()
 	{
-		if (!textMesh)
-		{
-			Debug.LogError("Please assign the textMesh of the Score.");
-		}
-
 		score = 0;
 		textMesh.text = "0";
 	}

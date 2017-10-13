@@ -6,7 +6,6 @@ Feel:
     - you gotta give the piece movements more weight somehow. do the math.
 
 Art:
-    - Fix the app logo. try a couple different permutations. one with like a grid of pieces, one with just the icon of the queen or something, etc.
     - Make sure Now typeface is free.
         - It is. I can use it.
     - Make the trail fade out behind the piece that's moving as it moves.
@@ -20,7 +19,9 @@ Known Bugs:
 
 
 RELEASE CHECKLIST:
+    - chessumo is crashing on game end when there’s no data (airplane mode)
     - Make it so you can let go of a move past the board and it will still register as a move.
+        - This could be done by reading the last tile that we've raised.
     - Do sound design.
     - Test for bugs.
     - Do an about section with copyright references, special thanks, licensing info, etc.

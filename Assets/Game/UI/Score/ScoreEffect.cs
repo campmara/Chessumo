@@ -2,83 +2,72 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using TMPro;
 
 public class ScoreEffect : MonoBehaviour 
 {
-    [SerializeField] private SpriteRenderer one;
-    [SerializeField] private SpriteRenderer two;
-    [SerializeField] private SpriteRenderer three;
+    [SerializeField] private SpriteRenderer bar;
+    [SerializeField] private TextMeshPro textMesh;
 
-    private const float DESIRED_Y = 0f;
+    private const float START_Y = -3f;
+    private const float ONE_Y = -2.5f;
+    private const float TWO_Y = -2.25f;
+    private const float THREE_Y = -2f;
 
-    private Tween oneTween;
-    private Tween twoTween;
-    private Tween threeTween;
+    private Tween tween;
 
 	private void Awake()
 	{
-        one.transform.localPosition = Vector3.down * 2f;
-        two.transform.localPosition = Vector3.down * 2f;
-        three.transform.localPosition = Vector3.down * 2f;
+        transform.position = Vector3.up * START_Y;
 	}
 
     public void OnOneScored(Color col)
     {
-        if (oneTween != null)
+        if (tween != null)
         {
-            oneTween.Kill();
-            one.transform.localPosition = Vector3.down * 2f;
+            tween.Kill();
         }
 
-        one.color = col;
+        bar.color = col;
+        textMesh.text = "+" + Constants.I.ScoreOneAmount.ToString();
 
-        oneTween = one.transform.DOLocalMoveY(DESIRED_Y, 0.5f)
+        tween = transform.DOMoveY(ONE_Y, 0.5f)
                       .SetEase(Ease.OutQuint)
-                      .OnComplete(OnOneComplete);
+                      .OnComplete(OnTweenComplete);
     }
-
-	public void OnOneComplete()
-	{
-        oneTween = one.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint);
-	}
 
 	public void OnTwoScored(Color col)
 	{
-        if (twoTween != null)
-		{
-			twoTween.Kill();
-			two.transform.localPosition = Vector3.down * 2f;
-		}
+        if (tween != null)
+        {
+            tween.Kill();
+        }
 
-		two.color = col;
+        bar.DOColor(col, 0.1f).SetEase(Ease.Linear);
+        textMesh.text = "+" + Constants.I.ScoreTwoAmount.ToString();
 
-        twoTween = two.transform.DOLocalMoveY(DESIRED_Y, 0.5f)
+        tween = transform.DOMoveY(TWO_Y, 0.5f)
                       .SetEase(Ease.OutQuint)
-                      .OnComplete(OnTwoComplete);
-	}
-
-	public void OnTwoComplete()
-	{
-        twoTween = two.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint);
+                      .OnComplete(OnTweenComplete);
 	}
 
 	public void OnThreeScored(Color col)
 	{
-		if (threeTween != null)
-		{
-			threeTween.Kill();
-			three.transform.localPosition = Vector3.down * 2f;
-		}
+        if (tween != null)
+        {
+            tween.Kill();
+        }
 
-		three.color = col;
+        bar.DOColor(col, 0.1f).SetEase(Ease.Linear);
+        textMesh.text = "+" + Constants.I.ScoreThreeAmount.ToString();
 
-        threeTween = three.transform.DOLocalMoveY(DESIRED_Y, 0.5f)
-                          .SetEase(Ease.OutQuint)
-                          .OnComplete(OnThreeComplete);
+        tween = transform.DOMoveY(THREE_Y, 0.5f)
+                      .SetEase(Ease.OutQuint)
+                      .OnComplete(OnTweenComplete);
 	}
 
-    public void OnThreeComplete()
-    {
-        threeTween = three.transform.DOLocalMoveY(-2f, 0.5f).SetEase(Ease.InQuint);
-    }
+    public void OnTweenComplete()
+	{
+        tween = transform.DOMoveY(START_Y, 0.5f).SetEase(Ease.InQuint);
+	}
 }

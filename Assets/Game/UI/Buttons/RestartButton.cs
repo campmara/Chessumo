@@ -36,12 +36,12 @@ public class RestartButton : MonoBehaviour
     {
         Debug.Log("Ready for input? " + isReady);
 
-        pulseTween.Kill();
-        fadeTween.Kill();
-
         if (isReady)
         {
-            touchDesignator.gameObject.SetActive(true);
+            AudioManager.Instance.PlayChordOne();
+
+            pulseTween.Kill();
+            fadeTween.Kill();
 
             touchDesignator.transform.position = new Vector3(Constants.I.GridOffsetX, Constants.I.GridOffsetY, 0f);
             ResetEffect();
@@ -51,7 +51,12 @@ public class RestartButton : MonoBehaviour
         }
 
         isTakingInput = isReady;
-        GetComponent<BoxCollider>().enabled = isReady;
+    }
+
+    public void SetButtonEnabled(bool isEnabled)
+    {
+        touchDesignator.gameObject.SetActive(isEnabled);
+        GetComponent<BoxCollider>().enabled = isEnabled;
     }
 
 	void OnMouseDown()
@@ -70,19 +75,17 @@ public class RestartButton : MonoBehaviour
         if (!isTakingInput) return;
 
 		touchDesignator.transform.DOScale(Vector3.one * MAX_S, 1f);
-        touchDesignator.DOFade(0f, 1f).OnComplete(() => touchDesignator.gameObject.SetActive(false));
+        touchDesignator.DOFade(0f, 1f).OnComplete(OnEffectFinish);
 
-		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-		RaycastHit hit;
+        SetReadyForInput(false);
 
-		if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-		{
-			if (hit.collider.gameObject == this.gameObject)
-			{
-				OnPress();
-			}
-		}
+        OnPress();
 	}
+
+    void OnEffectFinish()
+    {
+        SetButtonEnabled(false);
+    }
 
 	void OnPress() 
     {

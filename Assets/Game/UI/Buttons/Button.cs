@@ -48,6 +48,7 @@ public class Button : MonoBehaviour
 			{
 				if (hit.collider.gameObject == this.gameObject)
 				{
+					AudioManager.Instance.PlayBlip(0.5f);
 					OnPress();
 				}
 			}

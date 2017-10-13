@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
         topUIBar.gameObject.SetActive(isVisible);
         leaderboardButton.gameObject.SetActive(isVisible);
         settingsButton.gameObject.SetActive(isVisible);
+		scoreEffect.gameObject.SetActive(isVisible);
 
         if (game != null)
         {
@@ -167,13 +168,12 @@ public class GameManager : MonoBehaviour
 	public void OnGameEnd()
 	{
         AdManager.Instance.ShowVideoAd();
+		restartButton.SetButtonEnabled(true);
         restartButton.SetReadyForInput(true);
 	}
 
 	public void BeginGame()
 	{
-        restartButton.SetReadyForInput(false);
-
 		if (game == null)
 		{
 			Debug.Log("[GAME MANAGER] Loading and Beginning Game.");
@@ -211,12 +211,12 @@ public class GameManager : MonoBehaviour
 		return new Vector2(xPos, yPos);
 	}
 
-	public void GrowMe(GameObject obj, float delay = 0f, Ease ease = Ease.OutBack)
+	public void GrowMe(GameObject obj, Ease ease = Ease.OutBack)
 	{
-		StartCoroutine(GrowToScale(obj, delay, ease));
+		StartCoroutine(GrowToScale(obj, ease));
 	}
 
-	IEnumerator GrowToScale(GameObject obj, float delay, Ease ease)
+	IEnumerator GrowToScale(GameObject obj, Ease ease)
 	{
 		// Neat little effect for now to compensate for the fact that shit would just appear out of nowhere otherwise. this will die someday.
 
@@ -230,9 +230,6 @@ public class GameManager : MonoBehaviour
 
 		// Scale to 0 first.
 		obj.transform.localScale = startScale;
-
-		// Then wait the delay.
-		yield return new WaitForSeconds(delay);
 
 		// Then rescale via tween.
 		if (obj)

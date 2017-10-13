@@ -20,9 +20,10 @@ public class TutorialAnim1 : MonoBehaviour
     [SerializeField] private ScoreEffect scoreEffect;
 
     [SerializeField] private GameObject touch;
+
     private Vector3 initialTouchScale;
 
-    void Awake()
+    void OnEnable()
     {
         initialTouchScale = touch.transform.localScale;
         StartCoroutine(LoopRoutine());

@@ -16,9 +16,12 @@ MonoBehaviour:
     y: 4
   StartingPieceCount: 5
   CombosEnabled: 1
+  ScoreOneAmount: 1
+  ScoreTwoAmount: 4
+  ScoreThreeAmount: 9
   GridOffsetX: 0
   GridOffsetY: 0.5
-  PieceMoveTime: 0.3
+  PieceMoveTime: 0.2
   StartButtonRaisedY: -3.5
   StartButtonLoweredY: -6
   StartButtonTweenTime: 0.75

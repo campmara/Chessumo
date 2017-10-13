@@ -39,7 +39,14 @@ public class GameCenterManager : MonoBehaviour
     {
         long scoreLong = score;
         
-        Social.ReportScore(scoreLong, GAMECENTER_LEADERBOARD_ID, HighScoreCheck);
+        try
+        {
+            Social.ReportScore(scoreLong, GAMECENTER_LEADERBOARD_ID, HighScoreCheck);
+        }
+        catch
+        {
+            Debug.Log("Report Score to Game Center Failed");
+        }
     }
     
     void HighScoreCheck(bool result) 

@@ -26,12 +26,12 @@ SpriteAtlas:
       enableTightPacking: 1
     packedHash:
       serializedVersion: 2
-      Hash: 1b847f5401ceaf689e933598ebbd8c6e
+      Hash: dd5ec1969073bfe5204d6f79de3e7a3f
     variantMultiplier: 1
     bindAsDefault: 1
     finalFormat: 4
-    hashString: 1b847f5401ceaf689e933598ebbd8c6e
-    totalSpriteSurfaceArea: 2500000
+    hashString: dd5ec1969073bfe5204d6f79de3e7a3f
+    totalSpriteSurfaceArea: 2750000
     packables:
     - {fileID: 21300000, guid: 5cbfee95afd1044aa989d58b4be094e1, type: 3}
     - {fileID: 21300000, guid: c051cb411bef74027ae264be97288a13, type: 3}
@@ -40,9 +40,11 @@ SpriteAtlas:
     - {fileID: 21300000, guid: 00d3bdf1bb9f446fa83075867cffec8d, type: 3}
     - {fileID: 21300000, guid: 18aa5c90c351e4800a7a7e27768403ad, type: 3}
     - {fileID: 21300000, guid: f715ab10aec21423bbcf451c02249503, type: 3}
+    - {fileID: 21300000, guid: ad9f2f8821a3f4c1db5524f0e467881b, type: 3}
     packedSpriteRenderDataKeys:
     - f715ab10aec21423bbcf451c02249503: 21300000
     - d2cb50bdc495c4fb7aeeab678cf9aaca: 21300000
+    - ad9f2f8821a3f4c1db5524f0e467881b: 21300000
     - 00d3bdf1bb9f446fa83075867cffec8d: 21300000
     - 5cbfee95afd1044aa989d58b4be094e1: 21300000
     - c051cb411bef74027ae264be97288a13: 21300000
@@ -52,6 +54,7 @@ SpriteAtlas:
   m_PackedSprites:
   - {fileID: 21300000, guid: f715ab10aec21423bbcf451c02249503, type: 3}
   - {fileID: 21300000, guid: d2cb50bdc495c4fb7aeeab678cf9aaca, type: 3}
+  - {fileID: 21300000, guid: ad9f2f8821a3f4c1db5524f0e467881b, type: 3}
   - {fileID: 21300000, guid: 00d3bdf1bb9f446fa83075867cffec8d, type: 3}
   - {fileID: 21300000, guid: 5cbfee95afd1044aa989d58b4be094e1, type: 3}
   - {fileID: 21300000, guid: c051cb411bef74027ae264be97288a13, type: 3}
@@ -60,6 +63,7 @@ SpriteAtlas:
   m_PackedSpriteNamesToIndex:
   - selector
   - color_band
+  - Settings Box
   - restart-button-designator
   - Checkbox Ticked
   - Checkbox Unticked

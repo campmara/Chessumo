@@ -6,12 +6,12 @@ public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager Instance = null;
 
-	[SerializeField] private TutorialPage[] pages;
+	[SerializeField] private GameObject[] pageObjects;
+	private TutorialPage[] pages;
 
 	private ProgressDots dots;
 
 	private int pageIndex = 0;
-	private bool fingerLifted = true;
 
     public void SetVisibility(bool isVisible)
     {
@@ -27,6 +27,22 @@ public class TutorialManager : MonoBehaviour
     {
         pageIndex = 0;
         dots.UpdateDots(pageIndex);
+
+		if (pages != null && pages.Length > 0)
+		{
+			for (int i = 0; i < pages.Length; i++)
+			{
+				Destroy(pages[i].gameObject);
+			}
+		}
+
+		pages = new TutorialPage[pageObjects.Length];
+
+		for (int i = 0; i < pageObjects.Length; i++)
+		{
+			pages[i] = (Instantiate(pageObjects[i]) as GameObject).GetComponent(typeof(TutorialPage)) as TutorialPage;
+			pages[i].transform.parent = this.transform;
+		}
 
         for (int i = 0; i < pages.Length; i++)
         {
@@ -48,34 +64,12 @@ public class TutorialManager : MonoBehaviour
 		dots = GetComponentInChildren(typeof(ProgressDots)) as ProgressDots;
 		
 		// Like reading any novel, we must turn to the first page.
-		Initialize();
+		Restart();
 	}
 
-	private void Update()
+	private void OnMouseDown()
 	{
-#if UNITY_EDITOR
-		if (Input.GetMouseButtonDown(0))
-		{
-			HandlePageTurn();
-		}
-#else
-		if (fingerLifted && Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Began)
-		{
-			fingerLifted = false;
-
-			HandlePageTurn();
-		}
-
-		if (!fingerLifted && Input.touchCount > 0 && Input.touches[0].phase == TouchPhase.Ended)
-		{
-			fingerLifted = true;
-		}
-#endif
-	}
-
-	private void Initialize()
-	{
-		pages[pageIndex].gameObject.SetActive(true);
+		HandlePageTurn();
 	}
 
 	private void HandlePageTurn()

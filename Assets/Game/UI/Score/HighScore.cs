@@ -7,14 +7,6 @@ public class HighScore : MonoBehaviour
 {
 	[SerializeField] private TextMeshPro textMesh;
 
-	void Awake()
-	{
-		if (!textMesh)
-		{
-			Debug.LogError("Please assign the textMesh of the Score.");
-		}
-	}
-
 	void OnEnable()
 	{
 		//GameManager.Instance.IntroduceFromSide(this.gameObject, 1.8f, true);
@@ -22,7 +14,9 @@ public class HighScore : MonoBehaviour
 
 	public void PullHighScore()
 	{
-		textMesh.text = SaveDataManager.Instance.GetHighScore().ToString();
+		int score = SaveDataManager.Instance.GetHighScore();
+		textMesh.text = score.ToString();
+		GameCenterManager.Instance.ReportScore(score);
 	}
 
 	public void Reset()

@@ -24,11 +24,13 @@ public class SettingsMenu : MonoBehaviour
     {
         if (IsOpen())
         {
+			GameManager.Instance.restartButton.SetReadyForInput(true);
             transform.localScale = Vector3.zero;
             child.SetActive(false);
         }
         else
         {
+			GameManager.Instance.restartButton.SetReadyForInput(false);
             child.SetActive(true);
             transform.localScale = Vector3.one;
         }
@@ -50,6 +52,8 @@ public class SettingsMenu : MonoBehaviour
 
 	private IEnumerator Open()
 	{
+		GameManager.Instance.restartButton.SetReadyForInput(false);
+
 		inProgress = true;
 		child.SetActive(true);
 
@@ -62,6 +66,8 @@ public class SettingsMenu : MonoBehaviour
 
 	private IEnumerator Close()
 	{
+		GameManager.Instance.restartButton.SetReadyForInput(true);
+
 		inProgress = true;
 
 		tween = transform.DOScale(Vector3.zero, 1f).SetEase(Ease.OutQuint);

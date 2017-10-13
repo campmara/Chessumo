@@ -5,11 +5,13 @@ using UnityEngine.SceneManagement;
 
 public class TutorialButton : Button 
 {
-	protected override void OnPress()
-	{
+    protected override void OnPress()
+    {
         // Loads the tutorial.
         TutorialManager.Instance.SetVisibility(true);
         GameManager.Instance.SetVisibility(false);
+
+        GameManager.Instance.restartButton.SetButtonEnabled(false);
         GameManager.Instance.restartButton.SetReadyForInput(false);
-	}
+    }
 }

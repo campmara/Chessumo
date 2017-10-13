@@ -22,7 +22,6 @@ public class Tile : MonoBehaviour
 
 	private SpriteRenderer spriteRenderer;
 
-	private Game parentGame;
 	private IntVector2 currentCoordinates;
 
 	void Awake()
@@ -95,19 +94,13 @@ public class Tile : MonoBehaviour
 		spriteRenderer.sprite = downSprite;
 	}
 
-	void OnEnable()
-	{
-		GameManager.Instance.GrowMe(this.gameObject, Random.Range(0f, 0.5f));
-	}
-
 	public IntVector2 GetCoordinates()
 	{
 		return currentCoordinates;
 	}
 
-	public void SetInfo(int x, int y, Game game)
+	public void SetInfo(int x, int y)
 	{
 		currentCoordinates = new IntVector2(x, y);
-		parentGame = game;
 	}
 }

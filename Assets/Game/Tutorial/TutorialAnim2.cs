@@ -22,7 +22,7 @@ public class TutorialAnim2 : MonoBehaviour
 	[SerializeField] private GameObject touch;
 	private Vector3 initialTouchScale;
 
-	void Awake()
+	void OnEnable()
 	{
 		initialTouchScale = touch.transform.localScale;
 		StartCoroutine(LoopRoutine());

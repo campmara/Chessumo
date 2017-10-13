@@ -5,11 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class AppManager : MonoBehaviour 
 {
-    private Coroutine loadRoutine = null;
-
     private void Awake()
     {
-        loadRoutine = StartCoroutine(LoadRoutine());
+        StartCoroutine(LoadRoutine());
     }
 
     private IEnumerator LoadRoutine()

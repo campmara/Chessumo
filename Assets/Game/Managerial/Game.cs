@@ -125,10 +125,49 @@ public class Game : MonoBehaviour
 
 				tile.transform.position = GameManager.Instance.CoordinateToPosition(new IntVector2(x, y));
 
-				tile.SetInfo(x, y, this);
+				tile.SetInfo(x, y);
+
+				tile.transform.localScale = new Vector3(0f, 0f, 1f);
 
 				tileObjects[x, y] = tileObj;
 			}
+		}
+
+		StartCoroutine(TileGrowRoutine());
+	}
+
+	private IEnumerator TileGrowRoutine()
+	{
+		float blipPitch = 0.15f;
+
+		int[] order = new int[tileObjects.GetLength(0) * tileObjects.GetLength(1)];
+		for (int i = 0; i < order.Length; i++)
+		{
+			order[i] = i;
+		}
+		// now shuffle
+		for (int t = 0; t < order.Length; t++ )
+        {
+            int tmp = order[t];
+            int r = Random.Range(t, order.Length);
+            order[t] = order[r];
+            order[r] = tmp;
+        }
+
+		for (int i = 0; i < order.Length; i++)
+		{
+			int x = order[i] % tileObjects.GetLength(0);
+			int y = order[i] / tileObjects.GetLength(1);
+
+			Tile tile = tileObjects[x, y].GetComponent<Tile>();
+
+			yield return new WaitForSeconds(Random.Range(0f, 0.05f));
+
+			tile.transform.DOScale(new Vector3(1f, 1f, 1f), 1f)
+				.SetEase(Ease.OutBack);
+
+			AudioManager.Instance.PlayBlip(blipPitch);
+			blipPitch += 0.025f;
 		}
 	}
 
@@ -662,13 +701,12 @@ public class Game : MonoBehaviour
 		yield return tween.WaitForCompletion();
 
 		// Score a point and handle the score combo.
-		GameManager.Instance.score.ScorePoint();
-        IncrementScoreCombo(piece);
+        HandleScorePoint(piece);
 
 		Destroy(pieceObj);
 	}
 
-    void IncrementScoreCombo(Piece piece)
+    void HandleScorePoint(Piece piece)
 	{
 		if (!Constants.I.CombosEnabled)
 		{
@@ -680,11 +718,9 @@ public class Game : MonoBehaviour
 
 		if (scoreCombo >= Constants.I.GridSize.x - 1)
 		{
-			// We've scored the combo!
-			Debug.Log("Scored Combo.");
             GameManager.Instance.scoreEffect.OnThreeScored(piece.FullColor);
 
-			for (int i = 0; i < scoreCombo; i++)
+			for (int i = 0; i < Constants.I.ScoreThreeAmount; i++)
 			{
 				GameManager.Instance.score.ScorePoint();
 			}
@@ -692,10 +728,20 @@ public class Game : MonoBehaviour
         else if (scoreCombo >= 2)
         {
             GameManager.Instance.scoreEffect.OnTwoScored(piece.FullColor);
+			
+			for (int i = 0; i < Constants.I.ScoreTwoAmount; i++)
+			{
+				GameManager.Instance.score.ScorePoint();
+			}
         }
         else if (scoreCombo >= 1)
         {
             GameManager.Instance.scoreEffect.OnOneScored(piece.FullColor);
+			
+			for (int i = 0; i < Constants.I.ScoreOneAmount; i++)
+			{
+				GameManager.Instance.score.ScorePoint();
+			}
         }
 	}
 
@@ -767,23 +813,15 @@ public class Game : MonoBehaviour
 
 		numPiecesToSpawn = 0;
 
-		// Check for Game Over after every move.
-		CheckForGameEnd();
+		// Checks whether it should end the game or enable NPV movement.
+		CheckPieceCount();
 
 		moveInProgress = false;
 	}
 
-	void CheckForGameEnd()
+	void CheckPieceCount()
 	{
-		if (IsGameOver())
-		{
-			StartCoroutine(GameEndRoutine());
-		}
-	}
-
-	bool IsGameOver()
-	{
-		bool gameOver = true;
+		int movablePieceCount = 0;
 
 		for (int i = 0; i < pieces.GetLength(0); i++)
 		{
@@ -791,12 +829,15 @@ public class Game : MonoBehaviour
 			{
 				if (pieces[i, j] != null && !pieces[i, j].GetMoveDisabled()) 
 				{
-					gameOver = false;
+					movablePieceCount++;
 				}
 			}
 		}
 
-		return gameOver;
+		if (movablePieceCount <= 0)
+		{
+			StartCoroutine(GameEndRoutine());
+		}
 	}
 
 	IEnumerator GameEndRoutine()
@@ -989,16 +1030,8 @@ public class Game : MonoBehaviour
 
 		nextRandomCoords = RandomCoordinates();
 
-		/*
-		while (pieces[nextRandomCoords.x, nextRandomCoords.y] != null)
-		{
-			nextRandomCoords = RandomCoordinates();
-		}
-		*/
-
 		// Position the piece viewer at the top above the column it needs to be at.
-		Vector2 pos = GameManager.Instance.CoordinateToPosition(nextRandomCoords);
-		pieceViewer.PositionAlongTop(pos.x);
+		pieceViewer.PositionAlongTop(nextRandomCoords);
 	}
 
 	protected void PlaceNextRandomPiece()
@@ -1037,6 +1070,8 @@ public class Game : MonoBehaviour
 
 	private void PlacePieces()
 	{
+		AudioManager.Instance.PlayChordTwo();
+
 		// Spawn all the starting pieces.
 		for (int i = 0; i < Constants.I.StartingPieceCount; i++)
 		{
