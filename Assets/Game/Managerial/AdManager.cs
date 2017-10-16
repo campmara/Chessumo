@@ -51,7 +51,10 @@ public class AdManager : MonoBehaviour, IStoreListener
 		// Don't show ads if user has paid to remove them.
 		if (SaveDataManager.Instance.HasPaidToRemoveAds()) return;
 
-        Advertisement.Show();
+		if (Advertisement.IsReady() && Advertisement.isInitialized)
+		{
+			Advertisement.Show();
+		}
     }
 
 	public void InitializePurchasing() 

@@ -19,7 +19,6 @@ Known Bugs:
 
 
 RELEASE CHECKLIST:
-    - chessumo is crashing on game end when there’s no data (airplane mode)
     - Make it so you can let go of a move past the board and it will still register as a move.
         - This could be done by reading the last tile that we've raised.
     - Do sound design.

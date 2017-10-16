@@ -8,29 +8,31 @@ SpriteAtlas:
   m_Name: tutorial
   m_EditorData:
     textureSettings:
+      serializedVersion: 2
       anisoLevel: 1
       compressionQuality: 50
       maxTextureSize: 512
       textureCompression: 0
-      colorSpace: 1
       filterMode: 0
       generateMipMaps: 0
       readable: 0
       crunchedCompression: 0
+      sRGB: 0
     platformSettings: []
     packingParameters:
-      paddingPower: 2
+      serializedVersion: 2
+      padding: 4
       blockOffset: 1
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 1
     packedHash:
       serializedVersion: 2
-      Hash: a075e8895a236ba478a09db88e7dfe38
+      Hash: 32aad2020985e65cd69fce637c767d46
     variantMultiplier: 1
     bindAsDefault: 1
     finalFormat: 4
-    hashString: a075e8895a236ba478a09db88e7dfe38
+    hashString: 32aad2020985e65cd69fce637c767d46
     totalSpriteSurfaceArea: 266384
     packables:
     - {fileID: 2800000, guid: 2cb7d28a0f2c04d44b76caca1a88e4c6, type: 3}
