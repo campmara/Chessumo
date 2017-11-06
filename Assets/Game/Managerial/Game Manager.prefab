@@ -53,24 +53,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gamePrefab: {fileID: 114710873267322822, guid: 18f3f23bdbbec4beb820f9e90d96091d,
     type: 2}
-  leaderboardButtonPrefab: {fileID: 1490100644976496, guid: 62f99dee0bcc84935aafb236135be757,
-    type: 2}
-  settingsButtonPrefab: {fileID: 1895835230142028, guid: 45053641ea0424612ad5696082f44cd7,
-    type: 2}
   restartButtonPrefab: {fileID: 1359618656498248, guid: 0fc0f1e7f6d184529bbaa58613be71c3,
     type: 2}
   tilePrefab: {fileID: 1345034203562220, guid: 1bc957b08614540c08670a641b668e3d, type: 2}
-  topUIBarPrefab: {fileID: 1901250137628206, guid: c02676bcdf4fc4ddfb5a066334bca260,
-    type: 2}
-  scorePrefab: {fileID: 1000011452536478, guid: 396667be61c144e91b7b9e1693fac3c1,
-    type: 2}
   scoreEffectPrefab: {fileID: 1382382347676286, guid: ab3e49c51e1104119a0554eecd5e1d87,
     type: 2}
-  highScorePrefab: {fileID: 1000011452536478, guid: ab260fe38f00446d9ab6ac4da73de75f,
-    type: 2}
   nextPieceViewerPrefab: {fileID: 1000013728354998, guid: 405155a372c254fb888f166ea3a1d160,
-    type: 2}
-  settingsMenuPrefab: {fileID: 1446733621370044, guid: e095af804914a485abf6366fbe88fc02,
     type: 2}
   kingPrefab: {fileID: 1000012858214770, guid: 8bf9b3f6f39cb414bab1b115e88e82d2, type: 2}
   queenPrefab: {fileID: 1000014152563984, guid: 139782790f45f48859be2aed79c5296b,
@@ -81,7 +69,11 @@ MonoBehaviour:
   knightPrefab: {fileID: 1000014186337950, guid: b2fa396e2e2154dc6b5f0eaf7893b868,
     type: 2}
   pawnPrefab: {fileID: 1000013607600190, guid: 39259fa6fcd5a4acb87767b411bb6583, type: 2}
+  topUIBar: {fileID: 0}
   score: {fileID: 0}
-  scoreEffect: {fileID: 0}
   highScore: {fileID: 0}
+  leaderboardButton: {fileID: 0}
+  settingsButton: {fileID: 0}
+  settingsMenu: {fileID: 0}
+  scoreEffect: {fileID: 0}
   restartButton: {fileID: 0}

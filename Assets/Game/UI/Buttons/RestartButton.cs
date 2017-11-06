@@ -14,6 +14,8 @@ public class RestartButton : MonoBehaviour
 
     private bool isTakingInput = false;
 
+    private Coroutine pulseLoopRoutine = null;
+
     private Tween fadeTween = null;
     private Tween pulseTween = null;
 
@@ -24,33 +26,66 @@ public class RestartButton : MonoBehaviour
         touchDesignator.gameObject.SetActive(false);
         touchDesignator.color = new Color(touchDesignator.color.r, touchDesignator.color.g, touchDesignator.color.b, 1f);
         touchDesignator.transform.localScale = new Vector3(MIN_S, MIN_S, MIN_S);
+
+        AdManager.Instance.OnAdShown += AdShown;
+        AdManager.Instance.OnAdClosed += AdClosed;
     }
 
-    private void ResetEffect()
+    public void ResetEffect()
     {
         touchDesignator.color = new Color(touchDesignator.color.r, touchDesignator.color.g, touchDesignator.color.b, 1f);
         touchDesignator.transform.localScale = new Vector3(MIN_S, MIN_S, MIN_S);
     }
 
+    public void AdShown()
+    {
+        SetButtonEnabled(false);
+        SetReadyForInput(false);
+    }
+
+    public void AdClosed()
+    {
+        SetButtonEnabled(true);
+        SetReadyForInput(true);
+    }
+
     public void SetReadyForInput(bool isReady)
     {
+        if (!touchDesignator.gameObject.activeSelf) return;
+
         Debug.Log("Ready for input? " + isReady);
 
         if (isReady)
         {
-            AudioManager.Instance.PlayChordOne();
-
-            pulseTween.Kill();
-            fadeTween.Kill();
+            KillPulse();
 
             touchDesignator.transform.position = new Vector3(Constants.I.GridOffsetX, Constants.I.GridOffsetY, 0f);
             ResetEffect();
 
-			pulseTween = touchDesignator.transform.DOScale(Vector3.one * MAX_S, 2f).SetLoops(-1);
-            fadeTween = touchDesignator.DOFade(0f, 2f).SetLoops(-1);
+            pulseLoopRoutine = StartCoroutine(PulseLoopRoutine());
         }
 
         isTakingInput = isReady;
+    }
+
+    private IEnumerator PulseLoopRoutine()
+    {
+        AudioManager.Instance.PlaySuspense();
+        ResetEffect();
+
+        pulseTween = touchDesignator.transform.DOScale(Vector3.one * MAX_S, 2f);
+        fadeTween = touchDesignator.DOFade(0f, 2f);
+
+        yield return fadeTween.WaitForCompletion();
+
+        pulseLoopRoutine = StartCoroutine(PulseLoopRoutine());
+    }
+
+    public void KillPulse()
+    {
+        StopAllCoroutines();
+        pulseTween.Kill();
+        fadeTween.Kill();
     }
 
     public void SetButtonEnabled(bool isEnabled)
@@ -63,21 +98,16 @@ public class RestartButton : MonoBehaviour
 	{
         if (!isTakingInput) return;
 
-        pulseTween.Kill();
-        fadeTween.Kill();
+        KillPulse();
+        float time = AudioManager.Instance.ReverseSuspense();
 
-        pulseTween = touchDesignator.transform.DOScale(Vector3.one * MIN_S, 0.5f);
-        fadeTween = touchDesignator.DOFade(1f, 0.5f);
+        pulseTween = touchDesignator.transform.DOScale(Vector3.one * MIN_S, time);
+        fadeTween = touchDesignator.DOFade(1f, time);
 	}
 
 	void OnMouseUp()
 	{
         if (!isTakingInput) return;
-
-		touchDesignator.transform.DOScale(Vector3.one * MAX_S, 1f);
-        touchDesignator.DOFade(0f, 1f).OnComplete(OnEffectFinish);
-
-        SetReadyForInput(false);
 
         OnPress();
 	}
@@ -89,6 +119,13 @@ public class RestartButton : MonoBehaviour
 
 	void OnPress() 
     {
+        AudioManager.Instance.PlayStartRelease();
+
+        touchDesignator.transform.DOScale(Vector3.one * MAX_S, 1f);
+        touchDesignator.DOFade(0f, 1f).OnComplete(OnEffectFinish);
+
+        SetReadyForInput(false);
+
 		GameManager.Instance.BeginGame();
     }
 }

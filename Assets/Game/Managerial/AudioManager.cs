@@ -6,16 +6,32 @@ public class AudioManager : MonoBehaviour
 {
 	public static AudioManager Instance = null;
 
+	public bool SoundEnabled = true;
+
 	[Header("Sources")]
-	[SerializeField] AudioSource blipSource;
-	[SerializeField] AudioSource chordSource;
+	[SerializeField] AudioSource pianoA;
+	[SerializeField] AudioSource pianoB;
+	[SerializeField] AudioSource synth;
+	[SerializeField] AudioSource drums;
 
 	[Header("Clips")]
-	[SerializeField] AudioClip blip;
-	[SerializeField] AudioClip chord1;
-	[SerializeField] AudioClip chord2;
-	[SerializeField] AudioClip chord3;
-	[SerializeField] AudioClip chord4;
+	[SerializeField] AudioClip p_start_suspense_1;
+	[SerializeField] AudioClip p_start_suspense_2;
+	[SerializeField] AudioClip p_start_release;
+	[SerializeField] AudioClip p_start_piecespawn;
+	[SerializeField] AudioClip p_full_combo;
+	[SerializeField] AudioClip p_game_over;
+	
+	[SerializeField] AudioClip s_npv_enter;
+	[SerializeField] AudioClip s_npv_fade;
+
+	[SerializeField] AudioClip d_piece_move;
+	[SerializeField] AudioClip d_piece_pickup;
+	[SerializeField] AudioClip d_ui_blip;
+	[SerializeField] AudioClip d_move_hit;
+
+	[SerializeField] AudioClip[] p_moveNotes;
+	[SerializeField] AudioClip[] p_scores;
 
 	[Header("Curves")]
 	[SerializeField] AnimationCurve playCurve;
@@ -30,30 +46,137 @@ public class AudioManager : MonoBehaviour
 		}
 	}
 
-	public void PlayBlip(float pitch)
+	bool isSuspenseHigh = false;
+	public void PlaySuspense()
 	{
-		blipSource.pitch = pitch;
-		Play(blipSource, blip);
+		if (!SoundEnabled) return;
+
+		// reset pitch
+		pianoA.pitch = 1;
+		pianoB.pitch = 1;
+
+		if (isSuspenseHigh)
+		{
+			pianoB.clip = p_start_suspense_2;
+			pianoB.Play();
+		}
+		else
+		{
+			pianoA.clip = p_start_suspense_1;
+			pianoA.Play();
+		}
+
+		isSuspenseHigh = !isSuspenseHigh;
 	}
 
-	public void PlayChordOne()
+	public float ReverseSuspense() // returns the time until full reverse.
 	{
-		Play(chordSource, chord1);
+		if (!SoundEnabled) return 0f;
+
+		if (isSuspenseHigh)
+		{
+			// make piano a rev
+			pianoA.pitch = -1;
+			return pianoA.time;
+		}
+		else
+		{
+			pianoB.pitch = -1;
+			return pianoB.time;
+		}
 	}
 
-	public void PlayChordTwo()
+	public void PlayStartRelease()
 	{
-		Play(chordSource, chord2);
+		if (!SoundEnabled) return;
+
+		pianoA.pitch = 1;
+		pianoB.pitch = 1;
+
+		Play(pianoA, p_start_release);
+
+		isSuspenseHigh = false;
 	}
 
-	public void PlayChordThree()
+	public void PlayStartPiecesSpawn()
 	{
-		Play(chordSource, chord3);
+		if (!SoundEnabled) return;
+		Play(pianoB, p_start_piecespawn);
 	}
 
-	public void PlayChordFour()
+	public void PlayGameOver()
 	{
-		Play(chordSource, chord4);
+		if (!SoundEnabled) return;
+		Play(pianoB, p_game_over);
+	}
+
+	public void PlayNPVEnter()
+	{
+		if (!SoundEnabled) return;
+		Play(synth, s_npv_enter);
+	}
+
+	public void PlayNPVFade()
+	{
+		if (!SoundEnabled) return;
+		Play(synth, s_npv_fade);
+	}
+
+	public void PlayPiecePickup()
+	{
+		if (!SoundEnabled) return;
+		drums.pitch = Random.Range(0.95f, 1.05f);
+		drums.PlayOneShot(d_piece_pickup);
+	}
+
+	public void PlayPieceDrawMove()
+	{
+		if (!SoundEnabled) return;
+		drums.pitch = Random.Range(0.95f, 1.05f);
+		drums.PlayOneShot(d_piece_move);
+	}
+
+	public void PlayMoveHit()
+	{
+		if (!SoundEnabled) return;
+		drums.pitch = Random.Range(0.95f, 1.05f);
+		drums.PlayOneShot(d_move_hit);
+	}
+
+	/*
+	int currMoveNote = 0;
+	public void PlayMoveNote()
+	{
+		if (currMoveNote >= p_moveNotes.Length) currMoveNote = 0;
+
+		synth.PlayOneShot(p_moveNotes[currMoveNote]);
+
+		currMoveNote++;
+	}
+	*/
+
+	public void PlayScoreOneNote()
+	{
+		if (!SoundEnabled) return;
+		pianoB.PlayOneShot(p_scores[0]);
+	}
+	public void PlayScoreTwoNote()
+	{
+		if (!SoundEnabled) return;
+		pianoB.PlayOneShot(p_scores[1]);
+	}
+	public void PlayScoreThreeNote()
+	{
+		if (!SoundEnabled) return;
+		pianoB.PlayOneShot(p_full_combo);
+		pianoB.PlayOneShot(p_scores[2]);
+	}
+
+	public void PlayUIBlip()
+	{
+		if (!SoundEnabled) return;
+		drums.pitch = Random.Range(0.95f, 1.05f);
+		drums.PlayOneShot(d_ui_blip);
 	}
 
 	private void Play(AudioSource source, AudioClip clip)

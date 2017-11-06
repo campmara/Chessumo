@@ -15,8 +15,8 @@ public class NextPieceViewer : MonoBehaviour
 
 	public void OnEnable()
 	{
-		transform.position = new Vector3(transform.position.x, 20f, transform.position.z);
-		transform.DOMoveY(1.5f, 0.8f).SetEase(Ease.Linear).SetDelay(1.5f);
+		transform.position = new Vector3(transform.position.x, 15f, transform.position.z);
+		transform.DOMoveY(1.5f, 0.8f).SetEase(Ease.Linear).SetDelay(1.5f).OnStart(() => AudioManager.Instance.PlayNPVEnter());
 	}
 
 	public void PositionAlongTop(IntVector2 coords)

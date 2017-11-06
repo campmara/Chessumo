@@ -22,17 +22,11 @@ public class GameManager : MonoBehaviour
 	[Header("Game Prefab")]
 	public Game gamePrefab;
 	[Header("Button Prefabs")]
-	public GameObject leaderboardButtonPrefab;
-	public GameObject settingsButtonPrefab;
     public GameObject restartButtonPrefab;
 	[Header("UI Prefabs")]
 	public GameObject tilePrefab;
-	public GameObject topUIBarPrefab;
-	public GameObject scorePrefab;
 	public GameObject scoreEffectPrefab;
-	public GameObject highScorePrefab;
 	public GameObject nextPieceViewerPrefab;
-	public GameObject settingsMenuPrefab;
 	[Header("Piece Prefabs")]
 	public GameObject kingPrefab;
 	public GameObject queenPrefab;
@@ -41,9 +35,15 @@ public class GameManager : MonoBehaviour
 	public GameObject knightPrefab;
 	public GameObject pawnPrefab;
 
-	[HideInInspector] public Score score;
+	[Header("References")]
+	public TopUIBar topUIBar;
+	public Score score;
+	public HighScore highScore;
+	public LeaderboardButton leaderboardButton;
+	public SettingsButton settingsButton;
+	public SettingsMenu settingsMenu;
+
 	[HideInInspector] public ScoreEffect scoreEffect;
-	[HideInInspector] public HighScore highScore;
     [HideInInspector] public RestartButton restartButton;
 
 	/////////////////////////////////////////////////////////////////////
@@ -53,17 +53,9 @@ public class GameManager : MonoBehaviour
 	private Game game;
 	private State currentState;
 
-	//private DebugStartButton startButton;
-	private TopUIBar topUIBar;
-	private LeaderboardButton leaderboardButton;
-	private SettingsButton settingsButton;
-    private SettingsMenu settingsMenu;
-
     public void SetVisibility(bool isVisible)
     {
         topUIBar.gameObject.SetActive(isVisible);
-        leaderboardButton.gameObject.SetActive(isVisible);
-        settingsButton.gameObject.SetActive(isVisible);
 		scoreEffect.gameObject.SetActive(isVisible);
 
         if (game != null)
@@ -90,8 +82,7 @@ public class GameManager : MonoBehaviour
 			Instance = this;
 		}
 
-		// This will eat battery, but threes does it so w/e.
-		// Eventually, adding a "conserve battery" option that sets this to 30 would be good.
+		// 60fps will eat battery, but threes does it so w/e.
 		Application.targetFrameRate = SaveDataManager.Instance.IsBatterySaverOn() ? 30 : 60;
 
 		// Init DOTween.
@@ -100,76 +91,64 @@ public class GameManager : MonoBehaviour
 		currentState = State.MENU;
 
 		// Create the UI first, before introducing to avoid introductory jitter.
-		CreateTopUI();
-		//topUIBar.Introduce(1f);
+		CreateUI();
 	}
 
-	/*
-	void CreateStartButton()
-	{
-		GameObject startButtonObj = Instantiate(startButtonPrefab) as GameObject;
-		startButtonObj.name = "Start Button";
-		startButtonObj.transform.parent = transform;
-		startButtonObj.transform.position = new Vector3(0f, Constants.I.StartButtonLoweredY, 0f);
-
-		startButton = startButtonObj.GetComponent(typeof(DebugStartButton)) as DebugStartButton;
-		startButton.Raise();
-	}
-	*/
-
-	void CreateTopUI()
+	void CreateUI()
 	{
         GameObject restartButtonObj = Instantiate(restartButtonPrefab) as GameObject;
 		restartButtonObj.name = "Restart Button";
 		restartButtonObj.transform.parent = transform;
         restartButton = restartButtonObj.GetComponent(typeof(RestartButton)) as RestartButton;
 
-		GameObject topUIBarObj = Instantiate(topUIBarPrefab) as GameObject;
-		topUIBarObj.name = "Top UI Bar";
-		topUIBarObj.transform.parent = transform;
-		topUIBar = topUIBarObj.GetComponent(typeof(TopUIBar)) as TopUIBar;
-
-		GameObject settingsMenuObj = Instantiate(settingsMenuPrefab) as GameObject;
-		settingsMenuObj.name = "Settings Menu";
-		settingsMenuObj.transform.parent = transform;
-        settingsMenu = settingsMenuObj.GetComponent(typeof(SettingsMenu)) as SettingsMenu;
-
-		GameObject settingsButtonObj = Instantiate(settingsButtonPrefab) as GameObject;
-		settingsButtonObj.name = "Settings Button";
-		settingsButtonObj.transform.parent = topUIBarObj.transform;
-		settingsButton = settingsButtonObj.GetComponent(typeof(SettingsButton)) as SettingsButton;
-		settingsButton.Introduce(2.5f);
-        settingsButton.HookUpToMenu(settingsMenu);
-
-		GameObject leaderboardButtonObj = Instantiate(leaderboardButtonPrefab) as GameObject;
-		leaderboardButtonObj.name = "Scores Button";
-		leaderboardButtonObj.transform.parent = topUIBarObj.transform;
-		leaderboardButton = leaderboardButtonObj.GetComponent(typeof(LeaderboardButton)) as LeaderboardButton;
-		leaderboardButton.Introduce(2.5f);
-
-		GameObject scoreObj = Instantiate(scorePrefab) as GameObject;
-		scoreObj.name = "Score";
-		scoreObj.transform.parent = topUIBarObj.transform;
-		score = scoreObj.GetComponent<Score>();
-		score.Reset();
-
 		GameObject scoreEffectObj = Instantiate(scoreEffectPrefab) as GameObject;
 		scoreEffectObj.name = "Score Effect";
 		scoreEffectObj.transform.parent = transform;
 		scoreEffect = scoreEffectObj.GetComponent<ScoreEffect>();
 
-		GameObject highScoreObj = Instantiate(highScorePrefab) as GameObject;
-		highScoreObj.name = "High Score";
-		highScoreObj.transform.parent = topUIBarObj.transform;
-		highScore = highScoreObj.GetComponent<HighScore>();
+        settingsButton.HookUpToMenu(settingsMenu);
+
+		score.Reset();
 		highScore.PullHighScore();
 	}
 
 	public void OnGameEnd()
 	{
         AdManager.Instance.ShowVideoAd();
-		restartButton.SetButtonEnabled(true);
-        restartButton.SetReadyForInput(true);
+
+		if (SaveDataManager.Instance.HasPaidToRemoveAds())
+		{
+			restartButton.SetButtonEnabled(true);
+        	restartButton.SetReadyForInput(true);
+		}
+	}
+
+	public void StartNewGame()
+	{
+		if (game != null)
+		{
+			score.SubmitScore();
+			highScore.PullHighScore();
+			score.Reset();
+
+			game.Unload();
+
+			game = null;
+
+			restartButton.SetButtonEnabled(true);
+    		restartButton.SetReadyForInput(true);
+		}
+		else
+		{
+			restartButton.SetButtonEnabled(false);
+    		restartButton.SetReadyForInput(false);
+
+			restartButton.KillPulse();
+			restartButton.ResetEffect();
+
+			restartButton.SetButtonEnabled(true);
+    		restartButton.SetReadyForInput(true);
+		}
 	}
 
 	public void BeginGame()

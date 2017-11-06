@@ -9,6 +9,7 @@ public class SaveDataManager : MonoBehaviour
 	/////////////////////////////////////////////////////////////////////
 
 	private const string HIGH_SCORE_KEY = "HIGHSCORE";
+	private const string SOUND_EFFECTS_KEY = "SOUND_EFFECTS";
 	private const string BATTERY_SAVER_KEY = "BATTERY_SAVER";
     private const string TUTORIAL_COMPLETE_KEY = "TUTORIAL_COMPLETE";
 	private const string ADS_REMOVED_KEY = "ADS_REMOVED";
@@ -66,25 +67,44 @@ public class SaveDataManager : MonoBehaviour
 		return PlayerPrefs.GetInt(HIGH_SCORE_KEY, 0);
 	}
 
+	// SOUND EFFECTS
+
+	public void ToggleSound()
+	{
+		int num = PlayerPrefs.GetInt(SOUND_EFFECTS_KEY, -1);
+
+		if (num == 0 || num == -1) // Set to on
+		{
+			PlayerPrefs.SetInt(SOUND_EFFECTS_KEY, 1);
+            PlayerPrefs.Save();
+			AudioManager.Instance.SoundEnabled = true;
+		}
+		else if (num == 1) // Set to off
+		{
+			PlayerPrefs.SetInt(SOUND_EFFECTS_KEY, 0);
+            PlayerPrefs.Save();
+			AudioManager.Instance.SoundEnabled = false;
+		}
+	}
+
+	public bool IsSoundOn()
+	{
+		return PlayerPrefs.GetInt(SOUND_EFFECTS_KEY, -1) == 1;
+	}
+
 	// BATTERY SAVER
 
 	public void ToggleBatterySaver()
 	{
 		int num = PlayerPrefs.GetInt(BATTERY_SAVER_KEY, -1);
 
-		if (num == 0) // Set to false
+		if (num == 0 || num == -1) // Set to false
 		{
 			PlayerPrefs.SetInt(BATTERY_SAVER_KEY, 1);
             PlayerPrefs.Save();
 			Application.targetFrameRate = 30;
 		}
 		else if (num == 1) // Set to true
-		{
-			PlayerPrefs.SetInt(BATTERY_SAVER_KEY, 0);
-            PlayerPrefs.Save();
-			Application.targetFrameRate = 60;
-		}
-		else if (num == -1) // First time setup.
 		{
 			PlayerPrefs.SetInt(BATTERY_SAVER_KEY, 0);
             PlayerPrefs.Save();

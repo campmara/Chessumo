@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SettingsRestartButton : Button 
+public class SettingsRestartButton : MonoBehaviour
 {
     private int numTimesReset = 0;
 
-    protected override void OnPress()
+    public void OnPress()
 	{
+		GameManager.Instance.StartNewGame();
+
 		numTimesReset++;
 		if (numTimesReset >= 4)
 		{
+			GameManager.Instance.restartButton.KillPulse();
             AdManager.Instance.ShowVideoAd();
 			numTimesReset = 0;
 		}
-
-        GameManager.Instance.BeginGame();
 	}
 }

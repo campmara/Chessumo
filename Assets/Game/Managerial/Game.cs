@@ -88,19 +88,6 @@ public class Game : MonoBehaviour
 	public void Load() 
 	{
 		StartCoroutine(SetupBoard());
-
-		SetupPieceViewer();
-	}
-
-	void SetupPieceViewer()
-	{
-		pieceViewerObj = Instantiate(GameManager.Instance.nextPieceViewerPrefab) as GameObject;
-		pieceViewerObj.name = "Piece Viewer";
-		pieceViewerObj.transform.parent = transform;
-		//pieceViewerObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY - 1f, 0f);
-		pieceViewer = pieceViewerObj.GetComponent<NextPieceViewer>();
-
-		DecideNextRandomPiece();
 	}
 
 	IEnumerator SetupBoard()
@@ -109,7 +96,12 @@ public class Game : MonoBehaviour
 
 		yield return new WaitForSeconds(1.5f);
 
+		AudioManager.Instance.PlayStartPiecesSpawn();
 		PlacePieces();
+
+		yield return new WaitForSeconds(1f);
+
+		SetupPieceViewer();
 	}
 
 	void SetupPlayfield()
@@ -136,10 +128,19 @@ public class Game : MonoBehaviour
 		StartCoroutine(TileGrowRoutine());
 	}
 
+	void SetupPieceViewer()
+	{
+		pieceViewerObj = Instantiate(GameManager.Instance.nextPieceViewerPrefab) as GameObject;
+		pieceViewerObj.name = "Piece Viewer";
+		pieceViewerObj.transform.parent = transform;
+		//pieceViewerObj.transform.position = new Vector3(0f, Constants.I.ScoreRaisedY - 1f, 0f);
+		pieceViewer = pieceViewerObj.GetComponent<NextPieceViewer>();
+
+		DecideNextRandomPiece();
+	}
+
 	private IEnumerator TileGrowRoutine()
 	{
-		float blipPitch = 0.15f;
-
 		int[] order = new int[tileObjects.GetLength(0) * tileObjects.GetLength(1)];
 		for (int i = 0; i < order.Length; i++)
 		{
@@ -161,13 +162,10 @@ public class Game : MonoBehaviour
 
 			Tile tile = tileObjects[x, y].GetComponent<Tile>();
 
-			yield return new WaitForSeconds(Random.Range(0f, 0.05f));
+			yield return new WaitForSeconds(Random.Range(0f, 0.1f));
 
 			tile.transform.DOScale(new Vector3(1f, 1f, 1f), 1f)
 				.SetEase(Ease.OutBack);
-
-			AudioManager.Instance.PlayBlip(blipPitch);
-			blipPitch += 0.025f;
 		}
 	}
 
@@ -320,6 +318,8 @@ public class Game : MonoBehaviour
 
 	void HandleDownRayHit(RaycastHit hit)
 	{
+		if (GameManager.Instance.settingsMenu.IsOpen()) return;
+
 		if (hit.collider.GetComponent<Piece>())
 		{
 			Piece piece = hit.collider.GetComponent<Piece>();
@@ -336,6 +336,8 @@ public class Game : MonoBehaviour
 
 	void HandleMoveRayHit(RaycastHit hit)
 	{
+		if (GameManager.Instance.settingsMenu.IsOpen()) return;
+
 		if (hit.collider.GetComponent<Piece>() == currentSelectedPiece)
 		{
 			//MovePathManager.Instance.BeginPath(currentSelectedPiece.GetCoordinates());
@@ -417,6 +419,8 @@ public class Game : MonoBehaviour
 
 	void HandleUpRayHit(RaycastHit hit)
 	{
+		if (GameManager.Instance.settingsMenu.IsOpen()) return;
+
 		if (hit.collider.GetComponent<Piece>()) // up on a piece
 		{
 			Piece piece = hit.collider.GetComponent<Piece>();
@@ -434,6 +438,7 @@ public class Game : MonoBehaviour
 			}
 			else
 			{
+				AudioManager.Instance.PlayPiecePickup();
 				ResetPossibleMoves();
 			}	
 		}
@@ -455,6 +460,7 @@ public class Game : MonoBehaviour
 			}
 			else if (currentSelectedPiece && tile.GetState() != TileState.DRAWN)
 			{
+				AudioManager.Instance.PlayPiecePickup();
 				ResetPossibleMoves();
 			}
 		}
@@ -747,6 +753,9 @@ public class Game : MonoBehaviour
 
 	void SelectPiece(Piece piece)
 	{
+		// Play Pickup Sound
+		AudioManager.Instance.PlayPiecePickup();
+
 		// Handle Pickup Effect
 		piece.PickPieceUp();
 		tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>().SetState(TileState.DRAWN, piece.FullColor);
@@ -793,6 +802,8 @@ public class Game : MonoBehaviour
 	public void OnMoveInitiated()
 	{
 		moveInProgress = true;
+
+		AudioManager.Instance.PlayMoveHit();
 
 		Debug.Log("Score Combo Zeroed");
 		scoreCombo = 0;
@@ -842,12 +853,14 @@ public class Game : MonoBehaviour
 
 	IEnumerator GameEndRoutine()
 	{
-		pieceViewer.FadeOut();
-
-		yield return new WaitForSeconds(0.5f);
-
+		AudioManager.Instance.PlayGameOver();
 		StartCoroutine(DropPieces());
 		StartCoroutine(DropTiles());
+
+		yield return new WaitForSeconds(1.44f);
+
+		AudioManager.Instance.PlayNPVFade();
+		pieceViewer.FadeOut();
 
 		yield return new WaitForSeconds(2f);
 
@@ -1070,12 +1083,23 @@ public class Game : MonoBehaviour
 
 	private void PlacePieces()
 	{
-		AudioManager.Instance.PlayChordTwo();
+		StartCoroutine(PlacePiecesRoutine());
+	}
+
+	private IEnumerator PlacePiecesRoutine()
+	{
+		float[] waitTimes = new float[Constants.I.StartingPieceCount];
+		waitTimes[0] = 0.1f;
+		waitTimes[1] = 0.1f;
+		waitTimes[2] = 0.1f;
+		waitTimes[3] = 0.2f;
+		waitTimes[4] = 0f;
 
 		// Spawn all the starting pieces.
 		for (int i = 0; i < Constants.I.StartingPieceCount; i++)
 		{
 			PlaceRandomPiece();
+			yield return new WaitForSeconds(waitTimes[i]);
 		}
 	}
 

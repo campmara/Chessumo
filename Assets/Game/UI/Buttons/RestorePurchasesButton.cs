@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RestorePurchasesButton : Button 
+public class RestorePurchasesButton : MonoBehaviour
 {
-	protected override void OnPress()
+	public void OnPress()
 	{
 		AdManager.Instance.RestorePurchases();
 	}

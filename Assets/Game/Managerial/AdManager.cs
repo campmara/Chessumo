@@ -29,6 +29,12 @@ public class AdManager : MonoBehaviour, IStoreListener
 	public delegate void AdsRemovedDelegate();
 	public AdsRemovedDelegate OnAdsRemoved;
 
+	public delegate void AdClosedDelegate();
+	public AdClosedDelegate OnAdClosed;
+
+	public delegate void AdShownDelegate();
+	public AdShownDelegate OnAdShown;
+
 	private void Awake()
 	{
 		if (Instance == null)
@@ -53,9 +59,15 @@ public class AdManager : MonoBehaviour, IStoreListener
 
 		if (Advertisement.IsReady() && Advertisement.isInitialized)
 		{
-			Advertisement.Show();
+			OnAdShown();
+			Advertisement.Show(new ShowOptions { resultCallback = AdClosedCallback });
 		}
     }
+
+	public void AdClosedCallback(ShowResult result)
+	{
+		OnAdClosed();
+	}
 
 	public void InitializePurchasing() 
 	{

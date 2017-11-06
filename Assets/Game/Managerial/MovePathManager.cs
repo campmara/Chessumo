@@ -28,6 +28,8 @@ public class MovePathManager : MonoBehaviour
 	{
 		if (startCoords == IntVector2.NULL || move.coordinates == startCoords) return null;
 
+		AudioManager.Instance.PlayPieceDrawMove();
+
 		IntVector2 diff = move.coordinates - startCoords;
 
 		if (diff.x != 0 && diff.y == 0) // horizontal!
@@ -80,6 +82,7 @@ public class MovePathManager : MonoBehaviour
 	{
 		if (startCoords == IntVector2.NULL || move.coordinates == startCoords) return null;
 
+		AudioManager.Instance.PlayPieceDrawMove();
 
 		IntVector2[] ret = null;
 

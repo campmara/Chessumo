@@ -1,14 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
-public class LeaderboardButton : Button 
+public class LeaderboardButton : MonoBehaviour
 {
-	protected override void OnEnable()
-	{
-		//GameManager.Instance.IntroduceFromSide(this.gameObject, 1.5f, false);
-	}
-
-	protected override void OnPress()
+	public void OnPress()
 	{
 		Social.ShowLeaderboardUI();
 	}

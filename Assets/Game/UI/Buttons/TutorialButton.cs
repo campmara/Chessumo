@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TutorialButton : Button 
+public class TutorialButton : MonoBehaviour
 {
-    protected override void OnPress()
+    public void OnPress()
     {
         // Loads the tutorial.
         TutorialManager.Instance.SetVisibility(true);

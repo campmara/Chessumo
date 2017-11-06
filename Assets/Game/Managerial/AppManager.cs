@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class AppManager : MonoBehaviour 
 {
+    Coroutine _screenshotRoutine = null;
+    const string SCREENSHOT_SAVEFOLDERNAME = "Screenshots";
+
     private void Awake()
     {
+        SetupScreenshotTech();
+
         StartCoroutine(LoadRoutine());
     }
 
@@ -52,4 +58,37 @@ public class AppManager : MonoBehaviour
     {
         PlayerPrefs.DeleteAll();
     }
+
+    #region SCREENSHOTS
+
+    private void SetupScreenshotTech()
+    {
+        #if UNITY_EDITOR
+		if( !Directory.Exists( Application.dataPath + "/../" + SCREENSHOT_SAVEFOLDERNAME ) )
+		{
+			Directory.CreateDirectory( Application.dataPath + "/../" + SCREENSHOT_SAVEFOLDERNAME );
+		}
+        #endif
+    }
+
+    #if UNITY_EDITOR
+    private void Update()
+    {
+        if ( Input.GetKeyDown( KeyCode.S ) )
+        {
+            HandleScreenShot();
+        }
+    }
+
+    void HandleScreenShot(int screenshotDetail = 1)
+	{
+		string screenshotPath = "";
+
+        screenshotPath = Application.dataPath + "/../" + SCREENSHOT_SAVEFOLDERNAME + "/" + "Screenshot_" + System.DateTime.Now.ToString("MM_dd_yy_hhmmss") + ".png";
+
+		ScreenCapture.CaptureScreenshot(screenshotPath, screenshotDetail);
+	}
+    #endif
+
+    #endregion
 }

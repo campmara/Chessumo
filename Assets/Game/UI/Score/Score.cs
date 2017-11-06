@@ -6,7 +6,7 @@ using UnityEngine.SocialPlatforms;
 
 public class Score : MonoBehaviour 
 {
-	[SerializeField] private TextMeshPro textMesh;
+	[SerializeField] private TextMeshProUGUI textMesh;
 
 	private int score;
 	public int GetScore() { return score; }

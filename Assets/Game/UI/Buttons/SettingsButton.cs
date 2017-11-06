@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SettingsButton : Button 
+public class SettingsButton : MonoBehaviour
 {
 	private SettingsMenu settingsMenu;
 
@@ -12,7 +12,7 @@ public class SettingsButton : Button
 		settingsMenu.button = this;
 	}
 
-	protected override void OnPress()
+	public void OnPress()
 	{
 		if (settingsMenu != null)
 		{

@@ -28,6 +28,8 @@ public class ScoreEffect : MonoBehaviour
             tween.Kill();
         }
 
+        AudioManager.Instance.PlayScoreOneNote();
+
         bar.color = col;
         textMesh.text = "+" + Constants.I.ScoreOneAmount.ToString();
 
@@ -43,6 +45,8 @@ public class ScoreEffect : MonoBehaviour
             tween.Kill();
         }
 
+        AudioManager.Instance.PlayScoreTwoNote();
+
         bar.DOColor(col, 0.1f).SetEase(Ease.Linear);
         textMesh.text = "+" + Constants.I.ScoreTwoAmount.ToString();
 
@@ -57,6 +61,8 @@ public class ScoreEffect : MonoBehaviour
         {
             tween.Kill();
         }
+
+        AudioManager.Instance.PlayScoreThreeNote();
 
         bar.DOColor(col, 0.1f).SetEase(Ease.Linear);
         textMesh.text = "+" + Constants.I.ScoreThreeAmount.ToString();

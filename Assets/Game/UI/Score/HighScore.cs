@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class HighScore : MonoBehaviour 
 {
-	[SerializeField] private TextMeshPro textMesh;
+	[SerializeField] private TextMeshProUGUI textMesh;
 
 	void OnEnable()
 	{

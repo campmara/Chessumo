@@ -1,26 +1,29 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class RemoveAdsButton : Button 
+public class RemoveAdsButton : MonoBehaviour
 {
-	[SerializeField] protected Color disabledColor;
+	private Button button;
 
 	void Awake()
 	{
+		button = GetComponent(typeof(Button)) as Button;
+
 		if (SaveDataManager.Instance.HasPaidToRemoveAds())
 		{
-			spriteRenderer.color = disabledColor;
+			button.interactable = false;
 		}
 
 		AdManager.Instance.OnAdsRemoved += OnUserPaidToRemoveAds;
 	}
 
-	protected override void OnPress()
+	public void OnPress()
 	{
 		if (SaveDataManager.Instance.HasPaidToRemoveAds())
 		{
-			spriteRenderer.color = disabledColor;
+			button.interactable = false;
 		}
 		else
 		{
@@ -30,6 +33,6 @@ public class RemoveAdsButton : Button
 
 	private void OnUserPaidToRemoveAds()
 	{
-		spriteRenderer.color = disabledColor;
+		button.interactable = false;
 	}
 }
