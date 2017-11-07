@@ -18,10 +18,9 @@ Known Bugs:
     - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.
 
 RELEASE CHECKLIST:
-    - Fix UI to accomodate for multiple screen dimensions. Unfortunately we will have to use Unity's UI.
-    - Make it so you can let go of a move past the board and it will still register as a move.
-        - This could be done by reading the last tile that we've raised.
-    - Do sound design.
+    - Fix how cramped the game looks on iPhone X. We will need to figure out tile and piece scaling finally. sigh...
+    - Do a final sound pass. Remove all Convolution Reverb. Have sounds be terse instead of ringing out. Especially music notes / chords.
+    - Make website using Paper.js
     - Test for bugs.
     - Do an about section with copyright references, special thanks, licensing info, etc.
     - Get marketing campaign ready. (maybe) adwords, twitter, instagram, facebook. This requires working with dad for budget.
