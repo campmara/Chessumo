@@ -73,8 +73,8 @@ public class RestartButton : MonoBehaviour
         AudioManager.Instance.PlaySuspense();
         ResetEffect();
 
-        pulseTween = touchDesignator.transform.DOScale(Vector3.one * MAX_S, 2f);
-        fadeTween = touchDesignator.DOFade(0f, 2f);
+        pulseTween = touchDesignator.transform.DOScale(Vector3.one * MAX_S, 1.5f);
+        fadeTween = touchDesignator.DOFade(0f, 1.5f);
 
         yield return fadeTween.WaitForCompletion();
 

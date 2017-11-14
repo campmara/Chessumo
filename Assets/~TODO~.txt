@@ -16,8 +16,8 @@ Saving Battery and Filesize:
 Known Bugs:
     - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.
 
-RELEASE CHECKLIST:
-    - Make sure you finalize the website and its presskit.
+RELEASE ROADMAP:
+    - Finalize the website and its presskit.
     - Fix how cramped the game looks on iPhone X. We will need to figure out tile and piece scaling finally. sigh...
     - Do a final sound pass. Remove all Convolution Reverb. Have sounds be terse instead of ringing out. Especially music notes / chords.
     - Test for bugs.
