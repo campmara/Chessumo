@@ -73,13 +73,13 @@ public class SaveDataManager : MonoBehaviour
 	{
 		int num = PlayerPrefs.GetInt(SOUND_EFFECTS_KEY, -1);
 
-		if (num == 0 || num == -1) // Set to on
+		if (num == 0) // Set to on
 		{
 			PlayerPrefs.SetInt(SOUND_EFFECTS_KEY, 1);
             PlayerPrefs.Save();
 			AudioManager.Instance.SoundEnabled = true;
 		}
-		else if (num == 1) // Set to off
+		else if (num == 1 || num == -1) // Set to off
 		{
 			PlayerPrefs.SetInt(SOUND_EFFECTS_KEY, 0);
             PlayerPrefs.Save();

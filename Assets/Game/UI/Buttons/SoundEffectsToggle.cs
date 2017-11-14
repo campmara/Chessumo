@@ -7,7 +7,7 @@ public class SoundEffectsToggle : MonoBehaviour
 {
 	private Toggle toggle;
 
-	void Awake()
+	void Start()
 	{
 		toggle = GetComponent(typeof(Toggle)) as Toggle;
 

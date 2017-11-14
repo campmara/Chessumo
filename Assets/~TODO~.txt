@@ -12,19 +12,16 @@ Art:
 
 Saving Battery and Filesize:
     - Figure out how to reduce file size.
-    - Convert all onmouse() functions to use touch input exclusively.
 
 Known Bugs:
     - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.
 
 RELEASE CHECKLIST:
+    - Make sure you finalize the website and its presskit.
     - Fix how cramped the game looks on iPhone X. We will need to figure out tile and piece scaling finally. sigh...
     - Do a final sound pass. Remove all Convolution Reverb. Have sounds be terse instead of ringing out. Especially music notes / chords.
-    - Make website using Paper.js
     - Test for bugs.
-    - Do an about section with copyright references, special thanks, licensing info, etc.
     - Get marketing campaign ready. (maybe) adwords, twitter, instagram, facebook. This requires working with dad for budget.
-    - Set up itch page and hook it up to the support url in itunesconnect.
     - Set up app store page.
     - Draft Press Emails.
     - Finish copywriting.

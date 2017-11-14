@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class SettingsMenu : MonoBehaviour 
 {
-	public SettingsButton button;
+	public GameObject moreInfoPanel;
 
 	bool inProgress = false;
 	Tween tween;
@@ -81,5 +81,15 @@ public class SettingsMenu : MonoBehaviour
 	public bool IsOpen()
 	{
 		return child.activeSelf;
+	}
+
+	public void OnCopyrightClicked()
+	{
+		moreInfoPanel.SetActive(true);
+	}
+
+	public void OnPanelClicked()
+	{
+		moreInfoPanel.SetActive(false);
 	}
 }

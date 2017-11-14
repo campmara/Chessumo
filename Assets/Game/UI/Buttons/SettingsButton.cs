@@ -9,7 +9,6 @@ public class SettingsButton : MonoBehaviour
 	public void HookUpToMenu(SettingsMenu menu)
 	{
 		settingsMenu = menu;
-		settingsMenu.button = this;
 	}
 
 	public void OnPress()
