@@ -64,7 +64,11 @@ public class GameManager : MonoBehaviour
 		}
         else
         {
-			if (isVisible) topUIBar.Introduce(1f);
+			if (isVisible) 
+			{
+				Debug.Log("Hey");
+				topUIBar.Introduce(1f);
+			}
         }
 
         if (!isVisible)
@@ -136,7 +140,6 @@ public class GameManager : MonoBehaviour
 			game = null;
 
 			restartButton.SetButtonEnabled(true);
-    		restartButton.SetReadyForInput(true);
 		}
 		else
 		{
@@ -147,8 +150,12 @@ public class GameManager : MonoBehaviour
 			restartButton.ResetEffect();
 
 			restartButton.SetButtonEnabled(true);
-    		restartButton.SetReadyForInput(true);
 		}
+	}
+
+	public bool IsGameActive()
+	{
+		return game != null;
 	}
 
 	public void BeginGame()

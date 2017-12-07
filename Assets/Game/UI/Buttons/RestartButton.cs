@@ -57,12 +57,7 @@ public class RestartButton : MonoBehaviour
 
         if (isReady)
         {
-            KillPulse();
-
             touchDesignator.transform.position = new Vector3(Constants.I.GridOffsetX, Constants.I.GridOffsetY, 0f);
-            ResetEffect();
-
-            pulseLoopRoutine = StartCoroutine(PulseLoopRoutine());
         }
 
         isTakingInput = isReady;
@@ -90,8 +85,17 @@ public class RestartButton : MonoBehaviour
 
     public void SetButtonEnabled(bool isEnabled)
     {
+        Debug.Log("Button enabled? " + isEnabled);
         touchDesignator.gameObject.SetActive(isEnabled);
         GetComponent<BoxCollider>().enabled = isEnabled;
+
+        if (isEnabled)
+        {
+            KillPulse();
+            ResetEffect();
+            pulseLoopRoutine = StartCoroutine(PulseLoopRoutine());
+        }
+        
     }
 
 	void OnMouseDown()

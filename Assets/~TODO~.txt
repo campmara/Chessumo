@@ -6,8 +6,6 @@ Feel:
     - you gotta give the piece movements more weight somehow. do the math.
 
 Art:
-    - Make sure Now typeface is free.
-        - It is. I can use it.
     - Make the trail fade out behind the piece that's moving as it moves.
 
 Saving Battery and Filesize:
@@ -17,9 +15,10 @@ Known Bugs:
     - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.
 
 RELEASE ROADMAP:
+    - bring twitter back online right before american release
     - Finalize the website and its presskit.
     - Fix how cramped the game looks on iPhone X. We will need to figure out tile and piece scaling finally. sigh...
-    - Do a final sound pass. Remove all Convolution Reverb. Have sounds be terse instead of ringing out. Especially music notes / chords.
+    - Sound is so fucking muddy. Clean it up, use a different piano, whatever. Just clear out the sinuses.
     - Test for bugs.
     - Get marketing campaign ready. (maybe) adwords, twitter, instagram, facebook. This requires working with dad for budget.
     - Set up app store page.

@@ -209,6 +209,19 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114727955768905484, guid: 55da6ec0686434859a14220c39df5759,
+        type: 2}
+      propertyPath: m_text
+      value: "Hello! I hope you are enjoying this little game I made. It's been in
+        development for some time, and I wouldn't have been able to get it out without
+        the support and encouragement of my family, friends, and mentors. So, uh,
+        here's an incomplete list of people I want to thank for that:\n\nDad\nRebecca
+        Ansorge\nMom\nAli\nRuby and Piper\nHunter Ansorge\nJohn Groot\nMariah Hale\nMichala
+        Braker\nThomas Newlands\nChris Wade\nDavid Laskey\nDaniel\nRyan Wiemeyer\nBrian
+        Schrank\nMarty Sirvatka\nMike Burke\nJonathan Martyka, Chess Wizard\n\nI also
+        would like to dedicate this game to Xander. He was a good cat.\n\nNow Typeface
+        by Alfredo Marco Pradil\n\n\xA9 MURRAY LLC"
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 55da6ec0686434859a14220c39df5759, type: 2}
   m_IsPrefabParent: 0
