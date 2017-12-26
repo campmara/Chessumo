@@ -19,6 +19,8 @@ public class GameCenterManager : MonoBehaviour
         // Authenticate and register a ProcessAuthentication callback
         // This call needs to be made before we can proceed to other calls in the Social API
         Social.localUser.Authenticate (ProcessAuthentication);
+
+        
     }
 
     // This function gets called when Authenticate completes
@@ -59,5 +61,23 @@ public class GameCenterManager : MonoBehaviour
         {
             Debug.Log("score submission failed");
         }
+    }
+
+    public int GetHighScore()
+    {
+        int score = 0;
+        ILeaderboard leaderboard = Social.CreateLeaderboard();
+        leaderboard.id = GAMECENTER_LEADERBOARD_ID;
+        leaderboard.timeScope = TimeScope.Today;
+
+        leaderboard.LoadScores(success => {
+            IScore iScore = leaderboard.localUserScore;
+            if (iScore != null)
+            {
+                score = (int)iScore.value;
+            }
+        });
+
+        return score;
     }
 }

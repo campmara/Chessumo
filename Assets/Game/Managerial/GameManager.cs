@@ -66,7 +66,6 @@ public class GameManager : MonoBehaviour
         {
 			if (isVisible) 
 			{
-				Debug.Log("Hey");
 				topUIBar.Introduce(1f);
 			}
         }

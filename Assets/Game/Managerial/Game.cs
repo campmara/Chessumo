@@ -118,6 +118,12 @@ public class Game : MonoBehaviour
 				tile.transform.position = GameManager.Instance.CoordinateToPosition(new IntVector2(x, y));
 
 				tile.SetInfo(x, y);
+				
+				// setup the colliders around the edges
+				if (x == 0) tile.StretchCollider(-0.5f, 0f, 1f, 0f);
+				if (x == Constants.I.GridSize.x - 1) tile.StretchCollider(0.5f, 0f, 1f, 0f);
+				if (y == 0) tile.StretchCollider(0f, -0.5f, 0f, 1f);
+				if (y == Constants.I.GridSize.y - 1) tile.StretchCollider(0f, 0.5f, 0f, 1f);
 
 				tile.transform.localScale = new Vector3(0f, 0f, 1f);
 
@@ -413,7 +419,7 @@ public class Game : MonoBehaviour
 
 			currentMovePiece = piece;
 			lastMoveCoords = piece.GetCoordinates();
-			currentMoveTile = null;
+			currentMoveTile = tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>();
 		}
 	}
 
@@ -445,8 +451,13 @@ public class Game : MonoBehaviour
 		else if (hit.collider.GetComponent<Tile>()) // up on a tile
 		{
 			Tile tile = hit.collider.GetComponent<Tile>();
-
-			if (currentSelectedPiece && tile.GetState() == TileState.DRAWN)
+			
+			if (currentSelectedPiece && tile.GetCoordinates() == currentSelectedPiece.GetCoordinates())
+			{
+				AudioManager.Instance.PlayPiecePickup();
+				ResetPossibleMoves();
+			}
+			else if (currentSelectedPiece && tile.GetState() == TileState.DRAWN)
 			{
 				if (CurrentIsKnight())
 				{
@@ -758,9 +769,11 @@ public class Game : MonoBehaviour
 
 		// Handle Pickup Effect
 		piece.PickPieceUp();
-		tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>().SetState(TileState.DRAWN, piece.FullColor);
+		currentMoveTile = tileObjects[piece.GetCoordinates().x, piece.GetCoordinates().y].GetComponent<Tile>();
+		currentMoveTile.SetState(TileState.DRAWN, piece.FullColor);
 
 		currentSelectedPiece = piece;
+
 		lastMoveCoords = piece.GetCoordinates();
 
 		// Begin drawing the path.

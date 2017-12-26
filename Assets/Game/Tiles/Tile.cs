@@ -24,9 +24,12 @@ public class Tile : MonoBehaviour
 
 	private IntVector2 currentCoordinates;
 
+	private BoxCollider boxCollider;
+
 	void Awake()
 	{
 		spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+		boxCollider = GetComponent<BoxCollider>();
 		SetColorDefault();
 	}
 
@@ -103,4 +106,11 @@ public class Tile : MonoBehaviour
 	{
 		currentCoordinates = new IntVector2(x, y);
 	}
+
+	// this helps handle colliders around the edges
+	public void StretchCollider(float offsetX, float offsetY, float stretchX, float stretchY)
+	{
+		boxCollider.center += new Vector3(offsetX, offsetY, 0f);
+		boxCollider.size += new Vector3(stretchX, stretchY, 0f);
+	}	
 }

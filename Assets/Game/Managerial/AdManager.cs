@@ -55,7 +55,10 @@ public class AdManager : MonoBehaviour, IStoreListener
     public void ShowVideoAd()
     {
 		// Don't show ads if user has paid to remove them.
-		if (SaveDataManager.Instance.HasPaidToRemoveAds()) return;
+		if (SaveDataManager.Instance.HasPaidToRemoveAds() || Application.internetReachability == NetworkReachability.NotReachable) 
+		{
+			return;
+		}
 
 		if (Advertisement.IsReady() && Advertisement.isInitialized)
 		{

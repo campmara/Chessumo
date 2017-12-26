@@ -64,7 +64,17 @@ public class SaveDataManager : MonoBehaviour
 
 	public int GetHighScore()
 	{
-		return PlayerPrefs.GetInt(HIGH_SCORE_KEY, 0);
+		int prefsScore = PlayerPrefs.GetInt(HIGH_SCORE_KEY, 0);
+		int gCenterScore = GameCenterManager.Instance.GetHighScore();
+
+		if (prefsScore >= gCenterScore)
+		{
+			return prefsScore;
+		}
+		else
+		{
+			return gCenterScore;
+		}
 	}
 
 	// SOUND EFFECTS
