@@ -14,6 +14,8 @@ public abstract class Piece : MonoBehaviour
 	[SerializeField] Color disabledTint = Color.black;
 	[ReadOnly] public bool potentialPush = false;
 
+	public string pieceID = "0";
+
 	private const Ease moveEase = Ease.Linear;
 
 	public InitialMove Moveset { get { return moveset; } }

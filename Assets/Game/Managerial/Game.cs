@@ -104,6 +104,63 @@ public class Game : MonoBehaviour
 		SetupPieceViewer();
 	}
 
+	/*
+	IEnumerator SetupSavedBoard(string saveString)
+	{
+		SetupPlayfield();
+
+		yield return new WaitForSeconds(1.5f);
+
+		// parse the string and spawn old pieces
+		while (!saveString.StartsWith("PV"))
+		{
+			string pieceKey = saveString.Remove(0, 2);
+			bool isDisabled = saveString.Remove(0, 1) == "1" ? true : false;
+			int xCoord = int.Parse(saveString.Remove(0, 1));
+			int yCoord = int.Parse(saveString.Remove(0, 1));
+
+			switch(pieceKey)
+			{
+				case "BI":
+					Bishop bishop = CreateBishop(xCoord, yCoord);
+					bishop.SetMoveDisabled(isDisabled);
+					break;
+				case "KI":
+					King king = CreateKing(xCoord, yCoord);
+					king.SetMoveDisabled(isDisabled);
+					break;
+				case "KN":
+					Knight knight = CreateKnight(xCoord, yCoord);
+					knight.SetMoveDisabled(isDisabled);
+					break;
+				case "PN":
+					Pawn pawn = CreatePawn(xCoord, yCoord);
+					pawn.SetMoveDisabled(isDisabled);
+					break;
+				case "QN":
+					Queen queen = CreateQueen(xCoord, yCoord);
+					queen.SetMoveDisabled(isDisabled);
+					break;
+				case "RK":
+					Rook rook = CreateRook(xCoord, yCoord);
+					rook.SetMoveDisabled(isDisabled);
+					break;
+			}
+		}
+
+		// parse piece viewer
+		saveString.Remove(0, 2);
+		string pieceViewerID = saveString.Remove(0, 2);
+		int savedX = int.Parse(saveString.Remove(0, 1));
+		SetupSavedPieceViewer(pieceViewerID, savedX);
+
+		// parse score
+		saveString.Remove(0, 2);
+		int savedScore = int.Parse(saveString);
+		GameManager.Instance.score.SetSavedScore(savedScore);
+	}
+	*/
+
 	void SetupPlayfield()
 	{
 		for (int x = 0; x < Constants.I.GridSize.x; x++)
@@ -1116,46 +1173,58 @@ public class Game : MonoBehaviour
 		}
 	}
 
-	protected void CreateKing(int x, int y)
+	protected King CreateKing(int x, int y)
 	{
 		GameObject kingObj = Instantiate(GameManager.Instance.kingPrefab) as GameObject;
 		King king = kingObj.GetComponent<King>();
 		SetupPiece(king, "King", x, y);
+
+		return king;
 	}
 
-	protected void CreateQueen(int x, int y)
+	protected Queen CreateQueen(int x, int y)
 	{
 		GameObject queenObj = Instantiate(GameManager.Instance.queenPrefab) as GameObject;
 		Queen queen = queenObj.GetComponent<Queen>();
 		SetupPiece(queen, "Queen", x, y);
+
+		return queen;
 	}
 
-	protected void CreateRook(int x, int y)
+	protected Rook CreateRook(int x, int y)
 	{
 		GameObject rookObj = Instantiate(GameManager.Instance.rookPrefab) as GameObject;
 		Rook rook = rookObj.GetComponent<Rook>();
 		SetupPiece(rook, "Rook", x, y);
+
+		return rook;
 	}
 
-	protected void CreateBishop(int x, int y)
+	protected Bishop CreateBishop(int x, int y)
 	{
 		GameObject bishopObj = Instantiate(GameManager.Instance.bishopPrefab) as GameObject;
 		Bishop bishop = bishopObj.GetComponent<Bishop>();
 		SetupPiece(bishop, "Bishop", x, y);
+
+		return bishop;
 	}
 
-	protected void CreateKnight(int x, int y)
+	protected Knight CreateKnight(int x, int y)
 	{
 		GameObject knightObj = Instantiate(GameManager.Instance.knightPrefab) as GameObject;
 		Knight knight = knightObj.GetComponent<Knight>();
 		SetupPiece(knight, "Knight", x, y);
+
+		return knight;
 	}
 
-	protected void CreatePawn(int x, int y) 
+	protected Pawn CreatePawn(int x, int y) 
 	{
 		GameObject pawnObj = Instantiate(GameManager.Instance.pawnPrefab) as GameObject;
 		Pawn pawn = pawnObj.GetComponent<Pawn>();
 		SetupPiece(pawn, "Pawn", x, y);
+
+		return pawn;
 	}
 
 	void SetupPiece(Piece piece, string name, int x, int y)
@@ -1167,4 +1236,33 @@ public class Game : MonoBehaviour
 
 		pieces[x, y] = piece;
 	}
+
+	/*
+	// if there's a piece, itll be "PN0" or "PN1"
+	// if there is no piece, it'll be "NP" to signify no piece
+	public string GenerateSaveString()
+	{
+		string saveString = "";
+
+		for (int i = 0; i < pieces.GetLength(0); i++)
+		{
+			for (int j = 0; j < pieces.GetLength(1); j++)
+			{
+				if (pieces[i, j] != null)
+				{
+					saveString += pieces[i, j].pieceID;
+					saveString += pieces[i, j].GetMoveDisabled() == true ? "1" : "0";
+					saveString += pieces[i, j].GetCoordinates().x.ToString();
+					saveString += pieces[i, j].GetCoordinates().y.ToString();
+				}
+			}
+		}
+
+		saveString += "PV" + pieceViewer.nextPieceID.ToString() + pieceViewer.nextX.ToString();
+		saveString += "SC" + GameManager.Instance.score.GetScore().ToString();
+
+		Debug.Log(saveString);
+		return saveString;
+	}
+	*/
 }

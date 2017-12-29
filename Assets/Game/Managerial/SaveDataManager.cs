@@ -13,6 +13,7 @@ public class SaveDataManager : MonoBehaviour
 	private const string BATTERY_SAVER_KEY = "BATTERY_SAVER";
     private const string TUTORIAL_COMPLETE_KEY = "TUTORIAL_COMPLETE";
 	private const string ADS_REMOVED_KEY = "ADS_REMOVED";
+	private const string TOTAL_GAMES_KEY = "TOTAL_GAMES";
 
 	/////////////////////////////////////////////////////////////////////
 	// PUBLICS
@@ -151,5 +152,19 @@ public class SaveDataManager : MonoBehaviour
 	public bool HasPaidToRemoveAds()
 	{
 		return PlayerPrefs.GetInt(ADS_REMOVED_KEY, 0) == 1 ? true : false;
+	}
+
+	// AD DELAY
+
+	public void IncrementTotalGames()
+	{
+		int currentTotal = PlayerPrefs.GetInt(TOTAL_GAMES_KEY, 0);
+		PlayerPrefs.SetInt(TOTAL_GAMES_KEY, currentTotal + 1);
+		PlayerPrefs.Save();
+	}
+
+	public int GetTotalGames()
+	{
+		return PlayerPrefs.GetInt(TOTAL_GAMES_KEY, 0);
 	}
 }

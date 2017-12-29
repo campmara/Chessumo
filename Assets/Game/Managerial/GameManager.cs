@@ -117,8 +117,10 @@ public class GameManager : MonoBehaviour
 
 	public void OnGameEnd()
 	{
-        AdManager.Instance.ShowVideoAd();
+		SaveDataManager.Instance.IncrementTotalGames();
 
+		AdManager.Instance.TryShowVideoAd();
+        
 		if (SaveDataManager.Instance.HasPaidToRemoveAds())
 		{
 			restartButton.SetButtonEnabled(true);

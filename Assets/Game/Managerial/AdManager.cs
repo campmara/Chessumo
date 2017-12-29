@@ -52,11 +52,14 @@ public class AdManager : MonoBehaviour, IStoreListener
 		}
 	}
 
-    public void ShowVideoAd()
+    public void TryShowVideoAd()
     {
 		// Don't show ads if user has paid to remove them.
-		if (SaveDataManager.Instance.HasPaidToRemoveAds() || Application.internetReachability == NetworkReachability.NotReachable) 
+		if (SaveDataManager.Instance.HasPaidToRemoveAds() || 
+			Application.internetReachability == NetworkReachability.NotReachable ||
+			SaveDataManager.Instance.GetTotalGames() <= 3) 
 		{
+			OnAdClosed();
 			return;
 		}
 

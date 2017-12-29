@@ -14,7 +14,7 @@ public class SettingsRestartButton : MonoBehaviour
 		if (numTimesReset >= 4)
 		{
 			GameManager.Instance.restartButton.KillPulse();
-            AdManager.Instance.ShowVideoAd();
+            AdManager.Instance.TryShowVideoAd();
 			numTimesReset = 0;
 		}
 	}
