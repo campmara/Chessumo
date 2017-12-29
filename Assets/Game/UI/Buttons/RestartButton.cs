@@ -45,8 +45,8 @@ public class RestartButton : MonoBehaviour
 
     public void AdClosed()
     {
-        SetButtonEnabled(true);
-        SetReadyForInput(true);
+        //SetButtonEnabled(true);
+        //SetReadyForInput(true);
     }
 
     public void SetReadyForInput(bool isReady)

@@ -93,6 +93,8 @@ public class GameManager : MonoBehaviour
 
 		currentState = State.MENU;
 
+		AdManager.Instance.OnAdClosed += OnAdClosed;
+
 		// Create the UI first, before introducing to avoid introductory jitter.
 		CreateUI();
 	}
@@ -126,6 +128,12 @@ public class GameManager : MonoBehaviour
 			restartButton.SetButtonEnabled(true);
         	restartButton.SetReadyForInput(true);
 		}
+	}
+
+	// should just start a new game instead of hitting restart button.
+	public void OnAdClosed()
+	{
+		GameManager.Instance.BeginGame();
 	}
 
 	public void StartNewGame()
