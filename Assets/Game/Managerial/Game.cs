@@ -759,6 +759,8 @@ public class Game : MonoBehaviour
         //yield return new WaitForSeconds(waitTime);
         yield return new WaitForSeconds(GetWaitTime());
 
+		AudioManager.Instance.PlayPieceOffGrid();
+
 		GameObject pieceObj = piece.gameObject;
 
 		Vector3 newPos = new Vector3(position.x, position.y, pieceObj.transform.position.z);

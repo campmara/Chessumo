@@ -495,6 +495,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 94a6406b19de24daa8a29c32567df9f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SoundEnabled: 1
   pianoA: {fileID: 82880447796122232}
   pianoB: {fileID: 82353763299069448}
   synth: {fileID: 82838478086488920}
@@ -511,6 +512,7 @@ MonoBehaviour:
   d_piece_pickup: {fileID: 8300000, guid: 7b28323b2154446b9a6571319355d336, type: 3}
   d_ui_blip: {fileID: 8300000, guid: 9300e46d0349b4d758b8524f82994265, type: 3}
   d_move_hit: {fileID: 8300000, guid: 7f4c1cc968e8b41278096306cb8606db, type: 3}
+  p_off_grid: {fileID: 8300000, guid: 3b6aa233376c74aa8aac4bd2808cc723, type: 3}
   p_moveNotes:
   - {fileID: 8300000, guid: 93fe4f707fa754993b6b9726a948f71a, type: 3}
   - {fileID: 8300000, guid: 277421c4603cb46328c8f2caca35ed79, type: 3}
@@ -518,9 +520,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0e5407f3b5f2b4660bb7a9fc877e0a09, type: 3}
   - {fileID: 8300000, guid: b4963bf65a13d452fa2ace5f03fc2964, type: 3}
   p_scores:
-  - {fileID: 8300000, guid: defb29853ee524d4fa2db76fc88a34f8, type: 3}
-  - {fileID: 8300000, guid: 861bda3d1bfd64b29a03474e678e8294, type: 3}
-  - {fileID: 8300000, guid: 8e4157ae433474126a1c5b72471244ee, type: 3}
+  - {fileID: 8300000, guid: 3ad09b46e13274a35a7f2588ad8d5369, type: 3}
+  - {fileID: 8300000, guid: 74117ca53db0746e3a3f26b47a4c10d8, type: 3}
+  - {fileID: 8300000, guid: 9831a512e3af44b76a47eabaaf72b13e, type: 3}
   playCurve:
     serializedVersion: 2
     m_Curve:

@@ -30,6 +30,7 @@ public class AudioManager : MonoBehaviour
 	[SerializeField] AudioClip d_ui_blip;
 	[SerializeField] AudioClip d_move_hit;
 
+	[SerializeField] AudioClip p_off_grid;
 	[SerializeField] AudioClip[] p_moveNotes;
 	[SerializeField] AudioClip[] p_scores;
 
@@ -170,6 +171,13 @@ public class AudioManager : MonoBehaviour
 		if (!SoundEnabled) return;
 		pianoB.PlayOneShot(p_full_combo);
 		pianoB.PlayOneShot(p_scores[2]);
+	}
+
+	public void PlayPieceOffGrid()
+	{
+		if (!SoundEnabled) return;
+		drums.pitch = Random.Range(0.9f, 1.1f);
+		drums.PlayOneShot(p_off_grid);
 	}
 
 	public void PlayUIBlip()

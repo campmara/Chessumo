@@ -151,21 +151,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 114416912767595804, guid: 8fd9747fb65824b51b3d7245aa0c2f57,
-        type: 2}
-      propertyPath: p_scores.Array.data[0]
-      value: 
-      objectReference: {fileID: 8300000, guid: 3ad09b46e13274a35a7f2588ad8d5369, type: 3}
-    - target: {fileID: 114416912767595804, guid: 8fd9747fb65824b51b3d7245aa0c2f57,
-        type: 2}
-      propertyPath: p_scores.Array.data[1]
-      value: 
-      objectReference: {fileID: 8300000, guid: 74117ca53db0746e3a3f26b47a4c10d8, type: 3}
-    - target: {fileID: 114416912767595804, guid: 8fd9747fb65824b51b3d7245aa0c2f57,
-        type: 2}
-      propertyPath: p_scores.Array.data[2]
-      value: 
-      objectReference: {fileID: 8300000, guid: 9831a512e3af44b76a47eabaaf72b13e, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8fd9747fb65824b51b3d7245aa0c2f57, type: 2}
   m_IsPrefabParent: 0
