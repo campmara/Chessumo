@@ -21,6 +21,8 @@ public class RemoveAdsButton : MonoBehaviour
 
 	public void OnPress()
 	{
+		AudioManager.Instance.PlayUIBlip();
+
 		if (SaveDataManager.Instance.HasPaidToRemoveAds())
 		{
 			button.interactable = false;

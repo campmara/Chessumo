@@ -17,6 +17,8 @@ public class SoundEffectsToggle : MonoBehaviour
 	public void OnToggle()
 	{
 		SaveDataManager.Instance.ToggleSound();
+
+		if (toggle.isOn) AudioManager.Instance.PlayUIBlip();
 	}
 }
 

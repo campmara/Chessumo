@@ -17,5 +17,6 @@ public class BatterySaverToggle : MonoBehaviour
 	public void OnToggle()
 	{
 		SaveDataManager.Instance.ToggleBatterySaver();
+		AudioManager.Instance.PlayUIBlip();
 	}
 }

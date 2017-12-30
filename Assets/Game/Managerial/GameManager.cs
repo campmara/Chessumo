@@ -122,12 +122,6 @@ public class GameManager : MonoBehaviour
 		SaveDataManager.Instance.IncrementTotalGames();
 
 		AdManager.Instance.TryShowVideoAd();
-        
-		if (SaveDataManager.Instance.HasPaidToRemoveAds())
-		{
-			restartButton.SetButtonEnabled(true);
-        	restartButton.SetReadyForInput(true);
-		}
 	}
 
 	// should just start a new game instead of hitting restart button.

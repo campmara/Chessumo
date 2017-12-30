@@ -175,7 +175,7 @@ public class AudioManager : MonoBehaviour
 	public void PlayUIBlip()
 	{
 		if (!SoundEnabled) return;
-		drums.pitch = Random.Range(0.95f, 1.05f);
+		drums.pitch = Random.Range(0.9f, 1.1f);
 		drums.PlayOneShot(d_ui_blip);
 	}
 

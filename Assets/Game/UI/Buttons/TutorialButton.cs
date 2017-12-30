@@ -7,6 +7,8 @@ public class TutorialButton : MonoBehaviour
 {
     public void OnPress()
     {
+        AudioManager.Instance.PlayUIBlip();
+
         // Loads the tutorial.
         TutorialManager.Instance.SetVisibility(true);
         GameManager.Instance.SetVisibility(false);

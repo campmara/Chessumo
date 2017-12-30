@@ -8,6 +8,7 @@ public class SettingsRestartButton : MonoBehaviour
 
     public void OnPress()
 	{
+		AudioManager.Instance.PlayUIBlip();
 		GameManager.Instance.StartNewGame();
 
 		numTimesReset++;

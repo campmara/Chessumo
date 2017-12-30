@@ -38,6 +38,9 @@ public class SettingsMenu : MonoBehaviour
 
 	public void Toggle()
 	{
+		ImmediateToggle();
+		AudioManager.Instance.PlayUIBlip();
+		/*
 		if (inProgress) return;
 
 		if (IsOpen())
@@ -48,6 +51,7 @@ public class SettingsMenu : MonoBehaviour
 		{
 			StartCoroutine(Open());
 		}
+		*/
 	}
 
 	private IEnumerator Open()
@@ -86,10 +90,12 @@ public class SettingsMenu : MonoBehaviour
 	public void OnCopyrightClicked()
 	{
 		moreInfoPanel.SetActive(true);
+		AudioManager.Instance.PlayUIBlip();
 	}
 
 	public void OnPanelClicked()
 	{
 		moreInfoPanel.SetActive(false);
+		AudioManager.Instance.PlayUIBlip();
 	}
 }

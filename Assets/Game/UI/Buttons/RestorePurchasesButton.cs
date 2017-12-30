@@ -7,5 +7,6 @@ public class RestorePurchasesButton : MonoBehaviour
 	public void OnPress()
 	{
 		AdManager.Instance.RestorePurchases();
+		AudioManager.Instance.PlayUIBlip();
 	}
 }
