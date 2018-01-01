@@ -759,16 +759,25 @@ public class Game : MonoBehaviour
         //yield return new WaitForSeconds(waitTime);
         yield return new WaitForSeconds(GetWaitTime());
 
-		AudioManager.Instance.PlayPieceOffGrid();
-
 		GameObject pieceObj = piece.gameObject;
 
+		Vector3 oldPos = GameManager.Instance.CoordinateToPosition(piece.GetCoordinates());
+		oldPos.z = pieceObj.transform.position.z;
 		Vector3 newPos = new Vector3(position.x, position.y, pieceObj.transform.position.z);
+		Vector3 dir = (newPos - oldPos).normalized;
 
-		float duration = Constants.I.PieceMoveTime * (travelDist - Mathf.Clamp(distFromPushingPiece - 1, 0, distFromPushingPiece + 1));
-		Tween tween = pieceObj.transform.DOMove(newPos, duration)
-			.SetEase(Ease.Linear);
-		yield return tween.WaitForCompletion();
+		Tween tween;
+
+		for (int i = travelDist - Mathf.Clamp(distFromPushingPiece - 1, 0, distFromPushingPiece + 1); i > 0 ; i--)
+		{
+			tween = pieceObj.transform.DOMove(piece.transform.position + dir, Constants.I.PieceMoveTime)
+				.SetEase(Ease.Linear);
+			if (i == 1)
+			{
+				AudioManager.Instance.PlayPieceOffGrid();
+			}
+			yield return tween.WaitForCompletion();
+		}
 
 		piece.SetSortingLayer("Falling Pieces");
 		Destroy(piece); // Destroy the piece class so it won't get touched.
@@ -935,7 +944,7 @@ public class Game : MonoBehaviour
 		AudioManager.Instance.PlayNPVFade();
 		pieceViewer.FadeOut();
 
-		yield return new WaitForSeconds(3f);
+		yield return new WaitForSeconds(4.5f);
 
 		GameManager.Instance.score.SubmitScore();
 		GameManager.Instance.highScore.PullHighScore();

@@ -512,7 +512,7 @@ MonoBehaviour:
   d_piece_pickup: {fileID: 8300000, guid: 7b28323b2154446b9a6571319355d336, type: 3}
   d_ui_blip: {fileID: 8300000, guid: 9300e46d0349b4d758b8524f82994265, type: 3}
   d_move_hit: {fileID: 8300000, guid: 7f4c1cc968e8b41278096306cb8606db, type: 3}
-  p_off_grid: {fileID: 8300000, guid: 3b6aa233376c74aa8aac4bd2808cc723, type: 3}
+  p_off_grid: {fileID: 8300000, guid: 8f6d6f0ac48a943b8872878f42257fc8, type: 3}
   p_moveNotes:
   - {fileID: 8300000, guid: 93fe4f707fa754993b6b9726a948f71a, type: 3}
   - {fileID: 8300000, guid: 277421c4603cb46328c8f2caca35ed79, type: 3}

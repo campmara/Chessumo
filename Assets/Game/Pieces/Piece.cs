@@ -506,12 +506,18 @@ public abstract class Piece : MonoBehaviour
 		IntVector2 nextCoordinates = currentCoordinates + new IntVector2(xDistance, 0);
 		Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 		Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		Vector3 dir = new Vector3((float)sign, 0f, 0f);
 
 		parentGame.OnPieceMove(this, new IntVector2(sign, 0), xDistance);
 		SetCoordinates(nextCoordinates);
 
-		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(xDistance)).SetEase(moveEase);
-		yield return tween.WaitForCompletion();
+		Tween tween;
+
+		for (int i = Mathf.Abs(xDistance); i > 0; i--)
+		{
+			tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+			yield return tween.WaitForCompletion();
+		}
 
         parentGame.ResetWaitTimeOnChangeDirection();
 
@@ -523,12 +529,16 @@ public abstract class Piece : MonoBehaviour
 		nextCoordinates = currentCoordinates + new IntVector2(0, yDistance);
 		convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 		newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		dir = new Vector3(0f, (float)sign, 0f);
 
 		parentGame.OnPieceMove(this, new IntVector2(0, sign), yDistance);
 		SetCoordinates(nextCoordinates);
 
-		tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(yDistance)).SetEase(moveEase);
-		yield return tween.WaitForCompletion();
+		for (int i = Mathf.Abs(yDistance); i > 0; i--)
+		{
+			tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+			yield return tween.WaitForCompletion();
+		}
 
 		SetSortingLayer("Pieces");
 
@@ -548,13 +558,19 @@ public abstract class Piece : MonoBehaviour
 		IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, yDistance);
 		Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 		Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		Vector3 dir = new Vector3(0f, (float)sign, 0f);
 
 		parentGame.OnPieceMove(this, new IntVector2(0, sign), yDistance);
 		SetCoordinates(nextCoordinates);
+		
+		Tween tween;
 
-		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(yDistance)).SetEase(moveEase);
-		yield return tween.WaitForCompletion();
-
+		for (int i = Mathf.Abs(yDistance); i > 0; i--)
+		{
+			tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+			yield return tween.WaitForCompletion();
+		}
+		
         parentGame.ResetWaitTimeOnChangeDirection();
 
 		///////////////////////////////
@@ -565,12 +581,16 @@ public abstract class Piece : MonoBehaviour
 		nextCoordinates = currentCoordinates + new IntVector2(xDistance, 0);
 		convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 		newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		dir = new Vector3((float)sign, 0f, 0f);
 
 		parentGame.OnPieceMove(this, new IntVector2(sign, 0), xDistance);
 		SetCoordinates(nextCoordinates);
 		
-		tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(xDistance)).SetEase(moveEase);
-		yield return tween.WaitForCompletion();
+		for (int i = Mathf.Abs(xDistance); i > 0; i--)
+		{
+			tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+			yield return tween.WaitForCompletion();
+		}
 
 		SetSortingLayer("Pieces");
 
@@ -586,6 +606,7 @@ public abstract class Piece : MonoBehaviour
 		IntVector2 nextCoordinates = currentCoordinates + new IntVector2(distance, 0);
 		Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 		Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		Vector3 dir = new Vector3((float)sign, 0f, 0f);
 
 		parentGame.OnPieceMove(this, new IntVector2(sign, 0), distance);
 		SetCoordinates(nextCoordinates);
@@ -595,8 +616,11 @@ public abstract class Piece : MonoBehaviour
 			yield return new WaitForSeconds(pushWaitTime);
 		}
 
-		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(distance)).SetEase(moveEase);
-		yield return tween.WaitForCompletion();
+		for (int i = Mathf.Abs(distance); i > 0; i--)
+		{
+			Tween tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+			yield return tween.WaitForCompletion();
+		}
 
 		SetSortingLayer("Pieces");
 
@@ -612,6 +636,7 @@ public abstract class Piece : MonoBehaviour
 		IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, distance);
 		Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 		Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		Vector3 dir = new Vector3(0f, (float)sign, 0f);
 
 		parentGame.OnPieceMove(this, new IntVector2(0, sign), distance);
 		SetCoordinates(nextCoordinates);
@@ -621,8 +646,11 @@ public abstract class Piece : MonoBehaviour
 			yield return new WaitForSeconds(pushWaitTime);
 		}
 
-		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(distance)).SetEase(moveEase);
-		yield return tween.WaitForCompletion();
+		for (int i = Mathf.Abs(distance); i > 0; i--)
+		{
+			Tween tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+			yield return tween.WaitForCompletion();
+		}
 
 		SetSortingLayer("Pieces");
 
@@ -639,6 +667,7 @@ public abstract class Piece : MonoBehaviour
 		IntVector2 nextCoordinates = currentCoordinates + new IntVector2(xDistance, yDistance);
 		Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
 		Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
+		Vector3 dir = new Vector3((float)xSign, (float)ySign, 0f);
 
 		parentGame.OnPieceMove(this, new IntVector2(xSign, ySign), xDistance);
 		SetCoordinates(nextCoordinates);
@@ -648,8 +677,11 @@ public abstract class Piece : MonoBehaviour
 			yield return new WaitForSeconds(pushWaitTime);
 		}
 
-		Tween tween = transform.DOMove(newPos, Constants.I.PieceMoveTime * Mathf.Abs(xDistance)).SetEase(moveEase);
-		yield return tween.WaitForCompletion();
+		for (int i = Mathf.Abs(xDistance); i > 0; i--)
+		{
+			Tween tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+			yield return tween.WaitForCompletion();
+		}
 
 		SetSortingLayer("Pieces");
 
