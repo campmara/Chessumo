@@ -1,9 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 using DG.Tweening;
+using UnityEngine.iOS;
 
 public class TopUIBar : MonoBehaviour 
 {
+	private RectTransform rect;
+
+	private void Awake()
+	{
+		rect = GetComponent<RectTransform>();
+	}
+
 	public void Introduce(float delay)
 	{
 		StartCoroutine(IntroduceRoutine(delay));
@@ -13,6 +21,11 @@ public class TopUIBar : MonoBehaviour
 	{
 		Vector3 startScale = new Vector3(1f, 0f, 1f);
 		float desiredScaleY = 1f;
+
+		if (Device.generation == DeviceGeneration.iPhoneX) // move top bar down if iphone x
+		{
+			rect.anchoredPosition = new Vector2(0f, -100f);
+		}
 
 		// Scale to 0 first.
 		transform.localScale = startScale;
