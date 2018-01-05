@@ -112,5 +112,5 @@ public class Tile : MonoBehaviour
 	{
 		boxCollider.center += new Vector3(offsetX, offsetY, 0f);
 		boxCollider.size += new Vector3(stretchX, stretchY, 0f);
-	}	
+	}
 }

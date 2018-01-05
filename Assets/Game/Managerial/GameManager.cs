@@ -111,6 +111,12 @@ public class GameManager : MonoBehaviour
 		scoreEffectObj.transform.parent = transform;
 		scoreEffect = scoreEffectObj.GetComponent<ScoreEffect>();
 
+		if (Screen.safeArea.height < Screen.height) // then we know we're on iphone x
+		{
+			Camera.main.orthographicSize = 5.25f;
+			scoreEffect.SetPosition(Vector3.up * -3.75f);
+		}
+
         settingsButton.HookUpToMenu(settingsMenu);
 
 		score.Reset();
