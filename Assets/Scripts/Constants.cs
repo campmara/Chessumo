@@ -5,7 +5,6 @@ public class Constants : ScriptableObjectSingleton<Constants>
 	[Header("Gameplay")]
 	public IntVector2 GridSize = new IntVector2(5, 5);
 	public int StartingPieceCount = 7;
-	public bool CombosEnabled = true;
 	public int ScoreOneAmount = 1;
 	public int ScoreTwoAmount = 4;
 	public int ScoreThreeAmount = 9;

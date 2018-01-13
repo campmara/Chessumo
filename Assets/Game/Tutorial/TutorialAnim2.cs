@@ -2,29 +2,53 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class TutorialAnim2 : MonoBehaviour 
 {
-	[SerializeField] private GameObject pawn;
+	[SerializeField] private Image pawn;
 	[SerializeField] private Color pawnColor;
 	[SerializeField] private Color secondaryPawnColor;
 
-	[SerializeField] private GameObject king;
+	[SerializeField] private Image king;
 	[SerializeField] private Color kingColor;
 	[SerializeField] private Color secondaryKingColor;
 
     [SerializeField] private Color disabledTint;
 
-	[SerializeField] private Tile bottomTile;
-    [SerializeField] private Tile middleTile;
-	[SerializeField] private Tile topTile;
+	[SerializeField] private Image bottomTile;
+    [SerializeField] private Image middleTile;
+	[SerializeField] private Image topTile;
 
-	[SerializeField] private GameObject touch;
+	[SerializeField] private Sprite tileUpSprite;
+    [SerializeField] private Sprite tileDownSprite;
+
+	[SerializeField] private Image touch;
+
 	private Vector3 initialTouchScale;
+	private Vector2 initialPawnPos;
+    private Vector2 initialKingPos;
+
+	void Awake()
+	{
+		initialTouchScale = touch.transform.localScale;
+		initialPawnPos = pawn.rectTransform.anchoredPosition;
+        initialKingPos = king.rectTransform.anchoredPosition;
+	}
 
 	void OnEnable()
 	{
-		initialTouchScale = touch.transform.localScale;
+		pawn.rectTransform.anchoredPosition = initialPawnPos;
+        king.rectTransform.anchoredPosition = initialKingPos;
+		touch.gameObject.SetActive(false);
+
+		topTile.sprite = tileDownSprite;
+        topTile.color = disabledTint;
+        middleTile.sprite = tileDownSprite;
+        middleTile.color = disabledTint;
+		bottomTile.sprite = tileDownSprite;
+        bottomTile.color = disabledTint;
+
 		StartCoroutine(LoopRoutine());
 	}
 
@@ -37,49 +61,56 @@ public class TutorialAnim2 : MonoBehaviour
         // ===========
 
 		// TOUCH THE SCREEN.
-		touch.SetActive(true);
+		touch.rectTransform.anchoredPosition = pawn.rectTransform.anchoredPosition;
+        touch.rectTransform.localScale = new Vector3(4f, 4f, 1f);
+        touch.color = new Color(touch.color.r, touch.color.g, touch.color.b, 0f);
+		touch.gameObject.SetActive(true);
 
-		touch.transform.DOScale(new Vector3(0.5f, 0.5f, 1f), 0.5f);
-		Tween tween = (touch.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).DOFade(1f, 0.5f);
+		touch.rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.5f);
+        Tween tween = touch.DOFade(1f, 0.5f);
 
 		yield return tween.WaitForCompletion();
 
 		// TILES REACT
-		bottomTile.SetState(TileState.DRAWN, pawnColor);
-        middleTile.SetState(TileState.POSSIBLE, secondaryPawnColor);
-		pawn.transform.position += Vector3.up * 0.1f;
-		touch.transform.position += Vector3.up * 0.1f;
+		bottomTile.sprite = tileUpSprite;
+        bottomTile.color = pawnColor;
+        middleTile.color = secondaryPawnColor;
+        pawn.rectTransform.anchoredPosition += Vector2.up * 10f;
+        touch.rectTransform.anchoredPosition += Vector2.up * 10f;
 
 		yield return new WaitForSeconds(1f);
 
 		// DRAG FINGER UP
-		tween = touch.transform.DOMoveY(king.transform.position.y, 1f);
+		tween = touch.rectTransform.DOAnchorPosY(king.rectTransform.anchoredPosition.y, 1f);
 
 		yield return tween.WaitForCompletion();
 
 		// MIDDLE TILE REACTS
-        middleTile.SetState(TileState.DRAWN, pawnColor);
-		king.transform.position += Vector3.up * 0.1f;
-		touch.transform.position += Vector3.up * 0.1f;
+        middleTile.sprite = tileUpSprite;
+        middleTile.color = pawnColor;
+        king.rectTransform.anchoredPosition += Vector2.up * 10f;
+        touch.rectTransform.anchoredPosition += Vector2.up * 10f;
 
 		yield return new WaitForSeconds(1f);
 
         // LET GO FINGER AND PIECES MOVE
-        (king.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).color = Color.white; // enable king
+        king.color = Color.white; // enable king
 
 		touch.transform.DOScale(initialTouchScale, 0.5f);
-		(touch.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).DOFade(0f, 0.5f);
+        touch.DOFade(0f, 0.5f);
 
-		pawn.transform.DOMoveY(middleTile.transform.position.y, 0.75f);
-		tween = king.transform.DOMoveY(topTile.transform.position.y, 0.75f);
+		pawn.rectTransform.DOAnchorPosY(initialKingPos.y, 0.75f);
+        tween = king.rectTransform.DOAnchorPosY(topTile.rectTransform.anchoredPosition.y - 5f, 0.75f);
 
 		yield return tween.WaitForCompletion();
 
 		// DISABLE TOUCH DESIGNATOR AND WAIT
-        (pawn.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).color = disabledTint; // disable pawn
-		touch.SetActive(false);
-		bottomTile.SetState(TileState.DEFAULT, pawnColor);
-        middleTile.SetState(TileState.DEFAULT, pawnColor);
+        pawn.color = disabledTint; // disable pawn
+		touch.gameObject.SetActive(false);
+        bottomTile.sprite = tileDownSprite;
+        bottomTile.color = disabledTint;
+        middleTile.sprite = tileDownSprite;
+        middleTile.color = disabledTint;
 
 		yield return new WaitForSeconds(1f);
 
@@ -88,51 +119,55 @@ public class TutorialAnim2 : MonoBehaviour
 		// ============
 
 		// TOUCH THE SCREEN.
-		touch.SetActive(true);
-        touch.transform.position = king.transform.position;
+		touch.gameObject.SetActive(true);
+		touch.rectTransform.anchoredPosition = king.rectTransform.anchoredPosition;
 
-		touch.transform.DOScale(new Vector3(0.5f, 0.5f, 1f), 0.5f);
-		tween = (touch.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).DOFade(1f, 0.5f);
+		touch.rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.5f);
+        tween = touch.DOFade(1f, 0.5f);
 
 		yield return tween.WaitForCompletion();
 
 		// TILES REACT
-        topTile.SetState(TileState.DRAWN, kingColor);
-        middleTile.SetState(TileState.POSSIBLE, secondaryKingColor);
-		king.transform.position += Vector3.up * 0.1f;
-		touch.transform.position += Vector3.up * 0.1f;
+        topTile.sprite = tileUpSprite;
+        topTile.color = kingColor;
+        middleTile.color = secondaryKingColor;
+        king.rectTransform.anchoredPosition += Vector2.up * 10f;
+        touch.rectTransform.anchoredPosition += Vector2.up * 10f;
 
 		yield return new WaitForSeconds(1f);
 
 		// DRAG FINGER DOWN
-		tween = touch.transform.DOMoveY(pawn.transform.position.y, 1f);
+		tween = touch.rectTransform.DOAnchorPosY(pawn.rectTransform.anchoredPosition.y, 1f);
 
 		yield return tween.WaitForCompletion();
 
 		// MIDDLE TILE REACTS
-        middleTile.SetState(TileState.DRAWN, kingColor);
-		pawn.transform.position += Vector3.up * 0.1f;
-		touch.transform.position += Vector3.up * 0.1f;
+        middleTile.sprite = tileUpSprite;
+        middleTile.color = kingColor;
+        pawn.rectTransform.anchoredPosition += Vector2.up * 10f;
+        touch.rectTransform.anchoredPosition += Vector2.up * 10f;
 
 		yield return new WaitForSeconds(1f);
 
 		// LET GO FINGER AND PIECES MOVE
-        (pawn.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).color = Color.white; // enable pawn
+        pawn.color = Color.white; // enable pawn
 
 		touch.transform.DOScale(initialTouchScale, 0.5f);
-		(touch.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).DOFade(0f, 0.5f);
+		touch.DOFade(0f, 0.5f);
 
-		pawn.transform.DOMoveY(bottomTile.transform.position.y, 0.75f);
-		tween = king.transform.DOMoveY(middleTile.transform.position.y, 0.75f);
+		pawn.rectTransform.DOAnchorPosY(initialPawnPos.y, 0.75f);
+        tween = king.rectTransform.DOAnchorPosY(initialKingPos.y - 5f, 0.75f);
 
 		yield return tween.WaitForCompletion();
 
 		// DISABLE TOUCH DESIGNATOR AND WAIT
-        (king.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).color = disabledTint; // disable king
-		touch.SetActive(false);
-        middleTile.SetState(TileState.DEFAULT, pawnColor);
-		topTile.SetState(TileState.DEFAULT, pawnColor);
-		touch.transform.position = pawn.transform.position;
+        king.color = disabledTint; // disable king
+		touch.gameObject.SetActive(false);
+        topTile.sprite = tileDownSprite;
+        topTile.color = disabledTint;
+        middleTile.sprite = tileDownSprite;
+        middleTile.color = disabledTint;
+		touch.rectTransform.anchoredPosition = pawn.rectTransform.anchoredPosition;
 
 		StartCoroutine(LoopRoutine());
 	}

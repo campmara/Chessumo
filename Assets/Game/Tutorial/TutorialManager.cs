@@ -6,8 +6,7 @@ public class TutorialManager : MonoBehaviour
 {
     public static TutorialManager Instance = null;
 
-	[SerializeField] private GameObject[] pageObjects;
-	private TutorialPage[] pages;
+	[SerializeField] private TutorialPage[] pages;
 
 	private ProgressDots dots;
 
@@ -27,22 +26,6 @@ public class TutorialManager : MonoBehaviour
     {
         pageIndex = 0;
         dots.UpdateDots(pageIndex);
-
-		if (pages != null && pages.Length > 0)
-		{
-			for (int i = 0; i < pages.Length; i++)
-			{
-				Destroy(pages[i].gameObject);
-			}
-		}
-
-		pages = new TutorialPage[pageObjects.Length];
-
-		for (int i = 0; i < pageObjects.Length; i++)
-		{
-			pages[i] = (Instantiate(pageObjects[i]) as GameObject).GetComponent(typeof(TutorialPage)) as TutorialPage;
-			pages[i].transform.parent = this.transform;
-		}
 
         for (int i = 0; i < pages.Length; i++)
         {
@@ -67,7 +50,7 @@ public class TutorialManager : MonoBehaviour
 		Restart();
 	}
 
-	private void OnMouseDown()
+	public void OnScreenTapped()
 	{
 		HandlePageTurn();
 	}

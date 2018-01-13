@@ -10,6 +10,7 @@ public class SettingsRestartButton : MonoBehaviour
 	{
 		AudioManager.Instance.PlayUIBlip();
 		GameManager.Instance.StartNewGame();
+		UIManager.Instance.ToggleMenu();
 
 		numTimesReset++;
 		if (numTimesReset >= 4)

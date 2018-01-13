@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: 223053450786127136}
   - component: {fileID: 114868847027390174}
   - component: {fileID: 114561087370443956}
+  - component: {fileID: 114534045312320640}
   m_Layer: 5
   m_Name: UI Canvas
   m_TagString: Untagged
@@ -2057,6 +2058,23 @@ MonoBehaviour:
   - {fileID: 0}
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &114534045312320640
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1158594037596404}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40b862e557868412fa5979f77b82ff71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  topUIBar: {fileID: 114882606118851810}
+  score: {fileID: 114988943794234090}
+  highScore: {fileID: 114046879853090066}
+  leaderboardButton: {fileID: 114341475374193456}
+  settingsButton: {fileID: 114783593362570692}
+  settingsMenu: {fileID: 114820517807986644}
 --- !u!114 &114561087370443956
 MonoBehaviour:
   m_ObjectHideFlags: 1

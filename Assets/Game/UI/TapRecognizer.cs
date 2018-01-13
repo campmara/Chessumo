@@ -6,9 +6,9 @@ public class TapRecognizer : MonoBehaviour
 {
 	public void OnTap()
 	{
-		if (GameManager.Instance.settingsMenu.IsOpen())
+		if (UIManager.Instance.IsMenuOpen())
 		{
-			GameManager.Instance.settingsMenu.Toggle();
+			UIManager.Instance.ToggleMenu();
 		}
 		else
 		{

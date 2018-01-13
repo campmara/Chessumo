@@ -11,7 +11,7 @@ SpriteAtlas:
       serializedVersion: 2
       anisoLevel: 1
       compressionQuality: 50
-      maxTextureSize: 512
+      maxTextureSize: 2048
       textureCompression: 0
       filterMode: 0
       generateMipMaps: 0
@@ -30,12 +30,15 @@ SpriteAtlas:
     packables:
     - {fileID: 2800000, guid: 2cb7d28a0f2c04d44b76caca1a88e4c6, type: 3}
     - {fileID: 21300000, guid: 367778af1099b4b93bb91481cb2709fd, type: 3}
+    - {fileID: 21300000, guid: 717313f48462a400bafc8a6ded952d4d, type: 3}
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: 717313f48462a400bafc8a6ded952d4d, type: 3}
   - {fileID: 21300000, guid: 367778af1099b4b93bb91481cb2709fd, type: 3}
   - {fileID: 21300000, guid: 2cb7d28a0f2c04d44b76caca1a88e4c6, type: 3}
   m_PackedSpriteNamesToIndex:
+  - p1new
   - touch-designator
   - tutorialdot
   m_Tag: tutorial

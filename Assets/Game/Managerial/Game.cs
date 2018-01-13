@@ -304,7 +304,7 @@ public class Game : MonoBehaviour
 		}
 	}
 
-#elif UNITY_IPHONE
+#elif UNITY_IOS || UNITY_ANDROID
 
 	//////////////////////////////////////////////////////////
 	// IPHONE UPDATE
@@ -382,7 +382,7 @@ public class Game : MonoBehaviour
 
 	void HandleDownRayHit(RaycastHit hit)
 	{
-		if (GameManager.Instance.settingsMenu.IsOpen()) return;
+		if (UIManager.Instance.IsMenuOpen()) return;
 
 		if (hit.collider.GetComponent<Piece>())
 		{
@@ -400,7 +400,7 @@ public class Game : MonoBehaviour
 
 	void HandleMoveRayHit(RaycastHit hit)
 	{
-		if (GameManager.Instance.settingsMenu.IsOpen()) return;
+		if (UIManager.Instance.IsMenuOpen()) return;
 
 		if (hit.collider.GetComponent<Piece>() == currentSelectedPiece)
 		{
@@ -483,7 +483,7 @@ public class Game : MonoBehaviour
 
 	void HandleUpRayHit(RaycastHit hit)
 	{
-		if (GameManager.Instance.settingsMenu.IsOpen()) return;
+		if (UIManager.Instance.IsMenuOpen()) return;
 
 		if (hit.collider.GetComponent<Piece>()) // up on a piece
 		{
@@ -794,40 +794,23 @@ public class Game : MonoBehaviour
 
     void HandleScorePoint(Piece piece)
 	{
-		if (!Constants.I.CombosEnabled)
-		{
-			return;
-		}
-
 		Debug.Log("Score Combo Incremented, Current Number: " + scoreCombo);
 		scoreCombo++;
 
 		if (scoreCombo >= Constants.I.GridSize.x - 1)
 		{
             GameManager.Instance.scoreEffect.OnThreeScored(piece.FullColor);
-
-			for (int i = 0; i < Constants.I.ScoreThreeAmount; i++)
-			{
-				GameManager.Instance.score.ScorePoint();
-			}
+			UIManager.Instance.ScorePoints(Constants.I.ScoreThreeAmount);
 		}
         else if (scoreCombo >= 2)
         {
             GameManager.Instance.scoreEffect.OnTwoScored(piece.FullColor);
-			
-			for (int i = 0; i < Constants.I.ScoreTwoAmount; i++)
-			{
-				GameManager.Instance.score.ScorePoint();
-			}
+			UIManager.Instance.ScorePoints(Constants.I.ScoreTwoAmount);
         }
         else if (scoreCombo >= 1)
         {
             GameManager.Instance.scoreEffect.OnOneScored(piece.FullColor);
-			
-			for (int i = 0; i < Constants.I.ScoreOneAmount; i++)
-			{
-				GameManager.Instance.score.ScorePoint();
-			}
+			UIManager.Instance.ScorePoints(Constants.I.ScoreOneAmount);
         }
 	}
 
@@ -945,9 +928,7 @@ public class Game : MonoBehaviour
 		pieceViewer.FadeOut();
 
 		yield return new WaitForSeconds(4.5f);
-
-		GameManager.Instance.score.SubmitScore();
-		GameManager.Instance.highScore.PullHighScore();
+		
 		GameManager.Instance.OnGameEnd();
 	}
 

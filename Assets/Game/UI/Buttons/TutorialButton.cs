@@ -9,11 +9,11 @@ public class TutorialButton : MonoBehaviour
     {
         AudioManager.Instance.PlayUIBlip();
 
+        GameManager.Instance.restartButton.SetButtonEnabled(false);
+        GameManager.Instance.restartButton.SetReadyForInput(false);
+
         // Loads the tutorial.
         TutorialManager.Instance.SetVisibility(true);
         GameManager.Instance.SetVisibility(false);
-
-        GameManager.Instance.restartButton.SetButtonEnabled(false);
-        GameManager.Instance.restartButton.SetReadyForInput(false);
     }
 }

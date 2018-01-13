@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProgressDots : MonoBehaviour 
 {
@@ -11,25 +12,26 @@ public class ProgressDots : MonoBehaviour
 
 	[Header("Properties"), SerializeField] private float dotDistance = 0.25f;
 
-	private SpriteRenderer[] dots;
+	private Image[] dots;
 
 	void Awake()
 	{
-		CreateDots(6);
+		CreateDots(5);
 	}
 
 	public void CreateDots(int numDots)
 	{
-		dots = new SpriteRenderer[numDots];
-		Vector3 pos = transform.position;
-        float startX = (-(numDots / 2f) * 0.8333333f) * 0.25f;
+		dots = new Image[numDots];
+		Vector2 pos = Vector2.zero;
+        float startX = (-(numDots / 2f) * 0.8333333f) * dotDistance;
 
 		for (int i = 0; i < numDots; i++)
 		{
             pos.x = startX + (dotDistance * i);
-			GameObject obj = Instantiate(dotPrefab, pos, Quaternion.identity);
+			GameObject obj = Instantiate(dotPrefab);
 			obj.transform.parent = this.transform;
-			dots[i] = obj.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer;
+			obj.GetComponent<RectTransform>().anchoredPosition = pos;
+			dots[i] = obj.GetComponent(typeof(Image)) as Image;
 			dots[i].color = inactiveColor;
 		}
 

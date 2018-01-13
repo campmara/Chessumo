@@ -95,7 +95,10 @@ public class RestartButton : MonoBehaviour
             ResetEffect();
             pulseLoopRoutine = StartCoroutine(PulseLoopRoutine());
         }
-        
+        else
+        {
+            KillPulse();
+        }
     }
 
 	void OnMouseDown()

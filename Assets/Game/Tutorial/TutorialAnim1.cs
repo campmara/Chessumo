@@ -2,30 +2,53 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class TutorialAnim1 : MonoBehaviour 
 {
-    [SerializeField] private GameObject pawn;
+    [SerializeField] private Image pawn;
     [SerializeField] private Color pawnColor;
     [SerializeField] private Color secondaryPawnColor;
 
-    [SerializeField] private GameObject king;
+    [SerializeField] private Image king;
     [SerializeField] private Color kingColor;
 
-    [SerializeField] private Tile bottomTile;
-    [SerializeField] private Tile topTile;
+    [SerializeField] private Image bishop;
+
+    [SerializeField] private Image bottomTile;
+    [SerializeField] private Image topTile;
+
+    [SerializeField] private Sprite tileUpSprite;
+    [SerializeField] private Sprite tileDownSprite;
 
     [SerializeField] private Color disabledTint;
 
-    [SerializeField] private ScoreEffect scoreEffect;
-
-    [SerializeField] private GameObject touch;
+    [SerializeField] private Image touch;
 
     private Vector3 initialTouchScale;
+    private Vector2 initialPawnPos;
+    private Vector2 initialKingPos;
+
+    void Awake()
+    {
+        initialTouchScale = touch.transform.localScale;
+        initialPawnPos = pawn.rectTransform.anchoredPosition;
+        initialKingPos = king.rectTransform.anchoredPosition;
+    }
 
     void OnEnable()
     {
-        initialTouchScale = touch.transform.localScale;
+        pawn.rectTransform.anchoredPosition = initialPawnPos;
+        king.rectTransform.anchoredPosition = initialKingPos;
+        king.rectTransform.SetSiblingIndex(3);
+        bishop.rectTransform.localScale = Vector3.zero;
+        touch.gameObject.SetActive(false);
+
+        bottomTile.sprite = tileDownSprite;
+        bottomTile.color = disabledTint;
+        topTile.sprite = tileDownSprite;
+        topTile.color = disabledTint;
+
         StartCoroutine(LoopRoutine());
     }
 
@@ -34,65 +57,74 @@ public class TutorialAnim1 : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
         // TOUCH THE SCREEN.
-        touch.SetActive(true);
+        touch.rectTransform.anchoredPosition = pawn.rectTransform.anchoredPosition;
+        touch.rectTransform.localScale = new Vector3(4f, 4f, 1f);
+        touch.color = new Color(touch.color.r, touch.color.g, touch.color.b, 0f);
+        touch.gameObject.SetActive(true);
 
-        touch.transform.DOScale(new Vector3(0.5f, 0.5f, 1f), 0.5f);
-        Tween tween = (touch.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).DOFade(1f, 0.5f);
+        touch.rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.5f);
+        Tween tween = touch.DOFade(1f, 0.5f);
 
         yield return tween.WaitForCompletion();
 
         // TILES REACT
-        bottomTile.SetState(TileState.DRAWN, pawnColor);
-        topTile.SetState(TileState.POSSIBLE, secondaryPawnColor);
-        pawn.transform.position += Vector3.up * 0.1f;
-        touch.transform.position += Vector3.up * 0.1f;
+        bottomTile.sprite = tileUpSprite;
+        bottomTile.color = pawnColor;
+        topTile.color = secondaryPawnColor;
+        pawn.rectTransform.anchoredPosition += Vector2.up * 10f;
+        touch.rectTransform.anchoredPosition += Vector2.up * 10f;
 
         yield return new WaitForSeconds(1f);
 
         // DRAG FINGER UP
-        tween = touch.transform.DOMoveY(king.transform.position.y, 1f);
+        tween = touch.rectTransform.DOAnchorPosY(king.rectTransform.anchoredPosition.y, 1f);
 
         yield return tween.WaitForCompletion();
 
         // TOP TILE REACTS
-        topTile.SetState(TileState.DRAWN, pawnColor);
-        king.transform.position += Vector3.up * 0.1f;
-        touch.transform.position += Vector3.up * 0.1f;
+        topTile.sprite = tileUpSprite;
+        topTile.color = pawnColor;
+        king.rectTransform.anchoredPosition += Vector2.up * 10f;
+        touch.rectTransform.anchoredPosition += Vector2.up * 10f;
 
         yield return new WaitForSeconds(1f);
 
         // LET GO FINGER AND PIECES MOVE
         touch.transform.DOScale(initialTouchScale, 0.5f);
-        (touch.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).DOFade(0f, 0.5f);
+        touch.DOFade(0f, 0.5f);
 
-        pawn.transform.DOMoveY(topTile.transform.position.y, 0.75f);
-        tween = king.transform.DOMoveY(king.transform.position.y + 1f, 0.75f);
+        pawn.rectTransform.DOAnchorPosY(initialKingPos.y, 0.75f);
+        tween = king.rectTransform.DOAnchorPosY(king.rectTransform.anchoredPosition.y + 125f, 0.75f);
 
         yield return tween.WaitForCompletion();
 
         // LET KING FALL
-        (king.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).sortingLayerName = "Falling Pieces";
-        tween = king.transform.DOMoveY(-6f, 0.75f).SetEase(Ease.InCubic);
+        king.transform.SetAsFirstSibling();
+        tween = king.rectTransform.DOAnchorPosY(-1000f, 0.75f).SetEase(Ease.InCubic);
 
         // DISABLE TOUCH DESIGNATOR AND WAIT
-        touch.SetActive(false);
-		bottomTile.SetState(TileState.DEFAULT, pawnColor);
-		topTile.SetState(TileState.DEFAULT, pawnColor);
+        touch.gameObject.SetActive(false);
+        bottomTile.sprite = tileDownSprite;
+        bottomTile.color = disabledTint;
+        topTile.sprite = tileDownSprite;
+        topTile.color = disabledTint;
 
         yield return tween.WaitForCompletion();
 
-        scoreEffect.OnOneScored(kingColor);
-        (king.GetComponent(typeof(SpriteRenderer)) as SpriteRenderer).sortingLayerName = "Pieces";
-        king.transform.position = new Vector3(0f, 20f, 0f);
+        GameManager.Instance.scoreEffect.OnOneScored(kingColor);
+        bishop.rectTransform.DOScale(Vector3.one, 0.75f);
+        king.rectTransform.SetSiblingIndex(3);
+        king.rectTransform.anchoredPosition = new Vector2(0f, 1000f);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
 
-		king.transform.DOMoveY(topTile.transform.position.y, 0.75f);
-        tween = pawn.transform.DOMoveY(bottomTile.transform.position.y, 0.75f);
+		king.rectTransform.DOAnchorPosY(initialKingPos.y, 0.75f);
+        bishop.rectTransform.DOScale(Vector3.zero, 0.75f);
+        tween = pawn.rectTransform.DOAnchorPosY(initialPawnPos.y, 0.75f);
 
         yield return tween.WaitForCompletion();
 
-        touch.transform.position = pawn.transform.position;
+        touch.rectTransform.anchoredPosition = pawn.rectTransform.anchoredPosition;
 
         StartCoroutine(LoopRoutine());
     }

@@ -35,14 +35,6 @@ public class GameManager : MonoBehaviour
 	public GameObject knightPrefab;
 	public GameObject pawnPrefab;
 
-	[Header("References")]
-	public TopUIBar topUIBar;
-	public Score score;
-	public HighScore highScore;
-	public LeaderboardButton leaderboardButton;
-	public SettingsButton settingsButton;
-	public SettingsMenu settingsMenu;
-
 	[HideInInspector] public ScoreEffect scoreEffect;
     [HideInInspector] public RestartButton restartButton;
 
@@ -55,8 +47,7 @@ public class GameManager : MonoBehaviour
 
     public void SetVisibility(bool isVisible)
     {
-        topUIBar.gameObject.SetActive(isVisible);
-		scoreEffect.gameObject.SetActive(isVisible);
+		UIManager.Instance.SetVisibility(isVisible);
 
         if (game != null)
         {
@@ -66,16 +57,9 @@ public class GameManager : MonoBehaviour
         {
 			if (isVisible) 
 			{
-				topUIBar.Introduce(1f);
+				UIManager.Instance.IntroduceTopBar(1f);
 			}
         }
-
-        if (!isVisible)
-        {
-            if (settingsMenu.IsOpen()) settingsMenu.ImmediateToggle();
-        }
-
-        settingsMenu.gameObject.SetActive(isVisible);
     }
 
 	void Start()
@@ -117,16 +101,13 @@ public class GameManager : MonoBehaviour
 			scoreEffect.SetPosition(Vector3.up * -3.75f);
 		}
 
-        settingsButton.HookUpToMenu(settingsMenu);
-
-		score.Reset();
-		highScore.PullHighScore();
+		UIManager.Instance.Initialize();
 	}
 
 	public void OnGameEnd()
 	{
+		UIManager.Instance.SubmitFinalScore();
 		SaveDataManager.Instance.IncrementTotalGames();
-
 		AdManager.Instance.TryShowVideoAd();
 	}
 
@@ -140,9 +121,7 @@ public class GameManager : MonoBehaviour
 	{
 		if (game != null)
 		{
-			score.SubmitScore();
-			highScore.PullHighScore();
-			score.Reset();
+			UIManager.Instance.OnGameRestarted();
 
 			game.Unload();
 
@@ -183,9 +162,7 @@ public class GameManager : MonoBehaviour
 		{
 			Debug.Log("[GAME MANAGER] Unloading Game");
 
-			score.SubmitScore();
-			highScore.PullHighScore();
-			score.Reset();
+			UIManager.Instance.OnGameRestarted();
 
 			game.Unload();
 
