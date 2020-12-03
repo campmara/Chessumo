@@ -3,10 +3,12 @@
 --- !u!687078895 &4343727234628468602
 SpriteAtlas:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
   m_Name: ui
   m_EditorData:
+    serializedVersion: 2
     textureSettings:
       serializedVersion: 2
       anisoLevel: 1
@@ -18,8 +20,20 @@ SpriteAtlas:
       readable: 0
       crunchedCompression: 0
       sRGB: 0
-    platformSettings: []
-    packingParameters:
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
       serializedVersion: 2
       padding: 4
       blockOffset: 1
@@ -37,24 +51,26 @@ SpriteAtlas:
     - {fileID: 21300000, guid: f715ab10aec21423bbcf451c02249503, type: 3}
     - {fileID: 21300000, guid: ad9f2f8821a3f4c1db5524f0e467881b, type: 3}
     bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
   - {fileID: 21300000, guid: f715ab10aec21423bbcf451c02249503, type: 3}
-  - {fileID: 21300000, guid: d2cb50bdc495c4fb7aeeab678cf9aaca, type: 3}
-  - {fileID: 21300000, guid: ad9f2f8821a3f4c1db5524f0e467881b, type: 3}
+  - {fileID: 21300000, guid: 18aa5c90c351e4800a7a7e27768403ad, type: 3}
+  - {fileID: 21300000, guid: c051cb411bef74027ae264be97288a13, type: 3}
   - {fileID: 21300000, guid: 00d3bdf1bb9f446fa83075867cffec8d, type: 3}
   - {fileID: 21300000, guid: 5cbfee95afd1044aa989d58b4be094e1, type: 3}
-  - {fileID: 21300000, guid: c051cb411bef74027ae264be97288a13, type: 3}
+  - {fileID: 21300000, guid: ad9f2f8821a3f4c1db5524f0e467881b, type: 3}
   - {fileID: 21300000, guid: b7480c7ba1be447b491bdb09e7b5d854, type: 3}
-  - {fileID: 21300000, guid: 18aa5c90c351e4800a7a7e27768403ad, type: 3}
+  - {fileID: 21300000, guid: d2cb50bdc495c4fb7aeeab678cf9aaca, type: 3}
   m_PackedSpriteNamesToIndex:
   - selector
-  - color_band
-  - Settings Box
+  - Remove Ads Button
+  - Checkbox Unticked
   - restart-button-designator
   - Checkbox Ticked
-  - Checkbox Unticked
+  - Settings Box
   - IAP RESTORE Button
-  - Remove Ads Button
+  - color_band
   m_Tag: ui
   m_IsVariant: 0

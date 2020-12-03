@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour
 
 		currentState = State.MENU;
 
-		AdManager.Instance.OnAdClosed += OnAdClosed;
+		//AdManager.Instance.OnAdClosed += OnAdClosed;
 
 		// Create the UI first, before introducing to avoid introductory jitter.
 		CreateUI();
@@ -108,7 +108,7 @@ public class GameManager : MonoBehaviour
 	{
 		UIManager.Instance.SubmitFinalScore();
 		SaveDataManager.Instance.IncrementTotalGames();
-		AdManager.Instance.TryShowVideoAd();
+		//AdManager.Instance.TryShowVideoAd();
 	}
 
 	// should just start a new game instead of hitting restart button.
