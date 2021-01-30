@@ -98,6 +98,7 @@ public class GameManager : MonoBehaviour {
         UIManager.Instance.SubmitFinalScore();
         SaveDataManager.Instance.IncrementTotalGames();
         //AdManager.Instance.TryShowVideoAd();
+        GameManager.Instance.BeginGame();
     }
 
     // should just start a new game instead of hitting restart button.
