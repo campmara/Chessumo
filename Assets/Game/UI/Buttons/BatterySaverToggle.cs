@@ -3,20 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BatterySaverToggle : MonoBehaviour
-{
-	private Toggle toggle;
+public class BatterySaverToggle : MonoBehaviour {
+    private Toggle toggle;
 
-	void Awake()
-	{
-		toggle = GetComponent(typeof(Toggle)) as Toggle;
+    void Awake() {
+        toggle = GetComponent(typeof(Toggle)) as Toggle;
 
-		toggle.isOn = SaveDataManager.Instance.IsBatterySaverOn();
-	}
+        toggle.isOn = SaveDataManager.Instance.IsBatterySaverOn();
+    }
 
-	public void OnToggle()
-	{
-		SaveDataManager.Instance.ToggleBatterySaver();
-		AudioManager.Instance.PlayUIBlip();
-	}
+    public void OnToggle() {
+        SaveDataManager.Instance.ToggleBatterySaver();
+        AudioManager.Instance.PlayUIBlip();
+    }
 }

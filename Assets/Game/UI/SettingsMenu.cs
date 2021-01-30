@@ -3,44 +3,37 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class SettingsMenu : MonoBehaviour 
-{
-	public GameObject moreInfoPanel;
+public class SettingsMenu : MonoBehaviour {
+    public GameObject moreInfoPanel;
 
-	bool inProgress = false;
-	Tween tween;
+    //`bool inProgress = false;
+    Tween tween;
 
-	GameObject child;
+    GameObject child;
 
-	void Awake()
-	{
-		transform.localScale = new Vector3(0f, 0f, 0f);
+    void Awake() {
+        transform.localScale = new Vector3(0f, 0f, 0f);
 
-		child = transform.GetChild(0).gameObject; // Gets the offset object.
-		child.SetActive(false);
-	}
+        child = transform.GetChild(0).gameObject; // Gets the offset object.
+        child.SetActive(false);
+    }
 
-    public void ImmediateToggle()
-    {
-        if (IsOpen())
-        {
-			GameManager.Instance.restartButton.SetReadyForInput(true);
+    public void ImmediateToggle() {
+        if (IsOpen()) {
+            GameManager.Instance.restartButton.SetReadyForInput(true);
             transform.localScale = Vector3.zero;
             child.SetActive(false);
-        }
-        else
-        {
-			GameManager.Instance.restartButton.SetReadyForInput(false);
+        } else {
+            GameManager.Instance.restartButton.SetReadyForInput(false);
             child.SetActive(true);
             transform.localScale = Vector3.one;
         }
     }
 
-	public void Toggle()
-	{
-		ImmediateToggle();
-		AudioManager.Instance.PlayUIBlip();
-		/*
+    public void Toggle() {
+        ImmediateToggle();
+        AudioManager.Instance.PlayUIBlip();
+        /*
 		if (inProgress) return;
 
 		if (IsOpen())
@@ -52,50 +45,45 @@ public class SettingsMenu : MonoBehaviour
 			StartCoroutine(Open());
 		}
 		*/
-	}
+    }
 
-	private IEnumerator Open()
-	{
-		GameManager.Instance.restartButton.SetReadyForInput(false);
+    private IEnumerator Open() {
+        GameManager.Instance.restartButton.SetReadyForInput(false);
 
-		inProgress = true;
-		child.SetActive(true);
+        //inProgress = true;
+        child.SetActive(true);
 
-		tween = transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBack);
+        tween = transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBack);
 
-		yield return tween.WaitForCompletion();
+        yield return tween.WaitForCompletion();
 
-		inProgress = false;
-	}
+        //inProgress = false;
+    }
 
-	private IEnumerator Close()
-	{
-		GameManager.Instance.restartButton.SetReadyForInput(true);
+    private IEnumerator Close() {
+        GameManager.Instance.restartButton.SetReadyForInput(true);
 
-		inProgress = true;
+        //inProgress = true;
 
-		tween = transform.DOScale(Vector3.zero, 1f).SetEase(Ease.OutQuint);
+        tween = transform.DOScale(Vector3.zero, 1f).SetEase(Ease.OutQuint);
 
-		yield return tween.WaitForCompletion();
+        yield return tween.WaitForCompletion();
 
-		child.SetActive(false);
-		inProgress = false;
-	}
+        child.SetActive(false);
+        //inProgress = false;
+    }
 
-	public bool IsOpen()
-	{
-		return child.activeSelf;
-	}
+    public bool IsOpen() {
+        return child.activeSelf;
+    }
 
-	public void OnCopyrightClicked()
-	{
-		moreInfoPanel.SetActive(true);
-		AudioManager.Instance.PlayUIBlip();
-	}
+    public void OnCopyrightClicked() {
+        moreInfoPanel.SetActive(true);
+        AudioManager.Instance.PlayUIBlip();
+    }
 
-	public void OnPanelClicked()
-	{
-		moreInfoPanel.SetActive(false);
-		AudioManager.Instance.PlayUIBlip();
-	}
+    public void OnPanelClicked() {
+        moreInfoPanel.SetActive(false);
+        AudioManager.Instance.PlayUIBlip();
+    }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿/*
+using System;
 using UnityEngine;
 using GoogleMobileAds;
 using GoogleMobileAds.Api;
@@ -187,3 +188,4 @@ public class AdManager : MonoBehaviour, IStoreListener
 		Debug.Log(string.Format("OnPurchaseFailed: FAIL. Product: '{0}', PurchaseFailureReason: {1}", product.definition.storeSpecificId, failureReason));
 	}
 }
+*/

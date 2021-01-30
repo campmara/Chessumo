@@ -4,20 +4,16 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.IO;
 
-public class AppManager : MonoBehaviour 
-{
-    Coroutine _screenshotRoutine = null;
+public class AppManager : MonoBehaviour {
     const string SCREENSHOT_SAVEFOLDERNAME = "Screenshots";
 
-    private void Awake()
-    {
+    private void Awake() {
         SetupScreenshotTech();
 
         StartCoroutine(LoadRoutine());
     }
 
-    private IEnumerator LoadRoutine()
-    {
+    private IEnumerator LoadRoutine() {
         // Load tutorial, then set active / inactive if user has completed already.
         yield return StartCoroutine(AsyncLoad(1));
         TutorialManager.Instance.SetVisibility(false);
@@ -26,69 +22,57 @@ public class AppManager : MonoBehaviour
         yield return StartCoroutine(AsyncLoad(2));
         GameManager.Instance.SetVisibility(false);
 
-        if (SaveDataManager.Instance.IsTutorialComplete())
-        {
+        if (SaveDataManager.Instance.IsTutorialComplete()) {
             GameManager.Instance.SetVisibility(true);
-        }
-        else
-        {
+        } else {
             GameManager.Instance.restartButton.SetReadyForInput(false);
             TutorialManager.Instance.SetVisibility(true);
         }
     }
 
-    private IEnumerator AsyncLoad(int sceneIndex)
-    {
+    private IEnumerator AsyncLoad(int sceneIndex) {
         AsyncOperation op = SceneManager.LoadSceneAsync(sceneIndex, LoadSceneMode.Additive);
-		op.allowSceneActivation = false;
+        op.allowSceneActivation = false;
 
-		while (!op.isDone)
-		{
-			// Loading completed
-			if (Mathf.Abs(op.progress - 0.9f) < Mathf.Epsilon)
-			{
-				op.allowSceneActivation = true;
-			}
+        while (!op.isDone) {
+            // Loading completed
+            if (Mathf.Abs(op.progress - 0.9f) < Mathf.Epsilon) {
+                op.allowSceneActivation = true;
+            }
 
-			yield return null;
-		}
+            yield return null;
+        }
     }
 
-    public void ResetPlayerPrefs()
-    {
+    public void ResetPlayerPrefs() {
         PlayerPrefs.DeleteAll();
     }
 
     #region SCREENSHOTS
 
-    private void SetupScreenshotTech()
-    {
-        #if UNITY_EDITOR
-		if( !Directory.Exists( Application.dataPath + "/../" + SCREENSHOT_SAVEFOLDERNAME ) )
-		{
-			Directory.CreateDirectory( Application.dataPath + "/../" + SCREENSHOT_SAVEFOLDERNAME );
-		}
-        #endif
+    private void SetupScreenshotTech() {
+#if UNITY_EDITOR
+        if (!Directory.Exists(Application.dataPath + "/../" + SCREENSHOT_SAVEFOLDERNAME)) {
+            Directory.CreateDirectory(Application.dataPath + "/../" + SCREENSHOT_SAVEFOLDERNAME);
+        }
+#endif
     }
 
-    #if UNITY_EDITOR
-    private void Update()
-    {
-        if ( Input.GetKeyDown( KeyCode.S ) )
-        {
+#if UNITY_EDITOR
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.S)) {
             HandleScreenShot();
         }
     }
 
-    void HandleScreenShot(int screenshotDetail = 1)
-	{
-		string screenshotPath = "";
+    void HandleScreenShot(int screenshotDetail = 1) {
+        string screenshotPath = "";
 
         screenshotPath = Application.dataPath + "/../" + SCREENSHOT_SAVEFOLDERNAME + "/" + "Screenshot_" + System.DateTime.Now.ToString("MM_dd_yy_hhmmss") + ".png";
 
-		ScreenCapture.CaptureScreenshot(screenshotPath, screenshotDetail);
-	}
-    #endif
+        ScreenCapture.CaptureScreenshot(screenshotPath, screenshotDetail);
+    }
+#endif
 
     #endregion
 }

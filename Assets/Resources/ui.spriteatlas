@@ -40,6 +40,7 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 1
+    secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
     - {fileID: 21300000, guid: 5cbfee95afd1044aa989d58b4be094e1, type: 3}
@@ -50,6 +51,7 @@ SpriteAtlas:
     - {fileID: 21300000, guid: 18aa5c90c351e4800a7a7e27768403ad, type: 3}
     - {fileID: 21300000, guid: f715ab10aec21423bbcf451c02249503, type: 3}
     - {fileID: 21300000, guid: ad9f2f8821a3f4c1db5524f0e467881b, type: 3}
+    totalSpriteSurfaceArea: 2750000
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -72,5 +74,6 @@ SpriteAtlas:
   - Settings Box
   - IAP RESTORE Button
   - color_band
+  m_RenderDataMap: {}
   m_Tag: ui
   m_IsVariant: 0

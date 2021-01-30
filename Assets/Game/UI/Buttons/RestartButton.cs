@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class RestartButton : MonoBehaviour 
-{
+public class RestartButton : MonoBehaviour {
     [SerializeField] private SpriteRenderer touchDesignator;
 
     private const float MIN_S = 4f;
@@ -21,50 +20,43 @@ public class RestartButton : MonoBehaviour
 
     Vector3 followDir;
 
-    private void Awake()
-    {
+    private void Awake() {
         touchDesignator.gameObject.SetActive(false);
         touchDesignator.color = new Color(touchDesignator.color.r, touchDesignator.color.g, touchDesignator.color.b, 1f);
         touchDesignator.transform.localScale = new Vector3(MIN_S, MIN_S, MIN_S);
 
-        AdManager.Instance.OnAdShown += AdShown;
-        AdManager.Instance.OnAdClosed += AdClosed;
+        //AdManager.Instance.OnAdShown += AdShown;
+        //AdManager.Instance.OnAdClosed += AdClosed;
     }
 
-    public void ResetEffect()
-    {
+    public void ResetEffect() {
         touchDesignator.color = new Color(touchDesignator.color.r, touchDesignator.color.g, touchDesignator.color.b, 1f);
         touchDesignator.transform.localScale = new Vector3(MIN_S, MIN_S, MIN_S);
     }
 
-    public void AdShown()
-    {
+    public void AdShown() {
         SetButtonEnabled(false);
         SetReadyForInput(false);
     }
 
-    public void AdClosed()
-    {
+    public void AdClosed() {
         //SetButtonEnabled(true);
         //SetReadyForInput(true);
     }
 
-    public void SetReadyForInput(bool isReady)
-    {
+    public void SetReadyForInput(bool isReady) {
         if (!touchDesignator.gameObject.activeSelf) return;
 
         Debug.Log("Ready for input? " + isReady);
 
-        if (isReady)
-        {
+        if (isReady) {
             touchDesignator.transform.position = new Vector3(Constants.I.GridOffsetX, Constants.I.GridOffsetY, 0f);
         }
 
         isTakingInput = isReady;
     }
 
-    private IEnumerator PulseLoopRoutine()
-    {
+    private IEnumerator PulseLoopRoutine() {
         AudioManager.Instance.PlaySuspense();
         ResetEffect();
 
@@ -76,33 +68,27 @@ public class RestartButton : MonoBehaviour
         pulseLoopRoutine = StartCoroutine(PulseLoopRoutine());
     }
 
-    public void KillPulse()
-    {
+    public void KillPulse() {
         StopAllCoroutines();
         pulseTween.Kill();
         fadeTween.Kill();
     }
 
-    public void SetButtonEnabled(bool isEnabled)
-    {
+    public void SetButtonEnabled(bool isEnabled) {
         Debug.Log("Button enabled? " + isEnabled);
         touchDesignator.gameObject.SetActive(isEnabled);
         GetComponent<BoxCollider>().enabled = isEnabled;
 
-        if (isEnabled)
-        {
+        if (isEnabled) {
             KillPulse();
             ResetEffect();
             pulseLoopRoutine = StartCoroutine(PulseLoopRoutine());
-        }
-        else
-        {
+        } else {
             KillPulse();
         }
     }
 
-	void OnMouseDown()
-	{
+    void OnMouseDown() {
         if (!isTakingInput) return;
 
         KillPulse();
@@ -110,22 +96,19 @@ public class RestartButton : MonoBehaviour
 
         pulseTween = touchDesignator.transform.DOScale(Vector3.one * MIN_S, time);
         fadeTween = touchDesignator.DOFade(1f, time);
-	}
+    }
 
-	void OnMouseUp()
-	{
+    void OnMouseUp() {
         if (!isTakingInput) return;
 
         OnPress();
-	}
+    }
 
-    void OnEffectFinish()
-    {
+    void OnEffectFinish() {
         SetButtonEnabled(false);
     }
 
-	void OnPress() 
-    {
+    void OnPress() {
         AudioManager.Instance.PlayStartRelease();
 
         touchDesignator.transform.DOScale(Vector3.one * MAX_S, 1f);
@@ -133,6 +116,6 @@ public class RestartButton : MonoBehaviour
 
         SetReadyForInput(false);
 
-		GameManager.Instance.BeginGame();
+        GameManager.Instance.BeginGame();
     }
 }

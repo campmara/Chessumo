@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿/*
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,3 +11,4 @@ public class RestorePurchasesButton : MonoBehaviour
 		AudioManager.Instance.PlayUIBlip();
 	}
 }
+*/

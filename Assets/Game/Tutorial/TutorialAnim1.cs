@@ -4,8 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 
-public class TutorialAnim1 : MonoBehaviour 
-{
+public class TutorialAnim1 : MonoBehaviour {
     [SerializeField] private Image pawn;
     [SerializeField] private Color pawnColor;
     [SerializeField] private Color secondaryPawnColor;
@@ -29,15 +28,13 @@ public class TutorialAnim1 : MonoBehaviour
     private Vector2 initialPawnPos;
     private Vector2 initialKingPos;
 
-    void Awake()
-    {
+    void Awake() {
         initialTouchScale = touch.transform.localScale;
         initialPawnPos = pawn.rectTransform.anchoredPosition;
         initialKingPos = king.rectTransform.anchoredPosition;
     }
 
-    void OnEnable()
-    {
+    void OnEnable() {
         pawn.rectTransform.anchoredPosition = initialPawnPos;
         king.rectTransform.anchoredPosition = initialKingPos;
         king.rectTransform.SetSiblingIndex(3);
@@ -52,8 +49,7 @@ public class TutorialAnim1 : MonoBehaviour
         StartCoroutine(LoopRoutine());
     }
 
-    private IEnumerator LoopRoutine()
-    {
+    private IEnumerator LoopRoutine() {
         yield return new WaitForSeconds(1f);
 
         // TOUCH THE SCREEN.
@@ -118,7 +114,7 @@ public class TutorialAnim1 : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
-		king.rectTransform.DOAnchorPosY(initialKingPos.y, 0.75f);
+        king.rectTransform.DOAnchorPosY(initialKingPos.y, 0.75f);
         bishop.rectTransform.DOScale(Vector3.zero, 0.75f);
         tween = pawn.rectTransform.DOAnchorPosY(initialPawnPos.y, 0.75f);
 

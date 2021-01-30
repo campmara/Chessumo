@@ -2,294 +2,258 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using GoogleMobileAds.Api;
+//using GoogleMobileAds.Api;
 
-public class GameManager : MonoBehaviour 
-{
-	/////////////////////////////////////////////////////////////////////
-	// PUBLICS
-	/////////////////////////////////////////////////////////////////////
+public class GameManager : MonoBehaviour {
+    /////////////////////////////////////////////////////////////////////
+    // PUBLICS
+    /////////////////////////////////////////////////////////////////////
 
-	public static GameManager Instance = null;
+    public static GameManager Instance = null;
 
-	public enum State
-	{
-		MENU = 0,
-		GAME = 1
-	}
-	public State CurrentState { get { return currentState; } }
+    public enum State {
+        MENU = 0,
+        GAME = 1
+    }
+    public State CurrentState { get { return currentState; } }
 
-	[Header("Game Prefab")]
-	public Game gamePrefab;
-	[Header("Button Prefabs")]
+    [Header("Game Prefab")]
+    public Game gamePrefab;
+    [Header("Button Prefabs")]
     public GameObject restartButtonPrefab;
-	[Header("UI Prefabs")]
-	public GameObject tilePrefab;
-	public GameObject scoreEffectPrefab;
-	public GameObject nextPieceViewerPrefab;
-	[Header("Piece Prefabs")]
-	public GameObject kingPrefab;
-	public GameObject queenPrefab;
-	public GameObject rookPrefab;
-	public GameObject bishopPrefab;
-	public GameObject knightPrefab;
-	public GameObject pawnPrefab;
+    [Header("UI Prefabs")]
+    public GameObject tilePrefab;
+    public GameObject scoreEffectPrefab;
+    public GameObject nextPieceViewerPrefab;
+    [Header("Piece Prefabs")]
+    public GameObject kingPrefab;
+    public GameObject queenPrefab;
+    public GameObject rookPrefab;
+    public GameObject bishopPrefab;
+    public GameObject knightPrefab;
+    public GameObject pawnPrefab;
 
-	[HideInInspector] public ScoreEffect scoreEffect;
+    [HideInInspector] public ScoreEffect scoreEffect;
     [HideInInspector] public RestartButton restartButton;
 
-	/////////////////////////////////////////////////////////////////////
-	// PRIVATES
-	/////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////
+    // PRIVATES
+    /////////////////////////////////////////////////////////////////////
 
-	private Game game;
-	private State currentState;
+    private Game game;
+    private State currentState;
 
-    public void SetVisibility(bool isVisible)
-    {
-		UIManager.Instance.SetVisibility(isVisible);
+    public void SetVisibility(bool isVisible) {
+        UIManager.Instance.SetVisibility(isVisible);
 
-        if (game != null)
-        {
-			game.gameObject.SetActive(isVisible);
-		}
-        else
-        {
-			if (isVisible) 
-			{
-				UIManager.Instance.IntroduceTopBar(1f);
-			}
+        if (game != null) {
+            game.gameObject.SetActive(isVisible);
+        } else {
+            if (isVisible) {
+                UIManager.Instance.IntroduceTopBar(1f);
+            }
         }
     }
 
-	void Start()
-	{
-		if (Instance == null)
-		{
-			Instance = this;
-		}
+    void Start() {
+        if (Instance == null) {
+            Instance = this;
+        }
 
-		// 60fps will eat battery, but threes does it so w/e.
-		Application.targetFrameRate = SaveDataManager.Instance.IsBatterySaverOn() ? 30 : 60;
+        // 60fps will eat battery, but threes does it so w/e.
+        Application.targetFrameRate = SaveDataManager.Instance.IsBatterySaverOn() ? 30 : 60;
 
-		// Init DOTween.
-		DOTween.Init();
+        // Init DOTween.
+        DOTween.Init();
 
-		currentState = State.MENU;
+        currentState = State.MENU;
 
-		//AdManager.Instance.OnAdClosed += OnAdClosed;
+        //AdManager.Instance.OnAdClosed += OnAdClosed;
 
-		// Create the UI first, before introducing to avoid introductory jitter.
-		CreateUI();
-	}
+        // Create the UI first, before introducing to avoid introductory jitter.
+        CreateUI();
+    }
 
-	void CreateUI()
-	{
+    void CreateUI() {
         GameObject restartButtonObj = Instantiate(restartButtonPrefab) as GameObject;
-		restartButtonObj.name = "Restart Button";
-		restartButtonObj.transform.parent = transform;
+        restartButtonObj.name = "Restart Button";
+        restartButtonObj.transform.parent = transform;
         restartButton = restartButtonObj.GetComponent(typeof(RestartButton)) as RestartButton;
 
-		GameObject scoreEffectObj = Instantiate(scoreEffectPrefab) as GameObject;
-		scoreEffectObj.name = "Score Effect";
-		scoreEffectObj.transform.parent = transform;
-		scoreEffect = scoreEffectObj.GetComponent<ScoreEffect>();
+        GameObject scoreEffectObj = Instantiate(scoreEffectPrefab) as GameObject;
+        scoreEffectObj.name = "Score Effect";
+        scoreEffectObj.transform.parent = transform;
+        scoreEffect = scoreEffectObj.GetComponent<ScoreEffect>();
 
-		if (Screen.safeArea.height < Screen.height) // then we know we're on iphone x
-		{
-			Camera.main.orthographicSize = 5.25f;
-			scoreEffect.SetPosition(Vector3.up * -3.75f);
-		}
+        if (Screen.safeArea.height < Screen.height) // then we know we're on iphone x
+        {
+            Camera.main.orthographicSize = 5.25f;
+            scoreEffect.SetPosition(Vector3.up * -3.75f);
+        }
 
-		UIManager.Instance.Initialize();
-	}
+        UIManager.Instance.Initialize();
+    }
 
-	public void OnGameEnd()
-	{
-		UIManager.Instance.SubmitFinalScore();
-		SaveDataManager.Instance.IncrementTotalGames();
-		//AdManager.Instance.TryShowVideoAd();
-	}
+    public void OnGameEnd() {
+        UIManager.Instance.SubmitFinalScore();
+        SaveDataManager.Instance.IncrementTotalGames();
+        //AdManager.Instance.TryShowVideoAd();
+    }
 
-	// should just start a new game instead of hitting restart button.
-	public void OnAdClosed()
-	{
-		GameManager.Instance.BeginGame();
-	}
+    // should just start a new game instead of hitting restart button.
+    public void OnAdClosed() {
+        GameManager.Instance.BeginGame();
+    }
 
-	public void StartNewGame()
-	{
-		if (game != null)
-		{
-			UIManager.Instance.OnGameRestarted();
+    public void StartNewGame() {
+        if (game != null) {
+            UIManager.Instance.OnGameRestarted();
 
-			game.Unload();
+            game.Unload();
 
-			game = null;
+            game = null;
 
-			restartButton.SetButtonEnabled(true);
-		}
-		else
-		{
-			restartButton.SetButtonEnabled(false);
-    		restartButton.SetReadyForInput(false);
+            restartButton.SetButtonEnabled(true);
+        } else {
+            restartButton.SetButtonEnabled(false);
+            restartButton.SetReadyForInput(false);
 
-			restartButton.KillPulse();
-			restartButton.ResetEffect();
+            restartButton.KillPulse();
+            restartButton.ResetEffect();
 
-			restartButton.SetButtonEnabled(true);
-		}
-	}
+            restartButton.SetButtonEnabled(true);
+        }
+    }
 
-	public bool IsGameActive()
-	{
-		return game != null;
-	}
+    public bool IsGameActive() {
+        return game != null;
+    }
 
-	public void BeginGame()
-	{
-		if (game == null)
-		{
-			Debug.Log("[GAME MANAGER] Loading and Beginning Game.");
+    public void BeginGame() {
+        if (game == null) {
+            Debug.Log("[GAME MANAGER] Loading and Beginning Game.");
 
-			game = Instantiate(gamePrefab) as Game;
-			game.name = "Chessumo Game";
-			game.transform.parent = transform;
+            game = Instantiate(gamePrefab) as Game;
+            game.name = "Chessumo Game";
+            game.transform.parent = transform;
 
-			game.Load();
-		}
-		else
-		{
-			Debug.Log("[GAME MANAGER] Unloading Game");
+            game.Load();
+        } else {
+            Debug.Log("[GAME MANAGER] Unloading Game");
 
-			UIManager.Instance.OnGameRestarted();
+            UIManager.Instance.OnGameRestarted();
 
-			game.Unload();
+            game.Unload();
 
-			game = null;
+            game = null;
 
-			// Reload the game, now that we've unloaded everything correctly.
-			BeginGame();
-		}
-	}
+            // Reload the game, now that we've unloaded everything correctly.
+            BeginGame();
+        }
+    }
 
-	public Vector2 CoordinateToPosition(IntVector2 coordinate)
-	{
-		//float xPos = coordinate.x - Mathf.Floor(Constants.I.GRID_SIZE.x / 2f) + Constants.I.GRID_OFFSET_X;
-		//float yPos = coordinate.y - Mathf.Floor(Constants.I.GRID_SIZE.y / 2f) + Constants.I.GRID_OFFSET_Y;
+    public Vector2 CoordinateToPosition(IntVector2 coordinate) {
+        //float xPos = coordinate.x - Mathf.Floor(Constants.I.GRID_SIZE.x / 2f) + Constants.I.GRID_OFFSET_X;
+        //float yPos = coordinate.y - Mathf.Floor(Constants.I.GRID_SIZE.y / 2f) + Constants.I.GRID_OFFSET_Y;
 
-		float xPos = (coordinate.x - (Constants.I.GridSize.x / 2f)) + 0.5f + Constants.I.GridOffsetX;
-		float yPos = (coordinate.y - (Constants.I.GridSize.y / 2f)) + 0.5f + Constants.I.GridOffsetY;
-		return new Vector2(xPos, yPos);
-	}
+        float xPos = (coordinate.x - (Constants.I.GridSize.x / 2f)) + 0.5f + Constants.I.GridOffsetX;
+        float yPos = (coordinate.y - (Constants.I.GridSize.y / 2f)) + 0.5f + Constants.I.GridOffsetY;
+        return new Vector2(xPos, yPos);
+    }
 
-	public void GrowMe(GameObject obj, Ease ease = Ease.OutBack)
-	{
-		StartCoroutine(GrowToScale(obj, ease));
-	}
+    public void GrowMe(GameObject obj, Ease ease = Ease.OutBack) {
+        StartCoroutine(GrowToScale(obj, ease));
+    }
 
-	IEnumerator GrowToScale(GameObject obj, Ease ease)
-	{
-		// Neat little effect for now to compensate for the fact that shit would just appear out of nowhere otherwise. this will die someday.
+    IEnumerator GrowToScale(GameObject obj, Ease ease) {
+        // Neat little effect for now to compensate for the fact that shit would just appear out of nowhere otherwise. this will die someday.
 
-		if (!obj)
-		{
-			yield break;
-		}
+        if (!obj) {
+            yield break;
+        }
 
-		Vector3 startScale = new Vector3(0f, 0f, 1f);
-		Vector3 desiredScale = obj.transform.localScale;
+        Vector3 startScale = new Vector3(0f, 0f, 1f);
+        Vector3 desiredScale = obj.transform.localScale;
 
-		// Scale to 0 first.
-		obj.transform.localScale = startScale;
+        // Scale to 0 first.
+        obj.transform.localScale = startScale;
 
-		// Then rescale via tween.
-		if (obj)
-		{
-			obj.transform.DOScale(desiredScale, 1f)
-				.SetEase(ease);
-		}
+        // Then rescale via tween.
+        if (obj) {
+            obj.transform.DOScale(desiredScale, 1f)
+                .SetEase(ease);
+        }
 
-		yield return null;
-	}
+        yield return null;
+    }
 
-	public void GrowMeFromSlit(GameObject obj, float delay = 0f, Ease ease = Ease.OutBack)
-	{
-		StartCoroutine(GrowFromSlit(obj, delay, ease));
-	}
+    public void GrowMeFromSlit(GameObject obj, float delay = 0f, Ease ease = Ease.OutBack) {
+        StartCoroutine(GrowFromSlit(obj, delay, ease));
+    }
 
-	IEnumerator GrowFromSlit(GameObject obj, float delay, Ease ease)
-	{
-		if (!obj)
-		{
-			yield break;
-		}
+    IEnumerator GrowFromSlit(GameObject obj, float delay, Ease ease) {
+        if (!obj) {
+            yield break;
+        }
 
-		Vector3 startScale = new Vector3(obj.transform.localScale.x, 0f, 1f);
-		float desiredScaleY = obj.transform.localScale.y;
+        Vector3 startScale = new Vector3(obj.transform.localScale.x, 0f, 1f);
+        float desiredScaleY = obj.transform.localScale.y;
 
-		// Scale to 0 first.
-		obj.transform.localScale = startScale;
+        // Scale to 0 first.
+        obj.transform.localScale = startScale;
 
-		// Then wait the delay.
-		yield return new WaitForSeconds(delay);
+        // Then wait the delay.
+        yield return new WaitForSeconds(delay);
 
-		// Then rescale via tween.
-		if (obj)
-		{
-			obj.transform.DOScaleY(desiredScaleY, 1f)
-				.SetEase(ease);
-		}
+        // Then rescale via tween.
+        if (obj) {
+            obj.transform.DOScaleY(desiredScaleY, 1f)
+                .SetEase(ease);
+        }
 
-		yield return null;
-	}
+        yield return null;
+    }
 
-	public void ShrinkMeToSlit(GameObject obj, float delay = 0f, Ease ease = Ease.OutBack)
-	{
-		StartCoroutine(ShrinkToSlit(obj, delay, ease));
-	}
+    public void ShrinkMeToSlit(GameObject obj, float delay = 0f, Ease ease = Ease.OutBack) {
+        StartCoroutine(ShrinkToSlit(obj, delay, ease));
+    }
 
-	IEnumerator ShrinkToSlit(GameObject obj, float delay, Ease ease)
-	{
-		// Then wait the delay.
-		yield return new WaitForSeconds(delay);
+    IEnumerator ShrinkToSlit(GameObject obj, float delay, Ease ease) {
+        // Then wait the delay.
+        yield return new WaitForSeconds(delay);
 
-		// Then rescale via tween.
-		if (obj)
-		{
-			obj.transform.DOScaleY(0f, 1f)
-				.SetEase(ease);
-		}
+        // Then rescale via tween.
+        if (obj) {
+            obj.transform.DOScaleY(0f, 1f)
+                .SetEase(ease);
+        }
 
-		yield return null;
-	}
+        yield return null;
+    }
 
-	public void IntroduceFromSide(GameObject obj, float delay, bool isRight, Ease ease = Ease.OutBounce)
-	{
-		StartCoroutine(IntroduceFromSideRoutine(obj, delay, isRight, ease));
-	}
+    public void IntroduceFromSide(GameObject obj, float delay, bool isRight, Ease ease = Ease.OutBounce) {
+        StartCoroutine(IntroduceFromSideRoutine(obj, delay, isRight, ease));
+    }
 
-	IEnumerator IntroduceFromSideRoutine(GameObject obj, float delay, bool isRight, Ease ease)
-	{
-		int sign = isRight ? 1 : -1;
-		Vector3 startPos = new Vector3(5f * sign, obj.transform.position.y, obj.transform.position.z);
-		Vector3 endPos = obj.transform.position;
+    IEnumerator IntroduceFromSideRoutine(GameObject obj, float delay, bool isRight, Ease ease) {
+        int sign = isRight ? 1 : -1;
+        Vector3 startPos = new Vector3(5f * sign, obj.transform.position.y, obj.transform.position.z);
+        Vector3 endPos = obj.transform.position;
 
-		// send off to the side first.
-		obj.transform.position = startPos;
+        // send off to the side first.
+        obj.transform.position = startPos;
 
-		// Then wait the delay.
-		yield return new WaitForSeconds(delay);
+        // Then wait the delay.
+        yield return new WaitForSeconds(delay);
 
-		// Then rescale via tween.
-		if (obj)
-		{
-			obj.transform.DOMove(endPos, 1f)
-				.SetEase(ease);
-		}
+        // Then rescale via tween.
+        if (obj) {
+            obj.transform.DOMove(endPos, 1f)
+                .SetEase(ease);
+        }
 
-		yield return null;
-	}
+        yield return null;
+    }
 }
 
 

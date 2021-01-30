@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class TutorialButton : MonoBehaviour
-{
-    public void OnPress()
-    {
+public class TutorialButton : MonoBehaviour {
+    public void OnPress() {
         AudioManager.Instance.PlayUIBlip();
 
         GameManager.Instance.restartButton.SetButtonEnabled(false);
