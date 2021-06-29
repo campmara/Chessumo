@@ -2,16 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovePathManager : MonoBehaviour {
-    public static MovePathManager Instance = null;
-
+public class MovePathManager : Singleton<MovePathManager> {
     private IntVector2 startCoords;
 
     void Awake() {
-        if (Instance == null) {
-            Instance = this;
-        }
-
         startCoords = IntVector2.NULL;
     }
 

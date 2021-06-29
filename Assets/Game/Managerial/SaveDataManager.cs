@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SaveDataManager : MonoBehaviour {
+public class SaveDataManager : Singleton<SaveDataManager> {
     /////////////////////////////////////////////////////////////////////
     // CONSTANTS
     /////////////////////////////////////////////////////////////////////
-
     private const string HIGH_SCORE_KEY = "HIGHSCORE";
     private const string SOUND_EFFECTS_KEY = "SOUND_EFFECTS";
     private const string BATTERY_SAVER_KEY = "BATTERY_SAVER";
@@ -18,8 +17,6 @@ public class SaveDataManager : MonoBehaviour {
     // PUBLICS
     /////////////////////////////////////////////////////////////////////
 
-    public static SaveDataManager Instance = null;
-
     /////////////////////////////////////////////////////////////////////
     // PRIVATES
     /////////////////////////////////////////////////////////////////////
@@ -27,12 +24,6 @@ public class SaveDataManager : MonoBehaviour {
     /////////////////////////////////////////////////////////////////////
     // FUNCTIONS
     /////////////////////////////////////////////////////////////////////
-
-    void Awake() {
-        if (!Instance) {
-            Instance = this;
-        }
-    }
 
     // HIGH SCORE
 

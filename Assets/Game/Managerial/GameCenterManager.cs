@@ -1,16 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
-public class GameCenterManager : MonoBehaviour {
-    public static GameCenterManager Instance = null;
-
+public class GameCenterManager : Singleton<GameCenterManager> {
     private const string GAMECENTER_LEADERBOARD_ID = "grp.chessumoHighScores";
-
-    private void Awake() {
-        if (Instance == null) {
-            Instance = this;
-        }
-    }
 
     void Start() {
         // Authenticate and register a ProcessAuthentication callback
@@ -31,11 +23,13 @@ public class GameCenterManager : MonoBehaviour {
     public void ReportScore(int score) {
         long scoreLong = score;
 
+#if !UNITY_EDITOR
         try {
             Social.ReportScore(scoreLong, GAMECENTER_LEADERBOARD_ID, HighScoreCheck);
         } catch {
             Debug.Log("Report Score to Game Center Failed");
         }
+#endif
     }
 
     void HighScoreCheck(bool result) {

@@ -14,16 +14,7 @@ Saving Battery and Filesize:
 Known Bugs:
     - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.
 
-RELEASE ROADMAP:
-    - bring twitter back online right before american release
-    - Finalize the website and its presskit.
-    - Fix how cramped the game looks on iPhone X. We will need to figure out tile and piece scaling finally. sigh...
-    - Sound is so fucking muddy. Clean it up, use a different piano, whatever. Just clear out the sinuses.
-    - Test for bugs.
-    - Get marketing campaign ready. (maybe) adwords, twitter, instagram, facebook. This requires working with dad for budget.
-    - Set up app store page.
-    - Draft Press Emails.
-    - Finish copywriting.
-    - Soft launch in Australia.
-    - Localize GameCenter Leaderboards.
-    - Find and implement chinese / japanese / whatever character fonts. Localize.
+Possible Changes & Additions:
+    - Localization
+    - Allow the user to start a new game quicker at the end of a game by tapping.
+    - Use Chessumo as a basis to learn more about Unity's test framework and get into testing.

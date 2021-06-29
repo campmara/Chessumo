@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using DG.Tweening;
 //using GoogleMobileAds.Api;
 
-public class GameManager : MonoBehaviour {
+public class GameManager : Singleton<GameManager> {
     /////////////////////////////////////////////////////////////////////
     // PUBLICS
     /////////////////////////////////////////////////////////////////////
-
-    public static GameManager Instance = null;
-
     public enum State {
         MENU = 0,
         GAME = 1
@@ -56,10 +53,6 @@ public class GameManager : MonoBehaviour {
     }
 
     void Start() {
-        if (Instance == null) {
-            Instance = this;
-        }
-
         // 60fps will eat battery, but threes does it so w/e.
         Application.targetFrameRate = SaveDataManager.Instance.IsBatterySaverOn() ? 30 : 60;
 

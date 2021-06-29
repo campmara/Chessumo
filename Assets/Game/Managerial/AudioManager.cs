@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AudioManager : MonoBehaviour {
-    public static AudioManager Instance = null;
-
+public class AudioManager : Singleton<AudioManager> {
     public bool SoundEnabled = true;
 
     [Header("Sources")]
@@ -38,12 +36,6 @@ public class AudioManager : MonoBehaviour {
     [SerializeField] AnimationCurve quietCurve;
     [SerializeField] float curveTime = 0.05f;
 
-    void Awake() {
-        if (Instance == null) {
-            Instance = this;
-        }
-    }
-
     bool isSuspenseHigh = false;
     public void PlaySuspense() {
         if (!SoundEnabled) return;
@@ -63,8 +55,8 @@ public class AudioManager : MonoBehaviour {
         isSuspenseHigh = !isSuspenseHigh;
     }
 
-    public float ReverseSuspense() // returns the time until full reverse.
-    {
+    // returns the time until full reverse.
+    public float ReverseSuspense() {
         if (!SoundEnabled) return 0f;
 
         if (isSuspenseHigh) {
