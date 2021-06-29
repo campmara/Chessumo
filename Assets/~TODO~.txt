@@ -18,3 +18,4 @@ Possible Changes & Additions:
     - Localization
     - Allow the user to start a new game quicker at the end of a game by tapping.
     - Use Chessumo as a basis to learn more about Unity's test framework and get into testing.
+    - Convert IntVector2 class to use Unity's built in Vector2Int
