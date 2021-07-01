@@ -1,13 +1,12 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
+using Mara.MrTween;
 
 public class SettingsMenu : MonoBehaviour {
     public GameObject moreInfoPanel;
 
     //`bool inProgress = false;
-    Tween tween;
+    ITween<Vector3> tween;
 
     GameObject child;
 
@@ -53,8 +52,8 @@ public class SettingsMenu : MonoBehaviour {
         //inProgress = true;
         child.SetActive(true);
 
-        tween = transform.DOScale(Vector3.one, 1f).SetEase(Ease.OutBack);
-
+        tween = transform.LocalScaleTo(Vector3.one, 1f).SetEaseType(EaseType.BackOut);
+        tween.Start();
         yield return tween.WaitForCompletion();
 
         //inProgress = false;
@@ -65,8 +64,8 @@ public class SettingsMenu : MonoBehaviour {
 
         //inProgress = true;
 
-        tween = transform.DOScale(Vector3.zero, 1f).SetEase(Ease.OutQuint);
-
+        tween = transform.LocalScaleTo(Vector3.zero, 1f).SetEaseType(EaseType.QuintOut);
+        tween.Start();
         yield return tween.WaitForCompletion();
 
         child.SetActive(false);

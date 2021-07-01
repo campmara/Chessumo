@@ -14,7 +14,7 @@ namespace Mara.MrTween {
         /// Only AbstractTweenTarget subclasses and Transform tweens will do validation (that includes all the built in tweens).
         /// It is up to any ITweenTarget custom implementations to add validation themselves if they want to take part in the babysitter.
         /// </summary>
-        public static bool EnableBabysitter = false;
+        public static bool EnableBabysitter = true;
 
         /// <summary>
         /// if true, the active tween list will be cleared when a new level loads

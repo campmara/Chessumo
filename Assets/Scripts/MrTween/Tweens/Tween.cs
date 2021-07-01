@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections.Generic;
 using System.Collections;
 
 
@@ -27,6 +26,7 @@ namespace Mara.MrTween {
         protected AnimationCurve _animationCurve;
         protected bool _shouldRecycleTween = true;
         protected bool _isRelative;
+        protected Action<ITween<T>> _startHandler;
         protected Action<ITween<T>> _completionHandler;
         protected Action<ITween<T>> _loopCompleteHandler;
         protected ITweenable _nextTween;
@@ -49,18 +49,15 @@ namespace Mara.MrTween {
 
         public object Context { get; protected set; }
 
-
         public ITween<T> SetEaseType(EaseType easeType) {
             _easeType = easeType;
             return this;
         }
 
-
         public ITween<T> SetAnimationCurve(AnimationCurve animationCurve) {
             _animationCurve = animationCurve;
             return this;
         }
-
 
         public ITween<T> SetDelay(float delay) {
             _delay = delay;
@@ -68,30 +65,30 @@ namespace Mara.MrTween {
             return this;
         }
 
-
         public ITween<T> SetDuration(float duration) {
             _duration = duration;
             return this;
         }
-
 
         public ITween<T> SetTimeScale(float timeScale) {
             _timeScale = timeScale;
             return this;
         }
 
-
         public ITween<T> SetIsTimeScaleIndependent() {
             _isTimeScaleIndependent = true;
             return this;
         }
 
+        public ITween<T> SetStartHandler(Action<ITween<T>> startHandler) {
+            _startHandler = startHandler;
+            return this;
+        }
 
         public ITween<T> SetCompletionHandler(Action<ITween<T>> completionHandler) {
             _completionHandler = completionHandler;
             return this;
         }
-
 
         public ITween<T> SetLoops(LoopType loopType, int loops = 1, float delayBetweenLoops = 0f) {
             _loopType = loopType;
@@ -105,12 +102,10 @@ namespace Mara.MrTween {
             return this;
         }
 
-
         public ITween<T> SetLoopCompletionHandler(Action<ITween<T>> loopCompleteHandler) {
             _loopCompleteHandler = loopCompleteHandler;
             return this;
         }
-
 
         public ITween<T> SetFrom(T from) {
             _isFromValueOverridden = true;
@@ -118,27 +113,22 @@ namespace Mara.MrTween {
             return this;
         }
 
-
         public ITween<T> PrepareForReuse(T from, T to, float duration) {
             Initialize(_target, to, duration);
             return this;
         }
-
 
         public ITween<T> SetRecycleTween(bool shouldRecycleTween) {
             _shouldRecycleTween = shouldRecycleTween;
             return this;
         }
 
-
         abstract public ITween<T> SetIsRelative();
-
 
         public ITween<T> SetContext(object context) {
             this.Context = context;
             return this;
         }
-
 
         public ITween<T> SetNextTween(ITweenable nextTween) {
             _nextTween = nextTween;
@@ -146,7 +136,6 @@ namespace Mara.MrTween {
         }
 
         #endregion
-
 
         #region ITweenable
 
@@ -167,27 +156,35 @@ namespace Mara.MrTween {
             }
 
             // elapsed time will be negative while we are delaying the start of the tween so dont update the value
-            if (_elapsedTime >= 0 && _elapsedTime <= _duration)
+            if (_elapsedTime >= 0 && _elapsedTime <= _duration) {
+                if (_startHandler != null) {
+                    _startHandler(this);
+                    _startHandler = null;
+                }
                 UpdateValue();
+            }
 
             // if we have a loopType and we are Complete (meaning we reached 0 or duration) handle the loop.
             // handleLooping will take any excess elapsedTime and factor it in and call udpateValue if necessary to keep
             // the tween perfectly accurate.
-            if (_loopType != LoopType.None && _tweenState == TweenState.Complete && _loops > 0)
+            if (_loopType != LoopType.None && _tweenState == TweenState.Complete && _loops > 0) {
                 HandleLooping(elapsedTimeExcess);
+            }
 
             var deltaTime = _isTimeScaleIndependent ? Time.unscaledDeltaTime : Time.deltaTime;
             deltaTime *= _timeScale;
 
             // running in reverse? then we need to subtract deltaTime
-            if (_isRunningInReverse)
+            if (_isRunningInReverse) {
                 _elapsedTime -= deltaTime;
-            else
+            } else {
                 _elapsedTime += deltaTime;
+            }
 
             if (_tweenState == TweenState.Complete) {
-                if (_completionHandler != null)
+                if (_completionHandler != null) {
                     _completionHandler(this);
+                }
 
                 // if we have a nextTween add it to MrTween so that it can start running
                 if (_nextTween != null) {
@@ -201,7 +198,6 @@ namespace Mara.MrTween {
             return false;
         }
 
-
         public virtual void RecycleSelf() {
             if (_shouldRecycleTween) {
                 _target = null;
@@ -209,11 +205,9 @@ namespace Mara.MrTween {
             }
         }
 
-
         public bool IsRunning() {
             return _tweenState == TweenState.Running;
         }
-
 
         public virtual void Start() {
             if (!_isFromValueOverridden)
@@ -225,16 +219,13 @@ namespace Mara.MrTween {
             }
         }
 
-
         public void Pause() {
             _tweenState = TweenState.Paused;
         }
 
-
         public void Resume() {
             _tweenState = TweenState.Running;
         }
-
 
         public void Stop(bool bringToCompletion = false, bool bringToCompletionImmediately = false) {
             _tweenState = TweenState.Complete;
@@ -257,7 +248,6 @@ namespace Mara.MrTween {
 
         #endregion
 
-
         #region ITweenControl
 
         public void JumpToElapsedTime(float elapsedTime) {
@@ -265,14 +255,12 @@ namespace Mara.MrTween {
             UpdateValue();
         }
 
-
         /// <summary>
         /// reverses the current tween. if it was going forward it will be going backwards and vice versa.
         /// </summary>
         public void ReverseTween() {
             _isRunningInReverse = !_isRunningInReverse;
         }
-
 
         /// <summary>
         /// when called via StartCoroutine this will continue until the tween completes
@@ -283,17 +271,15 @@ namespace Mara.MrTween {
                 yield return null;
         }
 
-
         public object GetTargetObject() {
             return _target.GetTargetObject();
         }
 
         #endregion
 
-
-        void ResetState() {
+        private void ResetState() {
             Context = null;
-            _completionHandler = _loopCompleteHandler = null;
+            _startHandler = _completionHandler = _loopCompleteHandler = null;
             _isFromValueOverridden = false;
             _isTimeScaleIndependent = false;
             _tweenState = TweenState.Complete;
@@ -318,7 +304,6 @@ namespace Mara.MrTween {
             _isRunningInReverse = false;
         }
 
-
         /// <summary>
         /// resets all state to defaults and sets the initial state based on the paramaters passed in. This method serves
         /// as an entry point so that Tween subclasses can call it and so that tweens can be recycled. When recycled,
@@ -336,7 +321,6 @@ namespace Mara.MrTween {
             _toValue = to;
             _duration = duration;
         }
-
 
         /// <summary>
         /// handles loop logic

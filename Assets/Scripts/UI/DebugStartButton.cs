@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using DG.Tweening;
+using Mara.MrTween;
 
 public class DebugStartButton : MonoBehaviour {
     [SerializeField] Sprite upSprite;
@@ -21,15 +21,17 @@ public class DebugStartButton : MonoBehaviour {
     }
 
     public void Raise() {
-        transform.DOMoveY(Constants.I.StartButtonRaisedY, Constants.I.StartButtonTweenTime)
-            .SetEase(Ease.OutBack);
+        transform.YPositionTo(Constants.I.StartButtonRaisedY, Constants.I.StartButtonTweenTime)
+            .SetEaseType(EaseType.BackOut)
+            .Start();
 
         Invoke("RaiseButton", Constants.I.StartButtonTweenTime + 0.25f);
     }
 
     public void Lower() {
-        transform.DOMoveY(Constants.I.StartButtonLoweredY, Constants.I.StartButtonTweenTime)
-            .SetEase(Ease.InQuint);
+        transform.YPositionTo(Constants.I.StartButtonLoweredY, Constants.I.StartButtonTweenTime)
+            .SetEaseType(EaseType.QuintIn)
+            .Start();
     }
 
     void RaiseButton() {

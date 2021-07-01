@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using TMPro;
-using DG.Tweening;
-using UnityEngine.SocialPlatforms;
 
 public class Score : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI textMesh;
@@ -13,10 +10,6 @@ public class Score : MonoBehaviour {
     void Awake() {
         score = 0;
         textMesh.text = "0";
-    }
-
-    void OnEnable() {
-        //GameManager.Instance.IntroduceFromSide(this.gameObject, 1.9f, true);
     }
 
     public void SubmitScore() {
@@ -36,15 +29,5 @@ public class Score : MonoBehaviour {
 
     void UpdateText() {
         textMesh.text = score.ToString();
-    }
-
-    public Tween Lower() {
-        return transform.DOMoveY(Constants.I.ScoreLoweredY, Constants.I.ScoreTweenTime)
-                .SetEase(Ease.Linear);
-    }
-
-    public Tween Raise() {
-        return transform.DOMoveY(Constants.I.ScoreRaisedY, Constants.I.ScoreTweenTime)
-                .SetEase(Ease.Linear);
     }
 }

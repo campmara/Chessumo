@@ -1,8 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using UnityEngine.UI;
+using Mara.MrTween;
 
 public class TutorialAnim3 : MonoBehaviour {
     [SerializeField] private Image rook;
@@ -76,10 +75,10 @@ public class TutorialAnim3 : MonoBehaviour {
         touch.color = new Color(touch.color.r, touch.color.g, touch.color.b, 0f);
         touch.gameObject.SetActive(true);
 
-        touch.rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.5f);
-        Tween tween = touch.DOFade(1f, 0.5f);
-
-        yield return tween.WaitForCompletion();
+        touch.rectTransform.LocalScaleTo(new Vector3(1f, 1f, 1f), 0.5f).Start();
+        ITween<float> floatTween = touch.AlphaTo(1f, 0.5f);
+        floatTween.Start();
+        yield return floatTween.WaitForCompletion();
 
         // TILES REACT
         tileA.sprite = tileUpSprite;
@@ -93,20 +92,23 @@ public class TutorialAnim3 : MonoBehaviour {
         yield return new WaitForSeconds(1f);
 
         // DRAG FINGER RIGHT, TILES REACTING ALONG THE WAY
-        tween = touch.rectTransform.DOAnchorPosX(bishop.rectTransform.anchoredPosition.x, 0.5f);
-        yield return tween.WaitForCompletion();
+        ITween<Vector2> anchorTween = touch.rectTransform.XAnchoredPositionTo(bishop.rectTransform.anchoredPosition.x, 0.5f);
+        anchorTween.Start();
+        yield return anchorTween.WaitForCompletion();
         tileB.sprite = tileUpSprite;
         tileB.color = rookColor;
         bishop.rectTransform.anchoredPosition += Vector2.up * 10f;
 
-        tween = touch.rectTransform.DOAnchorPosX(king.rectTransform.anchoredPosition.x, 0.5f);
-        yield return tween.WaitForCompletion();
+        anchorTween = touch.rectTransform.XAnchoredPositionTo(king.rectTransform.anchoredPosition.x, 0.5f);
+        anchorTween.Start();
+        yield return anchorTween.WaitForCompletion();
         tileC.sprite = tileUpSprite;
         tileC.color = rookColor;
         king.rectTransform.anchoredPosition += Vector2.up * 10f;
 
-        tween = touch.rectTransform.DOAnchorPosX(queen.rectTransform.anchoredPosition.x, 0.5f);
-        yield return tween.WaitForCompletion();
+        anchorTween = touch.rectTransform.XAnchoredPositionTo(queen.rectTransform.anchoredPosition.x, 0.5f);
+        anchorTween.Start();
+        yield return anchorTween.WaitForCompletion();
         tileD.sprite = tileUpSprite;
         tileD.color = rookColor;
         queen.rectTransform.anchoredPosition += Vector2.up * 10f;
@@ -114,29 +116,42 @@ public class TutorialAnim3 : MonoBehaviour {
         yield return new WaitForSeconds(1f);
 
         // LET GO FINGER AND PIECES MOVE
-        touch.transform.DOScale(initialTouchScale, 0.5f);
-        touch.DOFade(0f, 0.5f);
+        touch.transform.LocalScaleTo(initialTouchScale, 0.5f).Start();
+        touch.AlphaTo(0f, 0.5f).Start();
 
         // QUEEN GETS KNOCKED
-        rook.rectTransform.DOAnchorPosX(bishop.rectTransform.anchoredPosition.x, 0.75f);
-        bishop.rectTransform.DOAnchorPosX(king.rectTransform.anchoredPosition.x, 0.75f);
-        king.rectTransform.DOAnchorPosX(queen.rectTransform.anchoredPosition.x, 0.75f);
-        tween = queen.rectTransform.DOAnchorPosX(queen.rectTransform.anchoredPosition.x + 125f, 0.75f);
-        yield return tween.WaitForCompletion();
-        queen.rectTransform.DOAnchorPosY(-1000f, 0.75f).SetEase(Ease.InCubic).OnComplete(() => GameManager.Instance.scoreEffect.OnOneScored(queenColor));
+        rook.rectTransform.XAnchoredPositionTo(bishop.rectTransform.anchoredPosition.x, 0.75f).Start();
+        bishop.rectTransform.XAnchoredPositionTo(king.rectTransform.anchoredPosition.x, 0.75f).Start();
+        king.rectTransform.XAnchoredPositionTo(queen.rectTransform.anchoredPosition.x, 0.75f).Start();
+        anchorTween = queen.rectTransform.XAnchoredPositionTo(queen.rectTransform.anchoredPosition.x + 125f, 0.75f);
+        anchorTween.Start();
+        yield return anchorTween.WaitForCompletion();
+
+        queen.rectTransform.YAnchoredPositionTo(-1000f, 0.75f)
+            .SetEaseType(EaseType.CubicIn)
+            .SetCompletionHandler((_) => GameManager.Instance.scoreEffect.OnOneScored(queenColor))
+            .Start();
 
         // KING GETS KNOCKED
-        rook.rectTransform.DOAnchorPosX(bishop.rectTransform.anchoredPosition.x, 0.75f);
-        bishop.rectTransform.DOAnchorPosX(king.rectTransform.anchoredPosition.x, 0.75f);
-        tween = king.rectTransform.DOAnchorPosX(king.rectTransform.anchoredPosition.x + 125f, 0.75f);
-        yield return tween.WaitForCompletion();
-        king.rectTransform.DOAnchorPosY(-1000f, 0.75f).SetEase(Ease.InCubic).OnComplete(() => GameManager.Instance.scoreEffect.OnTwoScored(kingColor));
+        rook.rectTransform.XAnchoredPositionTo(bishop.rectTransform.anchoredPosition.x, 0.75f).Start();
+        bishop.rectTransform.XAnchoredPositionTo(king.rectTransform.anchoredPosition.x, 0.75f).Start();
+        anchorTween = king.rectTransform.XAnchoredPositionTo(king.rectTransform.anchoredPosition.x + 125f, 0.75f);
+        anchorTween.Start();
+        yield return anchorTween.WaitForCompletion();
+        king.rectTransform.YAnchoredPositionTo(-1000f, 0.75f)
+            .SetEaseType(EaseType.CubicIn)
+            .SetCompletionHandler((_) => GameManager.Instance.scoreEffect.OnTwoScored(kingColor))
+            .Start();
 
         // BISHOP GETS KNOCKED
-        rook.rectTransform.DOAnchorPosX(bishop.rectTransform.anchoredPosition.x, 0.75f);
-        tween = bishop.rectTransform.DOAnchorPosX(bishop.rectTransform.anchoredPosition.x + 125f, 0.75f);
-        yield return tween.WaitForCompletion();
-        bishop.rectTransform.DOAnchorPosY(-1000f, 0.75f).SetEase(Ease.InCubic).OnComplete(() => GameManager.Instance.scoreEffect.OnThreeScored(bishopColor));
+        rook.rectTransform.XAnchoredPositionTo(bishop.rectTransform.anchoredPosition.x, 0.75f).Start();
+        anchorTween = bishop.rectTransform.XAnchoredPositionTo(bishop.rectTransform.anchoredPosition.x + 125f, 0.75f);
+        anchorTween.Start();
+        yield return anchorTween.WaitForCompletion();
+        bishop.rectTransform.YAnchoredPositionTo(-1000f, 0.75f)
+            .SetEaseType(EaseType.CubicIn)
+            .SetCompletionHandler((_) => GameManager.Instance.scoreEffect.OnThreeScored(bishopColor))
+            .Start();
 
         // DISABLE TOUCH DESIGNATOR AND WAIT
         rook.color = disabledTint; // disable rook
@@ -158,13 +173,15 @@ public class TutorialAnim3 : MonoBehaviour {
         king.rectTransform.anchoredPosition = new Vector2(initialKingPos.x, 1000f);
         queen.rectTransform.anchoredPosition = new Vector2(initialQueenPos.x, 1000f);
 
-        rook.rectTransform.DOAnchorPosX(initialRookPos.x, 1f).OnComplete(() => rook.color = Color.white);
+        rook.rectTransform.XAnchoredPositionTo(initialRookPos.x, 1f)
+            .SetCompletionHandler((_) => rook.color = Color.white)
+            .Start();
         yield return new WaitForSeconds(0.25f);
-        queen.rectTransform.DOAnchorPosY(initialQueenPos.y, 1f);
+        queen.rectTransform.YAnchoredPositionTo(initialQueenPos.y, 1f).Start();
         yield return new WaitForSeconds(0.25f);
-        king.rectTransform.DOAnchorPosY(initialKingPos.y, 1f);
+        king.rectTransform.YAnchoredPositionTo(initialKingPos.y, 1f).Start();
         yield return new WaitForSeconds(0.25f);
-        bishop.rectTransform.DOAnchorPosY(initialBishopPos.y, 1f);
+        bishop.rectTransform.YAnchoredPositionTo(initialBishopPos.y, 1f).Start();
 
         yield return new WaitForSeconds(2f);
 

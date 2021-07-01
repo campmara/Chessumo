@@ -55,16 +55,14 @@ public class AudioManager : Singleton<AudioManager> {
     }
 
     // returns the time until full reverse.
-    public float ReverseSuspense() {
-        if (!SoundEnabled) return 0f;
+    public void ReverseSuspense() {
+        if (!SoundEnabled) return;
 
         if (isSuspenseHigh) {
             // make piano a rev
             pianoA.pitch = -1;
-            return pianoA.time;
         } else {
             pianoB.pitch = -1;
-            return pianoB.time;
         }
     }
 

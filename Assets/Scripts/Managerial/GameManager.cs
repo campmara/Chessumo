@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using DG.Tweening;
+using Mara.MrTween;
 //using GoogleMobileAds.Api;
 
 public class GameManager : Singleton<GameManager> {
@@ -47,9 +47,6 @@ public class GameManager : Singleton<GameManager> {
     private void Start() {
         // 60fps will eat battery, but threes does it so w/e.
         Application.targetFrameRate = SaveDataManager.Instance.IsBatterySaverOn() ? 30 : 60;
-
-        // Init DOTween.
-        DOTween.Init();
 
         currentState = State.MENU;
 
@@ -147,11 +144,11 @@ public class GameManager : Singleton<GameManager> {
         return new Vector2(xPos, yPos);
     }
 
-    public void GrowMe(GameObject obj, Ease ease = Ease.OutBack) {
+    public void GrowMe(GameObject obj, EaseType ease = EaseType.BackOut) {
         StartCoroutine(GrowToScale(obj, ease));
     }
 
-    IEnumerator GrowToScale(GameObject obj, Ease ease) {
+    IEnumerator GrowToScale(GameObject obj, EaseType ease) {
         // Neat little effect for now to compensate for the fact that shit would just appear out of nowhere otherwise. this will die someday.
 
         if (!obj) {
@@ -166,18 +163,19 @@ public class GameManager : Singleton<GameManager> {
 
         // Then rescale via tween.
         if (obj) {
-            obj.transform.DOScale(desiredScale, 1f)
-                .SetEase(ease);
+
+            obj.transform.LocalScaleTo(desiredScale, 1f)
+                .SetEaseType(ease).Start();
         }
 
         yield return null;
     }
 
-    public void GrowMeFromSlit(GameObject obj, float delay = 0f, Ease ease = Ease.OutBack) {
+    public void GrowMeFromSlit(GameObject obj, float delay = 0f, EaseType ease = EaseType.BackOut) {
         StartCoroutine(GrowFromSlit(obj, delay, ease));
     }
 
-    IEnumerator GrowFromSlit(GameObject obj, float delay, Ease ease) {
+    IEnumerator GrowFromSlit(GameObject obj, float delay, EaseType ease) {
         if (!obj) {
             yield break;
         }
@@ -193,35 +191,33 @@ public class GameManager : Singleton<GameManager> {
 
         // Then rescale via tween.
         if (obj) {
-            obj.transform.DOScaleY(desiredScaleY, 1f)
-                .SetEase(ease);
+            obj.transform.YLocalScaleTo(desiredScaleY, 1f).SetEaseType(ease).Start();
         }
 
         yield return null;
     }
 
-    public void ShrinkMeToSlit(GameObject obj, float delay = 0f, Ease ease = Ease.OutBack) {
+    public void ShrinkMeToSlit(GameObject obj, float delay = 0f, EaseType ease = EaseType.BackOut) {
         StartCoroutine(ShrinkToSlit(obj, delay, ease));
     }
 
-    IEnumerator ShrinkToSlit(GameObject obj, float delay, Ease ease) {
+    IEnumerator ShrinkToSlit(GameObject obj, float delay, EaseType ease) {
         // Then wait the delay.
         yield return new WaitForSeconds(delay);
 
         // Then rescale via tween.
         if (obj) {
-            obj.transform.DOScaleY(0f, 1f)
-                .SetEase(ease);
+            obj.transform.YLocalScaleTo(0f, 1f).SetEaseType(ease).Start();
         }
 
         yield return null;
     }
 
-    public void IntroduceFromSide(GameObject obj, float delay, bool isRight, Ease ease = Ease.OutBounce) {
+    public void IntroduceFromSide(GameObject obj, float delay, bool isRight, EaseType ease = EaseType.BounceOut) {
         StartCoroutine(IntroduceFromSideRoutine(obj, delay, isRight, ease));
     }
 
-    IEnumerator IntroduceFromSideRoutine(GameObject obj, float delay, bool isRight, Ease ease) {
+    IEnumerator IntroduceFromSideRoutine(GameObject obj, float delay, bool isRight, EaseType ease) {
         int sign = isRight ? 1 : -1;
         Vector3 startPos = new Vector3(5f * sign, obj.transform.position.y, obj.transform.position.z);
         Vector3 endPos = obj.transform.position;
@@ -234,8 +230,7 @@ public class GameManager : Singleton<GameManager> {
 
         // Then rescale via tween.
         if (obj) {
-            obj.transform.DOMove(endPos, 1f)
-                .SetEase(ease);
+            obj.transform.PositionTo(endPos, 1f).SetEaseType(ease).Start();
         }
 
         yield return null;

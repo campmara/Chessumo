@@ -51,6 +51,12 @@ namespace Mara.MrTween {
         ITween<T> SetIsTimeScaleIndependent();
 
         /// <summary>
+        /// chainable. sets the action that should be called when the tween is started (after 
+        /// any delays).
+        /// </summary>
+        ITween<T> SetStartHandler(Action<ITween<T>> startHandler);
+
+        /// <summary>
         /// chainable. sets the action that should be called when the tween is complete.
         /// </summary>
         ITween<T> SetCompletionHandler(Action<ITween<T>> completionHandler);

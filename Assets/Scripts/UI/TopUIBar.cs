@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using DG.Tweening;
 using UnityEngine.UI;
+using Mara.MrTween;
 
 public class TopUIBar : MonoBehaviour {
     [SerializeField] private RawImage coverPanel;
@@ -16,17 +16,14 @@ public class TopUIBar : MonoBehaviour {
     }
 
     public void Introduce(float delay) {
-        StartCoroutine(IntroduceRoutine(delay));
-    }
-
-    private IEnumerator IntroduceRoutine(float delay) {
-        yield return new WaitForSeconds(delay);
-        coverPanel.DOFade(0f, 1.5f).SetEase(Ease.Linear).OnComplete(OnComplete);
-    }
-
-    private void OnComplete() {
-        coverPanel.gameObject.SetActive(false);
-        GameManager.Instance.restartButton.SetButtonEnabled(true);
-        GameManager.Instance.restartButton.SetReadyForInput(true);
+        coverPanel.AlphaTo(0f, 1.5f)
+            .SetEaseType(EaseType.Linear)
+            .SetDelay(delay)
+            .SetCompletionHandler((_) => {
+                coverPanel.gameObject.SetActive(false);
+                GameManager.Instance.restartButton.SetButtonEnabled(true);
+                GameManager.Instance.restartButton.SetReadyForInput(true);
+            })
+            .Start();
     }
 }

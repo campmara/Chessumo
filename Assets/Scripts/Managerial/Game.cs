@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
+using Mara.MrTween;
 
 public class Game : MonoBehaviour {
     public enum PieceType {
@@ -195,8 +195,9 @@ public class Game : MonoBehaviour {
 
             yield return new WaitForSeconds(Random.Range(0f, 0.1f));
 
-            tile.transform.DOScale(new Vector3(1f, 1f, 1f), 1f)
-                .SetEase(Ease.OutBack);
+            tile.transform.LocalScaleTo(new Vector3(1f, 1f, 1f), 1f)
+                .SetEaseType(EaseType.BackOut)
+                .Start();
         }
     }
 
@@ -626,23 +627,26 @@ public class Game : MonoBehaviour {
         Vector3 newPos = new Vector3(position.x, position.y, pieceObj.transform.position.z);
         Vector3 dir = (newPos - oldPos).normalized;
 
-        Tween tween;
+        ITween<Vector3> vector3Tween;
 
         for (int i = travelDist - Mathf.Clamp(distFromPushingPiece - 1, 0, distFromPushingPiece + 1); i > 0; i--) {
-            tween = pieceObj.transform.DOMove(piece.transform.position + dir, Constants.I.PieceMoveTime)
-                .SetEase(Ease.Linear);
             if (i == 1) {
                 AudioManager.Instance.PlayPieceOffGrid();
             }
-            yield return tween.WaitForCompletion();
+
+            vector3Tween = pieceObj.transform.PositionTo(piece.transform.position + dir, Constants.I.PieceMoveTime)
+                .SetEaseType(EaseType.Linear);
+            vector3Tween.Start();
+
+            yield return vector3Tween.WaitForCompletion();
         }
 
         piece.SetSortingLayer("Falling Pieces");
         Destroy(piece); // Destroy the piece class so it won't get touched.
 
-        tween = pieceObj.transform.DOMoveY(-6f, 0.75f)
-            .SetEase(Ease.InCubic);
-        yield return tween.WaitForCompletion();
+        ITween<float> floatTween = pieceObj.transform.YPositionTo(-6f, 0.75f).SetEaseType(EaseType.CubicIn);
+        floatTween.Start();
+        yield return floatTween.WaitForCompletion();
 
         // Score a point and handle the score combo.
         HandleScorePoint(piece);
@@ -774,8 +778,8 @@ public class Game : MonoBehaviour {
                 if (pieces[i, j] != null) {
                     float duration = Random.Range(0.4f, 1.5f);
 
-                    tileObjects[i, j].transform.DOMoveY(-10f, duration).SetEase(Ease.InQuint);
-                    pieces[i, j].transform.DOMoveY(-10f, duration).SetEase(Ease.InQuint);
+                    tileObjects[i, j].transform.YPositionTo(-10f, duration).SetEaseType(EaseType.QuintIn).Start();
+                    pieces[i, j].transform.YPositionTo(-10f, duration).SetEaseType(EaseType.QuintIn).Start();
 
                     yield return new WaitForSeconds(0.01f);
                 }
@@ -788,7 +792,7 @@ public class Game : MonoBehaviour {
             for (int j = 0; j < tileObjects.GetLength(1); j++) {
                 if (pieces[i, j] == null) {
                     // If there are no pieces on this then we can drop.
-                    tileObjects[i, j].transform.DOMoveY(-10f, Random.Range(0.4f, 1.5f)).SetEase(Ease.InQuint);
+                    tileObjects[i, j].transform.YPositionTo(-10f, Random.Range(0.4f, 1.5f)).SetEaseType(EaseType.QuintIn).Start();
                     yield return new WaitForSeconds(0.01f);
                 }
             }

@@ -1,8 +1,7 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 using UnityEngine.UI;
+using Mara.MrTween;
 
 public class TutorialAnim2 : MonoBehaviour {
     [SerializeField] private Image pawn;
@@ -62,10 +61,10 @@ public class TutorialAnim2 : MonoBehaviour {
         touch.color = new Color(touch.color.r, touch.color.g, touch.color.b, 0f);
         touch.gameObject.SetActive(true);
 
-        touch.rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.5f);
-        Tween tween = touch.DOFade(1f, 0.5f);
-
-        yield return tween.WaitForCompletion();
+        touch.rectTransform.LocalScaleTo(new Vector3(1f, 1f, 1f), 0.5f).Start();
+        ITween<float> floatTween = touch.AlphaTo(1f, 0.5f);
+        floatTween.Start();
+        yield return floatTween.WaitForCompletion();
 
         // TILES REACT
         bottomTile.sprite = tileUpSprite;
@@ -77,9 +76,9 @@ public class TutorialAnim2 : MonoBehaviour {
         yield return new WaitForSeconds(1f);
 
         // DRAG FINGER UP
-        tween = touch.rectTransform.DOAnchorPosY(king.rectTransform.anchoredPosition.y, 1f);
-
-        yield return tween.WaitForCompletion();
+        ITween<Vector2> anchorTween = touch.rectTransform.YAnchoredPositionTo(king.rectTransform.anchoredPosition.y, 1f);
+        anchorTween.Start();
+        yield return anchorTween.WaitForCompletion();
 
         // MIDDLE TILE REACTS
         middleTile.sprite = tileUpSprite;
@@ -92,13 +91,13 @@ public class TutorialAnim2 : MonoBehaviour {
         // LET GO FINGER AND PIECES MOVE
         king.color = Color.white; // enable king
 
-        touch.transform.DOScale(initialTouchScale, 0.5f);
-        touch.DOFade(0f, 0.5f);
+        touch.transform.LocalScaleTo(initialTouchScale, 0.5f).Start();
+        touch.AlphaTo(0f, 0.5f).Start();
 
-        pawn.rectTransform.DOAnchorPosY(initialKingPos.y, 0.75f);
-        tween = king.rectTransform.DOAnchorPosY(topTile.rectTransform.anchoredPosition.y - 5f, 0.75f);
-
-        yield return tween.WaitForCompletion();
+        pawn.rectTransform.YAnchoredPositionTo(initialKingPos.y, 0.75f).Start();
+        anchorTween = king.rectTransform.YAnchoredPositionTo(topTile.rectTransform.anchoredPosition.y - 5f, 0.75f);
+        anchorTween.Start();
+        yield return anchorTween.WaitForCompletion();
 
         // DISABLE TOUCH DESIGNATOR AND WAIT
         pawn.color = disabledTint; // disable pawn
@@ -118,10 +117,10 @@ public class TutorialAnim2 : MonoBehaviour {
         touch.gameObject.SetActive(true);
         touch.rectTransform.anchoredPosition = king.rectTransform.anchoredPosition;
 
-        touch.rectTransform.DOScale(new Vector3(1f, 1f, 1f), 0.5f);
-        tween = touch.DOFade(1f, 0.5f);
-
-        yield return tween.WaitForCompletion();
+        touch.rectTransform.LocalScaleTo(new Vector3(1f, 1f, 1f), 0.5f).Start();
+        floatTween = touch.AlphaTo(1f, 0.5f);
+        floatTween.Start();
+        yield return floatTween.WaitForCompletion();
 
         // TILES REACT
         topTile.sprite = tileUpSprite;
@@ -133,9 +132,9 @@ public class TutorialAnim2 : MonoBehaviour {
         yield return new WaitForSeconds(1f);
 
         // DRAG FINGER DOWN
-        tween = touch.rectTransform.DOAnchorPosY(pawn.rectTransform.anchoredPosition.y, 1f);
-
-        yield return tween.WaitForCompletion();
+        anchorTween = touch.rectTransform.YAnchoredPositionTo(pawn.rectTransform.anchoredPosition.y, 1f);
+        anchorTween.Start();
+        yield return anchorTween.WaitForCompletion();
 
         // MIDDLE TILE REACTS
         middleTile.sprite = tileUpSprite;
@@ -148,13 +147,13 @@ public class TutorialAnim2 : MonoBehaviour {
         // LET GO FINGER AND PIECES MOVE
         pawn.color = Color.white; // enable pawn
 
-        touch.transform.DOScale(initialTouchScale, 0.5f);
-        touch.DOFade(0f, 0.5f);
+        touch.transform.LocalScaleTo(initialTouchScale, 0.5f).Start();
+        touch.AlphaTo(0f, 0.5f).Start();
 
-        pawn.rectTransform.DOAnchorPosY(initialPawnPos.y, 0.75f);
-        tween = king.rectTransform.DOAnchorPosY(initialKingPos.y - 5f, 0.75f);
-
-        yield return tween.WaitForCompletion();
+        pawn.rectTransform.YAnchoredPositionTo(initialPawnPos.y, 0.75f).Start();
+        anchorTween = king.rectTransform.YAnchoredPositionTo(initialKingPos.y - 5f, 0.75f);
+        anchorTween.Start();
+        yield return anchorTween.WaitForCompletion();
 
         // DISABLE TOUCH DESIGNATOR AND WAIT
         king.color = disabledTint; // disable king

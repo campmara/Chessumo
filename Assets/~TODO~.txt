@@ -13,9 +13,15 @@ Saving Battery and Filesize:
 
 Known Bugs:
     - Can't reverse the knight movement path. Not crazy bug but would be a nice fix.
+    - Knocking off 3 pieces makes the score sound play in weird intervals, this is probably because of the weirdness introduced w/ the switch to Mr. Tween.
+    - Reinitializing the tutorial when the new game pulse is happening disables the pulse on return and doesn't allow a new game to be started without going into the settings and manually starting a new game.
 
 Possible Changes & Additions:
-    - Localization
-    - Allow the user to start a new game quicker at the end of a game by tapping.
-    - Use Chessumo as a basis to learn more about Unity's test framework and get into testing.
-    - Convert IntVector2 class to use Unity's built in Vector2Int
+    [ ] Localization
+    [ ] Allow the user to start a new game quicker at the end of a game by tapping.
+    [ ] Use Chessumo as a basis to learn more about Unity's test framework and get into testing.
+    [ ] Convert IntVector2 class to use Unity's built in Vector2Int
+    [ ] Migrate tweens to Mr. Tween
+    [ ] Migrate from "onmousedown" calls, this is a mobile game. even though it works it is extremely weird that you're using those for input. do input properly.
+    [x] Do some code cleanup
+    [ ] Go through "// TODO: "s

@@ -1,7 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
+using Mara.MrTween;
 
 public class RestartButton : MonoBehaviour {
     [SerializeField] private SpriteRenderer touchDesignator;
@@ -15,8 +14,7 @@ public class RestartButton : MonoBehaviour {
 
     private Coroutine pulseLoopRoutine = null;
 
-    private Tween fadeTween = null;
-    private Tween pulseTween = null;
+    private TweenParty tweens = null;
 
     Vector3 followDir;
 
@@ -60,18 +58,30 @@ public class RestartButton : MonoBehaviour {
         AudioManager.Instance.PlaySuspense();
         ResetEffect();
 
-        pulseTween = touchDesignator.transform.DOScale(Vector3.one * MAX_S, 1.5f);
-        fadeTween = touchDesignator.DOFade(0f, 1.5f);
+        tweens = new TweenParty(1.5f);
+        tweens.AddTween(
+            touchDesignator.transform.LocalScaleTo(Vector3.one * MAX_S)
+                .SetEaseType(EaseType.Linear)
+        );
+        tweens.AddTween(
+            touchDesignator.AlphaTo(0f)
+                .SetEaseType(EaseType.Linear)
+        );
 
-        yield return fadeTween.WaitForCompletion();
+        tweens.Start();
+
+        yield return tweens.WaitForCompletion();
 
         pulseLoopRoutine = StartCoroutine(PulseLoopRoutine());
     }
 
     public void KillPulse() {
         StopAllCoroutines();
-        pulseTween.Kill();
-        fadeTween.Kill();
+
+        if (tweens != null && tweens.IsRunning()) {
+            tweens.Stop();
+            tweens = null;
+        }
     }
 
     public void SetButtonEnabled(bool isEnabled) {
@@ -91,28 +101,34 @@ public class RestartButton : MonoBehaviour {
     void OnMouseDown() {
         if (!isTakingInput) return;
 
-        KillPulse();
-        float time = AudioManager.Instance.ReverseSuspense();
-
-        pulseTween = touchDesignator.transform.DOScale(Vector3.one * MIN_S, time);
-        fadeTween = touchDesignator.DOFade(1f, time);
+        if (tweens != null && tweens.IsRunning()) {
+            StopAllCoroutines();
+            AudioManager.Instance.ReverseSuspense();
+            tweens.ReverseTween();
+        }
     }
 
-    void OnMouseUp() {
+    private void OnMouseUp() {
         if (!isTakingInput) return;
 
         OnPress();
     }
 
-    void OnEffectFinish() {
-        SetButtonEnabled(false);
-    }
-
-    void OnPress() {
+    private void OnPress() {
         AudioManager.Instance.PlayStartRelease();
 
-        touchDesignator.transform.DOScale(Vector3.one * MAX_S, 1f);
-        touchDesignator.DOFade(0f, 1f).OnComplete(OnEffectFinish);
+        KillPulse();
+        tweens = new TweenParty(1f);
+        tweens.AddTween(
+            touchDesignator.transform.LocalScaleTo(Vector3.one * MAX_S)
+                .SetEaseType(EaseType.Linear)
+        );
+        tweens.AddTween(
+            touchDesignator.AlphaTo(0f)
+                .SetEaseType(EaseType.Linear)
+        );
+        tweens.SetCompletionHandler((_) => SetButtonEnabled(false));
+        tweens.Start();
 
         SetReadyForInput(false);
 

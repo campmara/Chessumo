@@ -25,6 +25,51 @@ namespace Mara.MrTween {
             return tween;
         }
 
+        /// <summary>
+        /// transform.position tween for x
+        /// </summary>
+        /// <returns>The kposition to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="xPosTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<float> XPositionTo(this Transform self, float xPosTo, float duration = 0.3f) {
+            var tween = QuickCache<TransformFloatTween>.Pop();
+            tween.SetTargetAndType(self, TransformTargetType.XPosition);
+            tween.Initialize(tween, xPosTo, duration);
+
+            return tween;
+        }
+
+        /// <summary>
+        /// transform.position tween for y
+        /// </summary>
+        /// <returns>The kposition to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="yPosTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<float> YPositionTo(this Transform self, float yPosTo, float duration = 0.3f) {
+            var tween = QuickCache<TransformFloatTween>.Pop();
+            tween.SetTargetAndType(self, TransformTargetType.YPosition);
+            tween.Initialize(tween, yPosTo, duration);
+
+            return tween;
+        }
+
+        /// <summary>
+        /// transform.position tween for z
+        /// </summary>
+        /// <returns>The kposition to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="zPosTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<float> ZPositionTo(this Transform self, float zPosTo, float duration = 0.3f) {
+            var tween = QuickCache<TransformFloatTween>.Pop();
+            tween.SetTargetAndType(self, TransformTargetType.Position);
+            tween.Initialize(tween, zPosTo, duration);
+
+            return tween;
+        }
+
 
         /// <summary>
         /// transform.localPosition tween
@@ -41,6 +86,51 @@ namespace Mara.MrTween {
             return tween;
         }
 
+        /// <summary>
+        /// transform.localPosition tween for x
+        /// </summary>
+        /// <returns>The kposition to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="xPosTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<float> XLocalPositionTo(this Transform self, float xPosTo, float duration = 0.3f) {
+            var tween = QuickCache<TransformFloatTween>.Pop();
+            tween.SetTargetAndType(self, TransformTargetType.LocalPosition);
+            tween.Initialize(tween, xPosTo, duration);
+
+            return tween;
+        }
+
+        /// <summary>
+        /// transform.localPosition tween for y
+        /// </summary>
+        /// <returns>The kposition to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="yPosTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<float> YLocalPositionTo(this Transform self, float yPosTo, float duration = 0.3f) {
+            var tween = QuickCache<TransformFloatTween>.Pop();
+            tween.SetTargetAndType(self, TransformTargetType.LocalPosition);
+            tween.Initialize(tween, yPosTo, duration);
+
+            return tween;
+        }
+
+        /// <summary>
+        /// transform.localPosition tween for z
+        /// </summary>
+        /// <returns>The kposition to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="zPosTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<float> ZLocalPositionTo(this Transform self, float zPosTo, float duration = 0.3f) {
+            var tween = QuickCache<TransformFloatTween>.Pop();
+            tween.SetTargetAndType(self, TransformTargetType.LocalPosition);
+            tween.Initialize(tween, zPosTo, duration);
+
+            return tween;
+        }
+
 
         /// <summary>
         /// transform.localScale tween
@@ -53,6 +143,51 @@ namespace Mara.MrTween {
             var tween = QuickCache<TransformVector3Tween>.Pop();
             tween.SetTargetAndType(self, TransformTargetType.LocalScale);
             tween.Initialize(tween, to, duration);
+
+            return tween;
+        }
+
+        /// <summary>
+        /// transform.localScale tween for x
+        /// </summary>
+        /// <returns>The kposition to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="xPosTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<float> XLocalScaleTo(this Transform self, float xScaleTo, float duration = 0.3f) {
+            var tween = QuickCache<TransformFloatTween>.Pop();
+            tween.SetTargetAndType(self, TransformTargetType.LocalScale);
+            tween.Initialize(tween, xScaleTo, duration);
+
+            return tween;
+        }
+
+        /// <summary>
+        /// transform.localScale tween for y
+        /// </summary>
+        /// <returns>The kposition to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="yPosTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<float> YLocalScaleTo(this Transform self, float yScaleTo, float duration = 0.3f) {
+            var tween = QuickCache<TransformFloatTween>.Pop();
+            tween.SetTargetAndType(self, TransformTargetType.LocalScale);
+            tween.Initialize(tween, yScaleTo, duration);
+
+            return tween;
+        }
+
+        /// <summary>
+        /// transform.localScale tween for z
+        /// </summary>
+        /// <returns>The kposition to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="zPosTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<float> ZLocalScaleTo(this Transform self, float zScaleTo, float duration = 0.3f) {
+            var tween = QuickCache<TransformFloatTween>.Pop();
+            tween.SetTargetAndType(self, TransformTargetType.LocalScale);
+            tween.Initialize(tween, zScaleTo, duration);
 
             return tween;
         }
@@ -479,7 +614,7 @@ namespace Mara.MrTween {
         /// <summary>
         /// tweens the RectTransforms anchoredPosition property
         /// </summary>
-        /// <returns>The kanchored position to.</returns>
+        /// <returns>The anchored position to.</returns>
         /// <param name="self">Self.</param>
         /// <param name="to">To.</param>
         /// <param name="duration">Duration.</param>
@@ -491,11 +626,41 @@ namespace Mara.MrTween {
             return tween;
         }
 
+        /// <summary>
+        /// tweens the RectTransform's anchoredPosition.x property
+        /// </summary>
+        /// <returns>The anchored position to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="xTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<Vector2> XAnchoredPositionTo(this RectTransform self, float xTo, float duration = 0.3f) {
+            var tweenTarget = new RectTransformAnchoredPositionTarget(self);
+            var tween = Vector2Tween.Create();
+            tween.Initialize(tweenTarget, new Vector2(xTo, self.anchoredPosition.y), duration);
+
+            return tween;
+        }
+
+        /// <summary>
+        /// tweens the RectTransform's anchoredPosition.y property
+        /// </summary>
+        /// <returns>The anchored position to.</returns>
+        /// <param name="self">Self.</param>
+        /// <param name="yTo">To.</param>
+        /// <param name="duration">Duration.</param>
+        public static ITween<Vector2> YAnchoredPositionTo(this RectTransform self, float yTo, float duration = 0.3f) {
+            var tweenTarget = new RectTransformAnchoredPositionTarget(self);
+            var tween = Vector2Tween.Create();
+            tween.Initialize(tweenTarget, new Vector2(self.anchoredPosition.x, yTo), duration);
+
+            return tween;
+        }
+
 
         /// <summary>
         /// tweens the RectTransforms anchoredPosition3D property
         /// </summary>
-        /// <returns>The kanchored position3 D to.</returns>
+        /// <returns>The kanchored position3D to.</returns>
         /// <param name="self">Self.</param>
         /// <param name="to">To.</param>
         /// <param name="duration">Duration.</param>
@@ -639,6 +804,36 @@ namespace Mara.MrTween {
         /// <returns></returns>
 	    public static ITween<float> AlphaTo(this Text self, float to, float duration = 0.3f) {
             var tweenTarget = new TextAlphaTarget(self);
+            var tween = FloatTween.Create();
+            tween.Initialize(tweenTarget, to, duration);
+
+            return tween;
+        }
+
+        /// <summary>
+        /// tweens a RawImage color property
+        /// </summary>
+        /// <param name="self">Self.</param>
+        /// <param name="to">To.</param>
+        /// <param name="duration">Duration.</param>
+        /// <returns></returns>
+        public static ITween<Color> ColorTo(this RawImage self, Color to, float duration = 0.3f) {
+            var tweenTarget = new RawImageColorTarget(self);
+            var tween = ColorTween.Create();
+            tween.Initialize(tweenTarget, to, duration);
+
+            return tween;
+        }
+
+        /// <summary>
+        /// tweens a RawImage color alpha property
+        /// </summary>
+        /// <param name="self">Self.</param>
+        /// <param name="to">To.</param>
+        /// <param name="duration">Duration.</param>
+        /// <returns></returns>
+	    public static ITween<float> AlphaTo(this RawImage self, float to, float duration = 0.3f) {
+            var tweenTarget = new RawImageAlphaTarget(self);
             var tween = FloatTween.Create();
             tween.Initialize(tweenTarget, to, duration);
 

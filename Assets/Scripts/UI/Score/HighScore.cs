@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
 using TMPro;
-using DG.Tweening;
+using Mara.MrTween;
 
 public class HighScore : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI textMesh;
@@ -18,16 +17,6 @@ public class HighScore : MonoBehaviour {
 
     public void Reset() {
         textMesh.text = "0";
-    }
-
-    public Tween Lower() {
-        return transform.DOMoveY(Constants.I.ScoreLoweredY, Constants.I.ScoreTweenTime)
-                .SetEase(Ease.Linear);
-    }
-
-    public Tween Raise() {
-        return transform.DOMoveY(Constants.I.ScoreRaisedY, Constants.I.ScoreTweenTime)
-                .SetEase(Ease.Linear);
     }
 }
 

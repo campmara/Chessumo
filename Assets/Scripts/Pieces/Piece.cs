@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
+using Mara.MrTween;
 
 public abstract class Piece : MonoBehaviour {
     public Color FullColor { get { return fullColor; } }
@@ -15,7 +15,7 @@ public abstract class Piece : MonoBehaviour {
 
     public string pieceID = "0";
 
-    private const Ease moveEase = Ease.Linear;
+    private const EaseType moveEase = EaseType.Linear;
 
     public InitialMove Moveset { get { return moveset; } }
     protected InitialMove moveset;
@@ -397,18 +397,16 @@ public abstract class Piece : MonoBehaviour {
     public void SetMoveDisabled(bool disabled) {
         moveDisabled = disabled;
         if (disabled) {
-            sprite.DOColor(disabledTint, 0.6f);
+            sprite.ColorTo(disabledTint, 0.6f).Start();
             //sprite.color = disabledTint;
         } else {
-            sprite.DOColor(tint, 0.6f);
+            sprite.ColorTo(tint, 0.6f).Start();
             //sprite.color = tint;
         }
     }
 
     protected IEnumerator MoveXThenY(int xDistance, int yDistance, bool pushed) {
-        ///////////////////////////////
         // X MOVEMENT
-        ///////////////////////////////
 
         int sign = Mathf.FloorToInt(Mathf.Sign(xDistance));
         IntVector2 nextCoordinates = currentCoordinates + new IntVector2(xDistance, 0);
@@ -419,18 +417,17 @@ public abstract class Piece : MonoBehaviour {
         parentGame.OnPieceMove(this, new IntVector2(sign, 0), xDistance);
         SetCoordinates(nextCoordinates);
 
-        Tween tween;
+        ITween<Vector3> tween;
 
         for (int i = Mathf.Abs(xDistance); i > 0; i--) {
-            tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+            tween = transform.PositionTo(transform.position + dir, Constants.I.PieceMoveTime).SetEaseType(moveEase);
+            tween.Start();
             yield return tween.WaitForCompletion();
         }
 
         parentGame.ResetWaitTimeOnChangeDirection();
 
-        ///////////////////////////////
         // Y MOVEMENT
-        ///////////////////////////////
 
         sign = Mathf.FloorToInt(Mathf.Sign(yDistance));
         nextCoordinates = currentCoordinates + new IntVector2(0, yDistance);
@@ -442,7 +439,8 @@ public abstract class Piece : MonoBehaviour {
         SetCoordinates(nextCoordinates);
 
         for (int i = Mathf.Abs(yDistance); i > 0; i--) {
-            tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+            tween = transform.PositionTo(transform.position + dir, Constants.I.PieceMoveTime).SetEaseType(moveEase);
+            tween.Start();
             yield return tween.WaitForCompletion();
         }
 
@@ -454,9 +452,7 @@ public abstract class Piece : MonoBehaviour {
     }
 
     protected IEnumerator MoveYThenX(int xDistance, int yDistance, bool pushed) {
-        ///////////////////////////////
         // Y MOVEMENT
-        ///////////////////////////////
 
         int sign = Mathf.FloorToInt(Mathf.Sign(yDistance));
         IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, yDistance);
@@ -467,18 +463,17 @@ public abstract class Piece : MonoBehaviour {
         parentGame.OnPieceMove(this, new IntVector2(0, sign), yDistance);
         SetCoordinates(nextCoordinates);
 
-        Tween tween;
+        ITween<Vector3> tween;
 
         for (int i = Mathf.Abs(yDistance); i > 0; i--) {
-            tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+            tween = transform.PositionTo(transform.position + dir, Constants.I.PieceMoveTime).SetEaseType(moveEase);
+            tween.Start();
             yield return tween.WaitForCompletion();
         }
 
         parentGame.ResetWaitTimeOnChangeDirection();
 
-        ///////////////////////////////
         // X MOVEMENT
-        ///////////////////////////////
 
         sign = Mathf.FloorToInt(Mathf.Sign(xDistance));
         nextCoordinates = currentCoordinates + new IntVector2(xDistance, 0);
@@ -490,7 +485,8 @@ public abstract class Piece : MonoBehaviour {
         SetCoordinates(nextCoordinates);
 
         for (int i = Mathf.Abs(xDistance); i > 0; i--) {
-            tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+            tween = transform.PositionTo(transform.position + dir, Constants.I.PieceMoveTime).SetEaseType(moveEase);
+            tween.Start();
             yield return tween.WaitForCompletion();
         }
 
@@ -516,7 +512,8 @@ public abstract class Piece : MonoBehaviour {
         }
 
         for (int i = Mathf.Abs(distance); i > 0; i--) {
-            Tween tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+            ITween<Vector3> tween = transform.PositionTo(transform.position + dir, Constants.I.PieceMoveTime).SetEaseType(moveEase);
+            tween.Start();
             yield return tween.WaitForCompletion();
         }
 
@@ -542,7 +539,8 @@ public abstract class Piece : MonoBehaviour {
         }
 
         for (int i = Mathf.Abs(distance); i > 0; i--) {
-            Tween tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+            ITween<Vector3> tween = transform.PositionTo(transform.position + dir, Constants.I.PieceMoveTime).SetEaseType(moveEase);
+            tween.Start();
             yield return tween.WaitForCompletion();
         }
 
@@ -569,7 +567,8 @@ public abstract class Piece : MonoBehaviour {
         }
 
         for (int i = Mathf.Abs(xDistance); i > 0; i--) {
-            Tween tween = transform.DOMove(transform.position + dir, Constants.I.PieceMoveTime).SetEase(moveEase);
+            ITween<Vector3> tween = transform.PositionTo(transform.position + dir, Constants.I.PieceMoveTime).SetEaseType(moveEase);
+            tween.Start();
             yield return tween.WaitForCompletion();
         }
 

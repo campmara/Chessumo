@@ -576,6 +576,48 @@ namespace Mara.MrTween {
         }
     }
 
+    public class RawImageAlphaTarget : AbstractTweenTarget<RawImage, float> {
+        public RawImageAlphaTarget(RawImage image) {
+            _target = image;
+        }
+
+
+        public override void SetTweenedValue(float value) {
+            // if the babysitter is enabled and we dont validate just silently do nothing
+            if (MrTween.EnableBabysitter && !ValidateTarget())
+                return;
+
+            var color = _target.color;
+            color.a = value;
+            _target.color = color;
+        }
+
+
+        public override float GetTweenedValue() {
+            return _target.color.a;
+        }
+    }
+
+
+    public class RawImageColorTarget : AbstractTweenTarget<RawImage, Color> {
+        public RawImageColorTarget(RawImage image) {
+            _target = image;
+        }
+
+
+        public override void SetTweenedValue(Color value) {
+            // if the babysitter is enabled and we dont validate just silently do nothing
+            if (MrTween.EnableBabysitter && !ValidateTarget())
+                return;
+
+            _target.color = value;
+        }
+
+
+        public override Color GetTweenedValue() {
+            return _target.color;
+        }
+    }
 
     public class RectTransformAnchoredPositionTarget : AbstractTweenTarget<RectTransform, Vector2> {
         public override void SetTweenedValue(Vector2 value) {

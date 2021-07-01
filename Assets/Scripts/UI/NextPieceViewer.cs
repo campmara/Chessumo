@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-using DG.Tweening;
+using Mara.MrTween;
 
 public class NextPieceViewer : MonoBehaviour {
     [SerializeField] SpriteRenderer sprite;
@@ -14,39 +13,43 @@ public class NextPieceViewer : MonoBehaviour {
 
     public void OnEnable() {
         transform.position = new Vector3(transform.position.x, 15f, transform.position.z);
-        transform.DOMoveY(1.5f, 0.8f).SetEase(Ease.Linear).SetDelay(1.5f).OnStart(() => AudioManager.Instance.PlayNPVEnter());
+        transform.YPositionTo(1.5f, 0.8f)
+            .SetEaseType(EaseType.Linear)
+            .SetDelay(1.5f)
+            .SetStartHandler((_) => AudioManager.Instance.PlayNPVEnter())
+            .Start();
     }
 
     public void PositionAlongTop(IntVector2 coords) {
         Vector2 pos = GameManager.Instance.CoordinateToPosition(coords);
-        transform.DOMoveX(pos.x, 0.75f).SetEase(Ease.InOutQuint);
+        transform.XPositionTo(pos.x, 0.75f).SetEaseType(EaseType.QuintInOut).Start();
     }
 
     public void FadeOut() {
-        sprite.DOFade(0f, 0.75f);
+        sprite.AlphaTo(0f, 0.75f).Start();
     }
 
     public void ShowKing() {
-        sprite.DOColor(kingColor, 0.75f);
+        sprite.ColorTo(kingColor, 0.75f).Start();
     }
 
     public void ShowQueen() {
-        sprite.DOColor(queenColor, 0.75f);
+        sprite.ColorTo(queenColor, 0.75f).Start();
     }
 
     public void ShowRook() {
-        sprite.DOColor(rookColor, 0.75f);
+        sprite.ColorTo(rookColor, 0.75f).Start();
     }
 
     public void ShowBishop() {
-        sprite.DOColor(bishopColor, 0.75f);
+        sprite.ColorTo(bishopColor, 0.75f).Start();
     }
 
     public void ShowKnight() {
-        sprite.DOColor(knightColor, 0.75f);
+        sprite.ColorTo(knightColor, 0.75f).Start();
     }
 
     public void ShowPawn() {
-        sprite.DOColor(pawnColor, 0.75f);
+        sprite.ColorTo(pawnColor, 0.75f).Start();
     }
 }
