@@ -87,7 +87,7 @@ namespace Mara.MrTween {
 
         #region MonoBehaviour
 
-        void Awake() {
+        private void Awake() {
             if (_instance == null)
                 _instance = this;
 
@@ -97,7 +97,7 @@ namespace Mara.MrTween {
 #endif
         }
 
-        void OnApplicationQuit() {
+        private void OnApplicationQuit() {
             _instance = null;
             Destroy(gameObject);
             _applicationIsQuitting = true;
@@ -113,24 +113,26 @@ namespace Mara.MrTween {
 
 #else
 
-		void OnLevelWasLoaded( int level )
-		{
-			if( removeAllTweensOnLevelLoad )
-				_activeTweens.Clear();
-		}
+        private void OnLevelWasLoaded(int level) {
+            if(removeAllTweensOnLevelLoad) {
+                _activeTweens.Clear();
+            }
+        }
 
 #endif
 
 
-        void Update() {
+        private void Update() {
             _isUpdating = true;
 
             _tempTweens.Clear();
             _tempTweens.AddRange(_activeTweens);
-            for (var i = 0; i < _tempTweens.Count; i++) {
-                var tween = _tempTweens[i];
-                if (_removedTweens.Contains(tween))
+            for (int i = 0; i < _tempTweens.Count; i++) {
+                ITweenable tween = _tempTweens[i];
+
+                if (_removedTweens.Contains(tween)) {
                     continue; // was already recycled
+                }
 
                 // update tween
                 if (tween.Tick()) {

@@ -221,9 +221,9 @@ public class Game : MonoBehaviour {
         }
     }
 
-    //////////////////////////////////////////////////////////
+    // -------------------------------------------------------
     // INPUT CALLBACKS
-    //////////////////////////////////////////////////////////
+    // -------------------------------------------------------
 
     private void OnFingerDown() {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -571,8 +571,8 @@ public class Game : MonoBehaviour {
     public void IncrementWaitTime() {
         waitTime += Constants.I.PieceMoveTime;
     }
-    public void ResetWaitTimeOnChangeDirection() // for use specifically with MoveXThenY functions
-    {
+    // for use specifically with MoveXThenY functions
+    public void ResetWaitTimeOnChangeDirection() {
         waitTime = 0f;
     }
 
