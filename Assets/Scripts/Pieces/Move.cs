@@ -1,9 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class Move {
-    public IntVector2 coordinates; // The coordinates of wherever this move is.
-    public IntVector2 moveOffset; // The offset needed to be applied to get to the current coords.
+    public Vector2Int coordinates; // The coordinates of wherever this move is.
+    public Vector2Int moveOffset; // The offset needed to be applied to get to the current coords.
 
     public Move reverse = null; // The last move before this one, set on the fly for undoing moves and going back to the prev.
     public bool isPossibleEnd = false; // This is the last move in a possible piece movement. If we lift finger, we can move here.
@@ -31,7 +31,7 @@ public class InitialMove : Move {
     }
 
     // Searches the list of moves to find the one at the specified coordinates. Nifty!
-    public Move DetermineMove(IntVector2 coordinates) {
+    public Move DetermineMove(Vector2Int coordinates) {
         for (int i = 0; i < moveList.Count; i++) {
             if (moveList[i].coordinates == coordinates) {
                 return moveList[i];
@@ -41,7 +41,7 @@ public class InitialMove : Move {
         return null;
     }
 
-    public Move DetermineKnightMove(IntVector2 coordinates, IntVector2 offset) {
+    public Move DetermineKnightMove(Vector2Int coordinates, Vector2Int offset) {
         for (int i = 0; i < moveList.Count; i++) {
             if (moveList[i].coordinates == coordinates && offset == moveList[i].moveOffset) {
                 return moveList[i];

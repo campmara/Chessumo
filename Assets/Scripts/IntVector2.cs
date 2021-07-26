@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using System.Collections;
-
-[System.Serializable]
+﻿[System.Serializable]
 public struct IntVector2 {
     public int x, y;
     public static IntVector2 NULL { get { return new IntVector2(-999999999, -999999999); } }

@@ -1,8 +1,11 @@
 ﻿using UnityEngine;
 
 public class Constants : ScriptableObjectSingleton<Constants> {
+    [Header("Internal")]
+    public Vector2Int V2INULL = new Vector2Int(-999999, -999999);
+
     [Header("Gameplay")]
-    public IntVector2 GridSize = new IntVector2(5, 5);
+    public Vector2Int GridSize = new Vector2Int(5, 5);
     public int StartingPieceCount = 7;
     public int ScoreOneAmount = 1;
     public int ScoreTwoAmount = 4;

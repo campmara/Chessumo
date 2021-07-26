@@ -28,12 +28,12 @@ public class Game : MonoBehaviour {
     private GameObject pieceViewerObj;
     private NextPieceViewer pieceViewer;
 
-    private IntVector2 nextRandomCoords;
+    private Vector2Int nextRandomCoords;
 
     private bool moveInProgress = false;
 
     [ReadOnly, SerializeField] private Piece currentSelectedPiece;
-    private List<IntVector2> currentPossibleMoves;
+    private List<Vector2Int> currentPossibleMoves;
     private Piece currentMovePiece = null;
     private Tile currentMoveTile = null;
 
@@ -42,19 +42,19 @@ public class Game : MonoBehaviour {
         pieces = new Piece[Constants.I.GridSize.x, Constants.I.GridSize.y];
 
         currentSelectedPiece = null;
-        currentPossibleMoves = new List<IntVector2>();
+        currentPossibleMoves = new List<Vector2Int>();
     }
 
-    public void UpdatePieceCoordinates(Piece piece, IntVector2 oldCoordinates, IntVector2 newCoordinates) {
+    public void UpdatePieceCoordinates(Piece piece, Vector2Int oldCoordinates, Vector2Int newCoordinates) {
         pieces[oldCoordinates.x, oldCoordinates.y] = null;
         pieces[newCoordinates.x, newCoordinates.y] = piece;
     }
 
-    public bool IsWithinBounds(IntVector2 coordinates) {
+    public bool IsWithinBounds(Vector2Int coordinates) {
         return (coordinates.x >= 0 && coordinates.x < Constants.I.GridSize.x) && (coordinates.y >= 0 && coordinates.y < Constants.I.GridSize.y);
     }
 
-    public bool CoordsOccupied(IntVector2 coordinates) {
+    public bool CoordsOccupied(Vector2Int coordinates) {
         return pieces[coordinates.x, coordinates.y] != null;
     }
 
@@ -145,7 +145,7 @@ public class Game : MonoBehaviour {
                 tile.gameObject.name = "Tile (" + x + ", " + y + ")";
                 tile.transform.parent = transform;
 
-                tile.transform.position = GameManager.Instance.CoordinateToPosition(new IntVector2(x, y));
+                tile.transform.position = GameManager.Instance.CoordinateToPosition(new Vector2Int(x, y));
 
                 tile.SetInfo(x, y);
 
@@ -335,7 +335,7 @@ public class Game : MonoBehaviour {
         }
     }
 
-    private IntVector2 lastMoveCoords;
+    private Vector2Int lastMoveCoords;
 
     private void HandleMoveRayHit(RaycastHit hit) {
         if (UIManager.Instance.IsMenuOpen()) return;
@@ -413,7 +413,7 @@ public class Game : MonoBehaviour {
 
             if (piece.potentialPush && MoveIsOnPath(piece.GetCoordinates())) {
                 if (CurrentIsKnight()) {
-                    IntVector2 dir = tilesToRaise[0] - currentSelectedPiece.GetCoordinates();
+                    Vector2Int dir = tilesToRaise[0] - currentSelectedPiece.GetCoordinates();
                     currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(dir);
                 }
 
@@ -432,7 +432,7 @@ public class Game : MonoBehaviour {
                 ResetPossibleMoves();
             } else if (currentSelectedPiece && tile.GetState() == TileState.DRAWN) {
                 if (CurrentIsKnight()) {
-                    IntVector2 dir = tilesToRaise[0] - currentSelectedPiece.GetCoordinates();
+                    Vector2Int dir = tilesToRaise[0] - currentSelectedPiece.GetCoordinates();
                     currentSelectedPiece.GetComponent<Knight>().SetInitialDirection(dir);
                 }
 
@@ -446,7 +446,7 @@ public class Game : MonoBehaviour {
         }
     }
 
-    private bool MoveIsOnPath(IntVector2 coords) {
+    private bool MoveIsOnPath(Vector2Int coords) {
         for (int i = 0; i < tilesToRaise.Length; i++) {
             if (tilesToRaise[i] == coords) return true;
         }
@@ -459,7 +459,7 @@ public class Game : MonoBehaviour {
         MovePathManager.Instance.BeginPath(currentSelectedPiece.GetCoordinates());
     }
 
-    private IntVector2[] tilesToRaise;
+    private Vector2Int[] tilesToRaise;
 
     private void DrawMove(Move move) {
         ClearPreviousDraw();
@@ -468,7 +468,7 @@ public class Game : MonoBehaviour {
         if (CurrentIsKnight()) {
             currentSelectedPiece.GetComponent<Knight>().UpdateKnightMove(move);
 
-            IntVector2[] temp = MovePathManager.Instance.CalculateKnightPath(tilesToRaise, move);
+            Vector2Int[] temp = MovePathManager.Instance.CalculateKnightPath(tilesToRaise, move);
             tilesToRaise = temp;
         } else {
             tilesToRaise = MovePathManager.Instance.CalculatePath(move);
@@ -538,9 +538,9 @@ public class Game : MonoBehaviour {
         MovePathManager.Instance.EndPath();
     }
 
-    private bool CheckCoordsWithinPossibleMoves(IntVector2 coords) {
+    private bool CheckCoordsWithinPossibleMoves(Vector2Int coords) {
         if (CurrentIsKnight()) {
-            IntVector2[] secondaryMoves = currentSelectedPiece.GetComponent<Knight>().GetSecondaryMoves();
+            Vector2Int[] secondaryMoves = currentSelectedPiece.GetComponent<Knight>().GetSecondaryMoves();
 
             for (int i = 0; i < currentPossibleMoves.Count; i++) {
                 if (currentPossibleMoves[i] == coords) {
@@ -576,9 +576,9 @@ public class Game : MonoBehaviour {
         waitTime = 0f;
     }
 
-    public void OnPieceMove(Piece piece, IntVector2 direction, int distance) {
-        IntVector2 oldCoordinates = piece.GetCoordinates();
-        IntVector2 currentCheckingCoords = oldCoordinates;
+    public void OnPieceMove(Piece piece, Vector2Int direction, int distance) {
+        Vector2Int oldCoordinates = piece.GetCoordinates();
+        Vector2Int currentCheckingCoords = oldCoordinates;
         int absDist = Mathf.Abs(distance);
         int distFromPushingPiece = 0;
         int numPushedPieces = 0;
@@ -589,7 +589,7 @@ public class Game : MonoBehaviour {
 
             if (pieces[currentCheckingCoords.x, currentCheckingCoords.y] != null) {
                 int pushDistance = (absDist - distFromPushingPiece) + 1;
-                IntVector2 push = currentCheckingCoords + direction * pushDistance;
+                Vector2Int push = currentCheckingCoords + direction * pushDistance;
                 numPushedPieces++;
 
                 if (IsWithinBounds(push)) {
@@ -607,7 +607,7 @@ public class Game : MonoBehaviour {
         }
     }
 
-    private void PieceOffGrid(Piece piece, IntVector2 pushCoordinates, int travelDist, int distFromPushingPiece, int numPushedPieces) {
+    private void PieceOffGrid(Piece piece, Vector2Int pushCoordinates, int travelDist, int distFromPushingPiece, int numPushedPieces) {
         numPiecesToSpawn++;
 
         Vector2 offGridPosition = GameManager.Instance.CoordinateToPosition(pushCoordinates);
@@ -689,7 +689,7 @@ public class Game : MonoBehaviour {
         currentSelectedPiece.DetermineMoveset();
         currentPossibleMoves = currentSelectedPiece.GetPossibleMoves();
         for (int i = 0; i < currentPossibleMoves.Count; i++) {
-            IntVector2 move = currentPossibleMoves[i];
+            Vector2Int move = currentPossibleMoves[i];
             if (IsWithinBounds(move)) {
                 tileObjects[move.x, move.y].GetComponent<Tile>().SetState(TileState.POSSIBLE, currentSelectedPiece.SubduedColor);
 
@@ -702,10 +702,10 @@ public class Game : MonoBehaviour {
 
         // Handle Knight selection. We gotta get its secondary moves and highlight those too.
         if (CurrentIsKnight()) {
-            IntVector2[] secondaryMoves = currentSelectedPiece.GetComponent<Knight>().GetSecondaryMoves();
+            Vector2Int[] secondaryMoves = currentSelectedPiece.GetComponent<Knight>().GetSecondaryMoves();
 
             for (int i = 0; i < secondaryMoves.Length; i++) {
-                IntVector2 move = secondaryMoves[i];
+                Vector2Int move = secondaryMoves[i];
                 if (IsWithinBounds(move)) {
                     tileObjects[move.x, move.y].GetComponent<Tile>().SetState(TileState.KNIGHT_TRAVERSABLE, Color.black);
                 }
@@ -821,12 +821,12 @@ public class Game : MonoBehaviour {
         currentMoveTile = null;
     }
 
-    List<IntVector2> tempListUnoccupied = new List<IntVector2>();
-    IntVector2 RandomCoordinates() {
+    List<Vector2Int> tempListUnoccupied = new List<Vector2Int>();
+    Vector2Int RandomCoordinates() {
         tempListUnoccupied.Clear();
         for (int i = 0; i < tileObjects.GetLength(0); i++) {
             for (int j = 0; j < tileObjects.GetLength(1); j++) {
-                IntVector2 tileCoords = tileObjects[i, j].GetComponent<Tile>().GetCoordinates();
+                Vector2Int tileCoords = tileObjects[i, j].GetComponent<Tile>().GetCoordinates();
                 if (pieces[tileCoords.x, tileCoords.y] == null) {
                     tempListUnoccupied.Add(tileCoords);
                 }
@@ -835,10 +835,10 @@ public class Game : MonoBehaviour {
 
         return tempListUnoccupied[Random.Range(0, tempListUnoccupied.Count)];
 
-        //return new IntVector2(Random.Range(0, Constants.I.GridSize.x), Random.Range(0, Constants.I.GridSize.y));
+        //return new Vector2Int(Random.Range(0, Constants.I.GridSize.x), Random.Range(0, Constants.I.GridSize.y));
     }
 
-    IntVector2 RandomCoordinatesInColumn(int x) {
+    Vector2Int RandomCoordinatesInColumn(int x) {
         int count = 0;
         for (int i = 0; i < tileObjects.GetLength(1); i++) {
             if (pieces[x, i] != null) {
@@ -849,13 +849,13 @@ public class Game : MonoBehaviour {
         if (count >= Constants.I.GridSize.y - 1) {
             return RandomCoordinates();
         } else {
-            return new IntVector2(x, Random.Range(0, Constants.I.GridSize.y));
+            return new Vector2Int(x, Random.Range(0, Constants.I.GridSize.y));
         }
     }
 
     protected void PlaceRandomPiece() {
         int rand = Random.Range(0, 6);
-        IntVector2 randCoords = RandomCoordinates();
+        Vector2Int randCoords = RandomCoordinates();
 
         while (pieces[randCoords.x, randCoords.y] != null) {
             randCoords = RandomCoordinates();

@@ -20,8 +20,8 @@ Possible Changes & Additions:
     [ ] Localization
     [ ] Allow the user to start a new game quicker at the end of a game by tapping.
     [ ] Use Chessumo as a basis to learn more about Unity's test framework and get into testing.
-    [ ] Convert IntVector2 class to use Unity's built in Vector2Int
-    [ ] Migrate tweens to Mr. Tween
+    [x] Convert IntVector2 class to use Unity's built in Vector2Int
+    [x] Migrate tweens to Mr. Tween
     [ ] Migrate from "onmousedown" calls, this is a mobile game. even though it works it is weird that you're using those for input. do input properly.
     [x] Do some code cleanup
     [ ] Go through "// TODO: "s

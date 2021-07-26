@@ -20,7 +20,7 @@ public class NextPieceViewer : MonoBehaviour {
             .Start();
     }
 
-    public void PositionAlongTop(IntVector2 coords) {
+    public void PositionAlongTop(Vector2Int coords) {
         Vector2 pos = GameManager.Instance.CoordinateToPosition(coords);
         transform.XPositionTo(pos.x, 0.75f).SetEaseType(EaseType.QuintInOut).Start();
     }

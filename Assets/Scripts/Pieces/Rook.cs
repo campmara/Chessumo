@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Rook : Piece {
     protected override void Awake() {
@@ -8,12 +7,12 @@ public class Rook : Piece {
         // This piece can move pretty much across the board;
         moveMagnitude = 10;
 
-        moveOffsets = new IntVector2[4];
+        moveOffsets = new Vector2Int[4];
 
-        moveOffsets[0] = new IntVector2(0, 1);
-        moveOffsets[1] = new IntVector2(0, -1);
-        moveOffsets[2] = new IntVector2(1, 0);
-        moveOffsets[3] = new IntVector2(-1, 0);
+        moveOffsets[0] = new Vector2Int(0, 1);
+        moveOffsets[1] = new Vector2Int(0, -1);
+        moveOffsets[2] = new Vector2Int(1, 0);
+        moveOffsets[3] = new Vector2Int(-1, 0);
     }
 
     public override void DetermineMoveset() {

@@ -21,10 +21,10 @@ public abstract class Piece : MonoBehaviour {
     protected InitialMove moveset;
 
     // Array of coordinate offsets that define the moves a piece can make.
-    protected IntVector2[] moveOffsets;
+    protected Vector2Int[] moveOffsets;
 
     protected int moveMagnitude = 1;
-    [SerializeField] protected IntVector2 currentCoordinates;
+    [SerializeField] protected Vector2Int currentCoordinates;
     protected Game parentGame;
 
     protected bool moveDisabled = false;
@@ -36,17 +36,17 @@ public abstract class Piece : MonoBehaviour {
         sprite.color = tint;
     }
 
-    public IntVector2 GetCoordinates() {
+    public Vector2Int GetCoordinates() {
         return currentCoordinates;
     }
 
-    public void SetCoordinates(IntVector2 coordinates) {
+    public void SetCoordinates(Vector2Int coordinates) {
         parentGame.UpdatePieceCoordinates(this, currentCoordinates, coordinates);
         currentCoordinates = coordinates;
     }
 
     public void SetInfo(int x, int y, Game game) {
-        currentCoordinates = new IntVector2(x, y);
+        currentCoordinates = new Vector2Int(x, y);
         parentGame = game;
     }
 
@@ -72,16 +72,16 @@ public abstract class Piece : MonoBehaviour {
         GameManager.Instance.GrowMe(this.gameObject);
     }
     /*
-	public virtual IntVector2[] GetPossibleMoves()
+	public virtual Vector2Int[] GetPossibleMoves()
 	{
-		IntVector2[] returnArray = new IntVector2[moveOffsets.Length * moveMagnitude];
+		Vector2Int[] returnArray = new Vector2Int[moveOffsets.Length * moveMagnitude];
 
 		for (int i = 0; i < returnArray.Length; i++)
 		{
 			int offsetIndex = Mathf.FloorToInt(i / moveMagnitude);
 			int coefficient = moveMagnitude > 1 ? (i + 1) % moveMagnitude : 1;
 			coefficient = coefficient == 0 ? moveMagnitude : coefficient;
-			IntVector2 moveOffset = new IntVector2(moveOffsets[offsetIndex].x * coefficient, moveOffsets[offsetIndex].y * coefficient);
+			Vector2Int moveOffset = new Vector2Int(moveOffsets[offsetIndex].x * coefficient, moveOffsets[offsetIndex].y * coefficient);
 			//Debug.Log("Move Offset: [" + moveOffset.x + ", " + moveOffset.y + "]");
 
 			returnArray[i] = currentCoordinates + moveOffset;
@@ -91,8 +91,8 @@ public abstract class Piece : MonoBehaviour {
 	}
 	*/
 
-    public virtual List<IntVector2> GetPossibleMoves() {
-        List<IntVector2> list = new List<IntVector2>();
+    public virtual List<Vector2Int> GetPossibleMoves() {
+        List<Vector2Int> list = new List<Vector2Int>();
 
         for (int i = 0; i < moveset.moveList.Count; i++) {
             if (moveset.moveList[i].isPossibleEnd) {
@@ -108,8 +108,8 @@ public abstract class Piece : MonoBehaviour {
     }
 
     protected MoveUp GetUp(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(0, 1);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(0, 1);
+        Vector2Int newCoords = currentCoordinates + offset;
         MoveUp[] moves = new MoveUp[moveMagnitude];
 
         for (int i = 0; i < moveMagnitude; i++) {
@@ -140,8 +140,8 @@ public abstract class Piece : MonoBehaviour {
     }
 
     protected MoveDown GetDown(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(0, -1);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(0, -1);
+        Vector2Int newCoords = currentCoordinates + offset;
         MoveDown[] moves = new MoveDown[moveMagnitude];
 
         for (int i = 0; i < moveMagnitude; i++) {
@@ -172,8 +172,8 @@ public abstract class Piece : MonoBehaviour {
     }
 
     protected MoveLeft GetLeft(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(-1, 0);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(-1, 0);
+        Vector2Int newCoords = currentCoordinates + offset;
         MoveLeft[] moves = new MoveLeft[moveMagnitude];
 
         for (int i = 0; i < moveMagnitude; i++) {
@@ -204,8 +204,8 @@ public abstract class Piece : MonoBehaviour {
     }
 
     protected MoveRight GetRight(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(1, 0);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(1, 0);
+        Vector2Int newCoords = currentCoordinates + offset;
         MoveRight[] moves = new MoveRight[moveMagnitude];
 
         for (int i = 0; i < moveMagnitude; i++) {
@@ -236,8 +236,8 @@ public abstract class Piece : MonoBehaviour {
     }
 
     protected virtual MoveUpRight GetUpRight(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(1, 1);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(1, 1);
+        Vector2Int newCoords = currentCoordinates + offset;
         MoveUpRight[] moves = new MoveUpRight[moveMagnitude];
 
         for (int i = 0; i < moveMagnitude; i++) {
@@ -268,8 +268,8 @@ public abstract class Piece : MonoBehaviour {
     }
 
     protected virtual MoveDownRight GetDownRight(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(1, -1);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(1, -1);
+        Vector2Int newCoords = currentCoordinates + offset;
         MoveDownRight[] moves = new MoveDownRight[moveMagnitude];
 
         for (int i = 0; i < moveMagnitude; i++) {
@@ -300,8 +300,8 @@ public abstract class Piece : MonoBehaviour {
     }
 
     protected virtual MoveDownLeft GetDownLeft(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(-1, -1);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(-1, -1);
+        Vector2Int newCoords = currentCoordinates + offset;
         MoveDownLeft[] moves = new MoveDownLeft[moveMagnitude];
 
         for (int i = 0; i < moveMagnitude; i++) {
@@ -332,8 +332,8 @@ public abstract class Piece : MonoBehaviour {
     }
 
     protected virtual MoveUpLeft GetUpLeft(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(-1, 1);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(-1, 1);
+        Vector2Int newCoords = currentCoordinates + offset;
         MoveUpLeft[] moves = new MoveUpLeft[moveMagnitude];
 
         for (int i = 0; i < moveMagnitude; i++) {
@@ -363,7 +363,7 @@ public abstract class Piece : MonoBehaviour {
         return moves[0];
     }
 
-    public virtual void MoveTo(IntVector2 coordinates, bool pushed, int distFromPushingPiece, int numPushedPieces) {
+    public virtual void MoveTo(Vector2Int coordinates, bool pushed, int distFromPushingPiece, int numPushedPieces) {
         // This is the core disable / pushing logic.
         if (pushed) {
             if (moveDisabled) {
@@ -374,7 +374,7 @@ public abstract class Piece : MonoBehaviour {
         SetSortingLayer("Moving Pieces");
 
         // Determine how many times we must repeat the movement to get to the desired point.
-        IntVector2 diff = coordinates - GetCoordinates();
+        Vector2Int diff = coordinates - GetCoordinates();
         //float pushWaitTime = CalculatePushWaitTime(distFromPushingPiece, numPushedPieces);
         float pushWaitTime = parentGame.GetWaitTime();
 
@@ -409,12 +409,12 @@ public abstract class Piece : MonoBehaviour {
         // X MOVEMENT
 
         int sign = Mathf.FloorToInt(Mathf.Sign(xDistance));
-        IntVector2 nextCoordinates = currentCoordinates + new IntVector2(xDistance, 0);
+        Vector2Int nextCoordinates = currentCoordinates + new Vector2Int(xDistance, 0);
         Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
         Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
         Vector3 dir = new Vector3((float)sign, 0f, 0f);
 
-        parentGame.OnPieceMove(this, new IntVector2(sign, 0), xDistance);
+        parentGame.OnPieceMove(this, new Vector2Int(sign, 0), xDistance);
         SetCoordinates(nextCoordinates);
 
         ITween<Vector3> tween;
@@ -430,12 +430,12 @@ public abstract class Piece : MonoBehaviour {
         // Y MOVEMENT
 
         sign = Mathf.FloorToInt(Mathf.Sign(yDistance));
-        nextCoordinates = currentCoordinates + new IntVector2(0, yDistance);
+        nextCoordinates = currentCoordinates + new Vector2Int(0, yDistance);
         convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
         newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
         dir = new Vector3(0f, (float)sign, 0f);
 
-        parentGame.OnPieceMove(this, new IntVector2(0, sign), yDistance);
+        parentGame.OnPieceMove(this, new Vector2Int(0, sign), yDistance);
         SetCoordinates(nextCoordinates);
 
         for (int i = Mathf.Abs(yDistance); i > 0; i--) {
@@ -455,12 +455,12 @@ public abstract class Piece : MonoBehaviour {
         // Y MOVEMENT
 
         int sign = Mathf.FloorToInt(Mathf.Sign(yDistance));
-        IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, yDistance);
+        Vector2Int nextCoordinates = currentCoordinates + new Vector2Int(0, yDistance);
         Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
         Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
         Vector3 dir = new Vector3(0f, (float)sign, 0f);
 
-        parentGame.OnPieceMove(this, new IntVector2(0, sign), yDistance);
+        parentGame.OnPieceMove(this, new Vector2Int(0, sign), yDistance);
         SetCoordinates(nextCoordinates);
 
         ITween<Vector3> tween;
@@ -476,12 +476,12 @@ public abstract class Piece : MonoBehaviour {
         // X MOVEMENT
 
         sign = Mathf.FloorToInt(Mathf.Sign(xDistance));
-        nextCoordinates = currentCoordinates + new IntVector2(xDistance, 0);
+        nextCoordinates = currentCoordinates + new Vector2Int(xDistance, 0);
         convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
         newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
         dir = new Vector3((float)sign, 0f, 0f);
 
-        parentGame.OnPieceMove(this, new IntVector2(sign, 0), xDistance);
+        parentGame.OnPieceMove(this, new Vector2Int(sign, 0), xDistance);
         SetCoordinates(nextCoordinates);
 
         for (int i = Mathf.Abs(xDistance); i > 0; i--) {
@@ -499,12 +499,12 @@ public abstract class Piece : MonoBehaviour {
 
     protected IEnumerator MoveX(int distance, bool pushed, float pushWaitTime) {
         int sign = Mathf.FloorToInt(Mathf.Sign(distance));
-        IntVector2 nextCoordinates = currentCoordinates + new IntVector2(distance, 0);
+        Vector2Int nextCoordinates = currentCoordinates + new Vector2Int(distance, 0);
         Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
         Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
         Vector3 dir = new Vector3((float)sign, 0f, 0f);
 
-        parentGame.OnPieceMove(this, new IntVector2(sign, 0), distance);
+        parentGame.OnPieceMove(this, new Vector2Int(sign, 0), distance);
         SetCoordinates(nextCoordinates);
 
         if (pushed) {
@@ -526,12 +526,12 @@ public abstract class Piece : MonoBehaviour {
 
     protected IEnumerator MoveY(int distance, bool pushed, float pushWaitTime) {
         int sign = Mathf.FloorToInt(Mathf.Sign(distance));
-        IntVector2 nextCoordinates = currentCoordinates + new IntVector2(0, distance);
+        Vector2Int nextCoordinates = currentCoordinates + new Vector2Int(0, distance);
         Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
         Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
         Vector3 dir = new Vector3(0f, (float)sign, 0f);
 
-        parentGame.OnPieceMove(this, new IntVector2(0, sign), distance);
+        parentGame.OnPieceMove(this, new Vector2Int(0, sign), distance);
         SetCoordinates(nextCoordinates);
 
         if (pushed) {
@@ -554,12 +554,12 @@ public abstract class Piece : MonoBehaviour {
     protected IEnumerator MoveDiagonally(int xDistance, int yDistance, bool pushed, float pushWaitTime) {
         int xSign = Mathf.FloorToInt(Mathf.Sign(xDistance));
         int ySign = Mathf.FloorToInt(Mathf.Sign(yDistance));
-        IntVector2 nextCoordinates = currentCoordinates + new IntVector2(xDistance, yDistance);
+        Vector2Int nextCoordinates = currentCoordinates + new Vector2Int(xDistance, yDistance);
         Vector3 convertedPosition = GameManager.Instance.CoordinateToPosition(nextCoordinates);
         Vector3 newPos = new Vector3(convertedPosition.x, convertedPosition.y, transform.position.z);
         Vector3 dir = new Vector3((float)xSign, (float)ySign, 0f);
 
-        parentGame.OnPieceMove(this, new IntVector2(xSign, ySign), xDistance);
+        parentGame.OnPieceMove(this, new Vector2Int(xSign, ySign), xDistance);
         SetCoordinates(nextCoordinates);
 
         if (pushed) {

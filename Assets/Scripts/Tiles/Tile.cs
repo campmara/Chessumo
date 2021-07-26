@@ -20,7 +20,7 @@ public class Tile : MonoBehaviour {
 
     private SpriteRenderer spriteRenderer;
 
-    private IntVector2 currentCoordinates;
+    private Vector2Int currentCoordinates;
 
     private BoxCollider boxCollider;
 
@@ -88,12 +88,12 @@ public class Tile : MonoBehaviour {
         spriteRenderer.sprite = downSprite;
     }
 
-    public IntVector2 GetCoordinates() {
+    public Vector2Int GetCoordinates() {
         return currentCoordinates;
     }
 
     public void SetInfo(int x, int y) {
-        currentCoordinates = new IntVector2(x, y);
+        currentCoordinates = new Vector2Int(x, y);
     }
 
     // this helps handle colliders around the edges

@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class Pawn : Piece {
     protected override void Awake() {
@@ -9,19 +7,19 @@ public class Pawn : Piece {
         // we don't need to set the move magnitude if it's 1.
         //moveMagnitude = 1;
 
-        moveOffsets = new IntVector2[2];
-        moveOffsets[0] = new IntVector2(0, 1);
-        moveOffsets[1] = new IntVector2(0, -1);
+        moveOffsets = new Vector2Int[2];
+        moveOffsets[0] = new Vector2Int(0, 1);
+        moveOffsets[1] = new Vector2Int(0, -1);
     }
 
     /*
 	// This has to be overriden because the pawn's possible moves are sometimes diagonal if there is a piece to push there.
-	public override IntVector2[] GetPossibleMoves()
+	public override Vector2Int[] GetPossibleMoves()
 	{
 		// Check for diagonal pieces. Put them in a new array of moveOffsets that the rest of this function uses.
-		List<IntVector2> diagonals = parentGame.GetDiagonalPieceCoordinates(currentCoordinates);
+		List<Vector2Int> diagonals = parentGame.GetDiagonalPieceCoordinates(currentCoordinates);
 
-		IntVector2[] returnArray = new IntVector2[moveOffsets.Length + diagonals.Count];
+		Vector2Int[] returnArray = new Vector2Int[moveOffsets.Length + diagonals.Count];
 
 		// Add move offsets to array.
 		for (int i = 0; i < moveOffsets.Length; i++)
@@ -56,8 +54,8 @@ public class Pawn : Piece {
     }
 
     protected override MoveUpLeft GetUpLeft(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(-1, 1);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(-1, 1);
+        Vector2Int newCoords = currentCoordinates + offset;
         if (parentGame.IsWithinBounds(newCoords) && parentGame.CoordsOccupied(newCoords)) {
             MoveUpLeft ret = new MoveUpLeft();
             ret.coordinates = newCoords;
@@ -72,8 +70,8 @@ public class Pawn : Piece {
     }
 
     protected override MoveUpRight GetUpRight(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(1, 1);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(1, 1);
+        Vector2Int newCoords = currentCoordinates + offset;
         if (parentGame.IsWithinBounds(newCoords) && parentGame.CoordsOccupied(newCoords)) {
             MoveUpRight ret = new MoveUpRight();
             ret.coordinates = newCoords;
@@ -88,8 +86,8 @@ public class Pawn : Piece {
     }
 
     protected override MoveDownLeft GetDownLeft(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(-1, -1);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(-1, -1);
+        Vector2Int newCoords = currentCoordinates + offset;
         if (parentGame.IsWithinBounds(newCoords) && parentGame.CoordsOccupied(newCoords)) {
             MoveDownLeft ret = new MoveDownLeft();
             ret.coordinates = newCoords;
@@ -104,8 +102,8 @@ public class Pawn : Piece {
     }
 
     protected override MoveDownRight GetDownRight(ref InitialMove init) {
-        IntVector2 offset = new IntVector2(1, -1);
-        IntVector2 newCoords = currentCoordinates + offset;
+        Vector2Int offset = new Vector2Int(1, -1);
+        Vector2Int newCoords = currentCoordinates + offset;
         if (parentGame.IsWithinBounds(newCoords) && parentGame.CoordsOccupied(newCoords)) {
             MoveDownRight ret = new MoveDownRight();
             ret.coordinates = newCoords;

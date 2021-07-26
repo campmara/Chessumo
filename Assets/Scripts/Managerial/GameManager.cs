@@ -135,7 +135,7 @@ public class GameManager : Singleton<GameManager> {
         }
     }
 
-    public Vector2 CoordinateToPosition(IntVector2 coordinate) {
+    public Vector2 CoordinateToPosition(Vector2Int coordinate) {
         //float xPos = coordinate.x - Mathf.Floor(Constants.I.GRID_SIZE.x / 2f) + Constants.I.GRID_OFFSET_X;
         //float yPos = coordinate.y - Mathf.Floor(Constants.I.GRID_SIZE.y / 2f) + Constants.I.GRID_OFFSET_Y;
 

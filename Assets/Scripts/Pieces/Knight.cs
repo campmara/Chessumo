@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public class Knight : Piece {
-    private IntVector2[] secondaryMoveOffsets;
+    private Vector2Int[] secondaryMoveOffsets;
 
-    IntVector2 initialDirection;
+    Vector2Int initialDirection;
     Move currentFingerMove;
 
     protected override void Awake() {
@@ -13,7 +12,7 @@ public class Knight : Piece {
 
         //moveMagnitude = 1;
 
-        initialDirection = IntVector2.NULL;
+        initialDirection = Constants.I.V2INULL;
     }
 
     public void UpdateKnightMove(Move move) {
@@ -217,9 +216,9 @@ public class Knight : Piece {
         }
     }
 
-    public MoveUp GetUp(ref InitialMove init, IntVector2 prevCoords, bool isEnd) {
-        IntVector2 offset = new IntVector2(0, 1);
-        IntVector2 newCoords = prevCoords + offset;
+    public MoveUp GetUp(ref InitialMove init, Vector2Int prevCoords, bool isEnd) {
+        Vector2Int offset = new Vector2Int(0, 1);
+        Vector2Int newCoords = prevCoords + offset;
         if (parentGame.IsWithinBounds(newCoords)) {
             MoveUp ret = new MoveUp();
             ret.coordinates = newCoords;
@@ -233,9 +232,9 @@ public class Knight : Piece {
         }
     }
 
-    public MoveDown GetDown(ref InitialMove init, IntVector2 prevCoords, bool isEnd) {
-        IntVector2 offset = new IntVector2(0, -1);
-        IntVector2 newCoords = prevCoords + offset;
+    public MoveDown GetDown(ref InitialMove init, Vector2Int prevCoords, bool isEnd) {
+        Vector2Int offset = new Vector2Int(0, -1);
+        Vector2Int newCoords = prevCoords + offset;
         if (parentGame.IsWithinBounds(newCoords)) {
             MoveDown ret = new MoveDown();
             ret.coordinates = newCoords;
@@ -249,9 +248,9 @@ public class Knight : Piece {
         }
     }
 
-    public MoveLeft GetLeft(ref InitialMove init, IntVector2 prevCoords, bool isEnd) {
-        IntVector2 offset = new IntVector2(-1, 0);
-        IntVector2 newCoords = prevCoords + offset;
+    public MoveLeft GetLeft(ref InitialMove init, Vector2Int prevCoords, bool isEnd) {
+        Vector2Int offset = new Vector2Int(-1, 0);
+        Vector2Int newCoords = prevCoords + offset;
         if (parentGame.IsWithinBounds(newCoords)) {
             MoveLeft ret = new MoveLeft();
             ret.coordinates = newCoords;
@@ -265,9 +264,9 @@ public class Knight : Piece {
         }
     }
 
-    public MoveRight GetRight(ref InitialMove init, IntVector2 prevCoords, bool isEnd) {
-        IntVector2 offset = new IntVector2(1, 0);
-        IntVector2 newCoords = prevCoords + offset;
+    public MoveRight GetRight(ref InitialMove init, Vector2Int prevCoords, bool isEnd) {
+        Vector2Int offset = new Vector2Int(1, 0);
+        Vector2Int newCoords = prevCoords + offset;
         if (parentGame.IsWithinBounds(newCoords)) {
             MoveRight ret = new MoveRight();
             ret.coordinates = newCoords;
@@ -281,8 +280,8 @@ public class Knight : Piece {
         }
     }
 
-    public IntVector2[] GetSecondaryMoves() {
-        List<IntVector2> returnArray = new List<IntVector2>();
+    public Vector2Int[] GetSecondaryMoves() {
+        List<Vector2Int> returnArray = new List<Vector2Int>();
 
         for (int i = 0; i < moveset.moveList.Count; i++) {
             if (!moveset.moveList[i].isPossibleEnd) {
@@ -294,9 +293,9 @@ public class Knight : Piece {
     }
 
     // This is necessarily long.
-    public override void MoveTo(IntVector2 coordinates, bool pushed, int distFromPushingPiece, int numPushedPieces) {
+    public override void MoveTo(Vector2Int coordinates, bool pushed, int distFromPushingPiece, int numPushedPieces) {
         // Determine where it is we're actually moving.
-        IntVector2 diff = coordinates - GetCoordinates();
+        Vector2Int diff = coordinates - GetCoordinates();
 
         SetSortingLayer("Moving Pieces");
 
@@ -342,16 +341,16 @@ public class Knight : Piece {
         }
     }
 
-    public void SetInitialDirection(IntVector2 dir) {
+    public void SetInitialDirection(Vector2Int dir) {
         initialDirection = dir;
     }
 
     public bool HasDirection() {
-        return initialDirection != IntVector2.NULL;
+        return initialDirection != Constants.I.V2INULL;
     }
 
     public void ResetKnight() {
-        initialDirection = IntVector2.NULL;
+        initialDirection = Constants.I.V2INULL;
         currentFingerMove = null;
     }
 }
