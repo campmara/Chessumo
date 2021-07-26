@@ -4,15 +4,6 @@ using System.Collections.Generic;
 using Mara.MrTween;
 
 public class Game : MonoBehaviour {
-    public enum PieceType {
-        KING,
-        QUEEN,
-        ROOK,
-        BISHOP,
-        KNIGHT,
-        PAWN
-    }
-
     private GameObject topUIBarObj;
     private GameObject scoresButtonObj;
     private GameObject menuButtonObj;
@@ -20,7 +11,7 @@ public class Game : MonoBehaviour {
 
     private GameObject[,] tileObjects;
     private Piece[,] pieces;
-    private PieceType nextRandomPieceType;
+    private int nextRandomPieceID;
     private int numPiecesToSpawn = 0;
 
     private int scoreCombo;
@@ -79,63 +70,6 @@ public class Game : MonoBehaviour {
 
         SetupPieceViewer();
     }
-
-    /*
-    IEnumerator SetupSavedBoard(string saveString)
-    {
-        SetupPlayfield();
-
-        yield return new WaitForSeconds(1.5f);
-
-        // parse the string and spawn old pieces
-        while (!saveString.StartsWith("PV"))
-        {
-            string pieceKey = saveString.Remove(0, 2);
-            bool isDisabled = saveString.Remove(0, 1) == "1" ? true : false;
-            int xCoord = int.Parse(saveString.Remove(0, 1));
-            int yCoord = int.Parse(saveString.Remove(0, 1));
-
-            switch(pieceKey)
-            {
-                case "BI":
-                    Bishop bishop = CreateBishop(xCoord, yCoord);
-                    bishop.SetMoveDisabled(isDisabled);
-                    break;
-                case "KI":
-                    King king = CreateKing(xCoord, yCoord);
-                    king.SetMoveDisabled(isDisabled);
-                    break;
-                case "KN":
-                    Knight knight = CreateKnight(xCoord, yCoord);
-                    knight.SetMoveDisabled(isDisabled);
-                    break;
-                case "PN":
-                    Pawn pawn = CreatePawn(xCoord, yCoord);
-                    pawn.SetMoveDisabled(isDisabled);
-                    break;
-                case "QN":
-                    Queen queen = CreateQueen(xCoord, yCoord);
-                    queen.SetMoveDisabled(isDisabled);
-                    break;
-                case "RK":
-                    Rook rook = CreateRook(xCoord, yCoord);
-                    rook.SetMoveDisabled(isDisabled);
-                    break;
-            }
-        }
-
-        // parse piece viewer
-        saveString.Remove(0, 2);
-        string pieceViewerID = saveString.Remove(0, 2);
-        int savedX = int.Parse(saveString.Remove(0, 1));
-        SetupSavedPieceViewer(pieceViewerID, savedX);
-
-        // parse score
-        saveString.Remove(0, 2);
-        int savedScore = int.Parse(saveString);
-        GameManager.Instance.score.SetSavedScore(savedScore);
-    }
-    */
 
     void SetupPlayfield() {
         for (int x = 0; x < Constants.I.GridSize.x; x++) {
@@ -854,68 +788,19 @@ public class Game : MonoBehaviour {
     }
 
     protected void PlaceRandomPiece() {
-        int rand = Random.Range(0, 6);
+        int randID = Random.Range(Constants.I.MinPieceID, Constants.I.MaxPieceID + 1);
         Vector2Int randCoords = RandomCoordinates();
 
         while (pieces[randCoords.x, randCoords.y] != null) {
             randCoords = RandomCoordinates();
         }
 
-        switch (rand) {
-            case 0:
-                CreateKing(randCoords.x, randCoords.y);
-                break;
-            case 1:
-                CreateQueen(randCoords.x, randCoords.y);
-                break;
-            case 2:
-                CreateRook(randCoords.x, randCoords.y);
-                break;
-            case 3:
-                CreateBishop(randCoords.x, randCoords.y);
-                break;
-            case 4:
-                CreateKnight(randCoords.x, randCoords.y);
-                break;
-            case 5:
-                CreatePawn(randCoords.x, randCoords.y);
-                break;
-            default:
-                break;
-        }
+        CreatePiece(randID, randCoords);
     }
 
     private void DecideNextRandomPiece() {
-        int rand = Random.Range(0, 6);
-
-        switch (rand) {
-            case 0:
-                nextRandomPieceType = PieceType.KING;
-                pieceViewer.ShowKing();
-                break;
-            case 1:
-                nextRandomPieceType = PieceType.QUEEN;
-                pieceViewer.ShowQueen();
-                break;
-            case 2:
-                nextRandomPieceType = PieceType.ROOK;
-                pieceViewer.ShowRook();
-                break;
-            case 3:
-                nextRandomPieceType = PieceType.BISHOP;
-                pieceViewer.ShowBishop();
-                break;
-            case 4:
-                nextRandomPieceType = PieceType.KNIGHT;
-                pieceViewer.ShowKnight();
-                break;
-            case 5:
-                nextRandomPieceType = PieceType.PAWN;
-                pieceViewer.ShowPawn();
-                break;
-            default:
-                break;
-        }
+        nextRandomPieceID = Random.Range(Constants.I.MinPieceID, Constants.I.MaxPieceID + 1);
+        pieceViewer.ShowPiece(nextRandomPieceID);
 
         nextRandomCoords = RandomCoordinates();
 
@@ -928,29 +813,7 @@ public class Game : MonoBehaviour {
             nextRandomCoords = RandomCoordinatesInColumn(nextRandomCoords.x);
         }
 
-        switch (nextRandomPieceType) {
-            case PieceType.KING:
-                CreateKing(nextRandomCoords.x, nextRandomCoords.y);
-                break;
-            case PieceType.QUEEN:
-                CreateQueen(nextRandomCoords.x, nextRandomCoords.y);
-                break;
-            case PieceType.ROOK:
-                CreateRook(nextRandomCoords.x, nextRandomCoords.y);
-                break;
-            case PieceType.BISHOP:
-                CreateBishop(nextRandomCoords.x, nextRandomCoords.y);
-                break;
-            case PieceType.KNIGHT:
-                CreateKnight(nextRandomCoords.x, nextRandomCoords.y);
-                break;
-            case PieceType.PAWN:
-                CreatePawn(nextRandomCoords.x, nextRandomCoords.y);
-                break;
-            default:
-                break;
-        }
-
+        CreatePiece(nextRandomPieceID, nextRandomCoords);
         DecideNextRandomPiece();
     }
 
@@ -973,89 +836,17 @@ public class Game : MonoBehaviour {
         }
     }
 
-    protected King CreateKing(int x, int y) {
-        GameObject kingObj = Instantiate(GameManager.Instance.kingPrefab) as GameObject;
-        King king = kingObj.GetComponent<King>();
-        SetupPiece(king, "King", x, y);
+    protected Piece CreatePiece(int pieceID, Vector2Int coords) {
+        GameObject obj = Instantiate(GameManager.Instance.piecePrefabs[pieceID]);
 
-        return king;
-    }
-
-    protected Queen CreateQueen(int x, int y) {
-        GameObject queenObj = Instantiate(GameManager.Instance.queenPrefab) as GameObject;
-        Queen queen = queenObj.GetComponent<Queen>();
-        SetupPiece(queen, "Queen", x, y);
-
-        return queen;
-    }
-
-    protected Rook CreateRook(int x, int y) {
-        GameObject rookObj = Instantiate(GameManager.Instance.rookPrefab) as GameObject;
-        Rook rook = rookObj.GetComponent<Rook>();
-        SetupPiece(rook, "Rook", x, y);
-
-        return rook;
-    }
-
-    protected Bishop CreateBishop(int x, int y) {
-        GameObject bishopObj = Instantiate(GameManager.Instance.bishopPrefab) as GameObject;
-        Bishop bishop = bishopObj.GetComponent<Bishop>();
-        SetupPiece(bishop, "Bishop", x, y);
-
-        return bishop;
-    }
-
-    protected Knight CreateKnight(int x, int y) {
-        GameObject knightObj = Instantiate(GameManager.Instance.knightPrefab) as GameObject;
-        Knight knight = knightObj.GetComponent<Knight>();
-        SetupPiece(knight, "Knight", x, y);
-
-        return knight;
-    }
-
-    protected Pawn CreatePawn(int x, int y) {
-        GameObject pawnObj = Instantiate(GameManager.Instance.pawnPrefab) as GameObject;
-        Pawn pawn = pawnObj.GetComponent<Pawn>();
-        SetupPiece(pawn, "Pawn", x, y);
-
-        return pawn;
-    }
-
-    void SetupPiece(Piece piece, string name, int x, int y) {
-        piece.gameObject.name = name;
+        Piece piece = obj.GetComponent<Piece>();
+        piece.gameObject.name = piece.name;
         piece.transform.parent = transform;
-        piece.transform.position = new Vector3(tileObjects[x, y].transform.position.x, tileObjects[x, y].transform.position.y, piece.transform.position.z);
-        piece.SetInfo(x, y, this);
+        piece.transform.position = new Vector3(tileObjects[coords.x, coords.y].transform.position.x, tileObjects[coords.x, coords.y].transform.position.y, piece.transform.position.z);
+        piece.SetInfo(coords, this);
 
-        pieces[x, y] = piece;
+        pieces[coords.x, coords.y] = piece;
+
+        return piece;
     }
-
-    /*
-    // if there's a piece, itll be "PN0" or "PN1"
-    // if there is no piece, it'll be "NP" to signify no piece
-    public string GenerateSaveString()
-    {
-        string saveString = "";
-
-        for (int i = 0; i < pieces.GetLength(0); i++)
-        {
-            for (int j = 0; j < pieces.GetLength(1); j++)
-            {
-                if (pieces[i, j] != null)
-                {
-                    saveString += pieces[i, j].pieceID;
-                    saveString += pieces[i, j].GetMoveDisabled() == true ? "1" : "0";
-                    saveString += pieces[i, j].GetCoordinates().x.ToString();
-                    saveString += pieces[i, j].GetCoordinates().y.ToString();
-                }
-            }
-        }
-
-        saveString += "PV" + pieceViewer.nextPieceID.ToString() + pieceViewer.nextX.ToString();
-        saveString += "SC" + GameManager.Instance.score.GetScore().ToString();
-
-        Debug.Log(saveString);
-        return saveString;
-    }
-    */
 }

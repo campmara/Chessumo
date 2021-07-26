@@ -10,6 +10,8 @@ public class Knight : Piece {
     protected override void Awake() {
         base.Awake();
 
+        pieceID = 4;
+
         //moveMagnitude = 1;
 
         initialDirection = Constants.I.V2INULL;

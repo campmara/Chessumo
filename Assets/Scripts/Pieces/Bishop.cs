@@ -4,6 +4,8 @@ public class Bishop : Piece {
     protected override void Awake() {
         base.Awake();
 
+        pieceID = 3;
+
         moveMagnitude = 10;
 
         moveOffsets = new Vector2Int[4];

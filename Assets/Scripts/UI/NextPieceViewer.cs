@@ -4,13 +4,6 @@ using Mara.MrTween;
 public class NextPieceViewer : MonoBehaviour {
     [SerializeField] SpriteRenderer sprite;
 
-    [SerializeField] Color kingColor;
-    [SerializeField] Color queenColor;
-    [SerializeField] Color rookColor;
-    [SerializeField] Color bishopColor;
-    [SerializeField] Color knightColor;
-    [SerializeField] Color pawnColor;
-
     public void OnEnable() {
         transform.position = new Vector3(transform.position.x, 15f, transform.position.z);
         transform.YPositionTo(1.5f, 0.8f)
@@ -29,27 +22,9 @@ public class NextPieceViewer : MonoBehaviour {
         sprite.AlphaTo(0f, 0.75f).Start();
     }
 
-    public void ShowKing() {
-        sprite.ColorTo(kingColor, 0.75f).Start();
-    }
-
-    public void ShowQueen() {
-        sprite.ColorTo(queenColor, 0.75f).Start();
-    }
-
-    public void ShowRook() {
-        sprite.ColorTo(rookColor, 0.75f).Start();
-    }
-
-    public void ShowBishop() {
-        sprite.ColorTo(bishopColor, 0.75f).Start();
-    }
-
-    public void ShowKnight() {
-        sprite.ColorTo(knightColor, 0.75f).Start();
-    }
-
-    public void ShowPawn() {
-        sprite.ColorTo(pawnColor, 0.75f).Start();
+    public void ShowPiece(int pieceID) {
+        Color viewerColor = GameManager.Instance.piecePrefabs[pieceID].GetComponent<Piece>().FullColor;
+        viewerColor.a = 0.25f;
+        sprite.ColorTo(viewerColor, 0.75f).Start();
     }
 }

@@ -19,12 +19,17 @@ public class GameManager : Singleton<GameManager> {
     public GameObject scoreEffectPrefab;
     public GameObject nextPieceViewerPrefab;
     [Header("Piece Prefabs")]
-    public GameObject kingPrefab;
-    public GameObject queenPrefab;
-    public GameObject rookPrefab;
-    public GameObject bishopPrefab;
-    public GameObject knightPrefab;
-    public GameObject pawnPrefab;
+    /// <summary>
+    /// Array of all piece prefabs. The indices correlate to the piece IDs. They are as follows:
+    /// -1: Nothing
+    /// 0: King
+    /// 1: Queen
+    /// 2: Rook
+    /// 3: Bishop
+    /// 4: Knight
+    /// 5: Pawn
+    /// </summary>
+    public GameObject[] piecePrefabs;
 
     [HideInInspector] public ScoreEffect scoreEffect;
     [HideInInspector] public RestartButton restartButton;

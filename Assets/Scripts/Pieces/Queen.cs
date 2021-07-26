@@ -4,6 +4,8 @@ public class Queen : Piece {
     protected override void Awake() {
         base.Awake();
 
+        pieceID = 1;
+
         moveMagnitude = 10;
 
         moveOffsets = new Vector2Int[8];

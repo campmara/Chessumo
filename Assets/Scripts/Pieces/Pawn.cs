@@ -4,6 +4,8 @@ public class Pawn : Piece {
     protected override void Awake() {
         base.Awake();
 
+        pieceID = 5;
+
         // we don't need to set the move magnitude if it's 1.
         //moveMagnitude = 1;
 

@@ -17,6 +17,8 @@ public class Constants : ScriptableObjectSingleton<Constants> {
 
     [Header("Pieces")]
     public float PieceMoveTime = 0.25f;
+    public int MinPieceID = 0;
+    public int MaxPieceID = 5;
 
     [Header("Start Button")]
     public float StartButtonRaisedY = -4f;

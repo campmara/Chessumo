@@ -4,6 +4,8 @@ public class King : Piece {
     protected override void Awake() {
         base.Awake();
 
+        pieceID = 0;
+
         moveMagnitude = 1;
 
         moveOffsets = new Vector2Int[8];

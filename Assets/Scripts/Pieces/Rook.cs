@@ -4,6 +4,8 @@ public class Rook : Piece {
     protected override void Awake() {
         base.Awake();
 
+        pieceID = 2;
+
         // This piece can move pretty much across the board;
         moveMagnitude = 10;
 

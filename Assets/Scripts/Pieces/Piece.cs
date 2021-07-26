@@ -13,7 +13,7 @@ public abstract class Piece : MonoBehaviour {
     [SerializeField] Color disabledTint = Color.black;
     [ReadOnly] public bool potentialPush = false;
 
-    public string pieceID = "0";
+    public int pieceID = -1;
 
     private const EaseType moveEase = EaseType.Linear;
 
@@ -45,8 +45,8 @@ public abstract class Piece : MonoBehaviour {
         currentCoordinates = coordinates;
     }
 
-    public void SetInfo(int x, int y, Game game) {
-        currentCoordinates = new Vector2Int(x, y);
+    public void SetInfo(Vector2Int coords, Game game) {
+        currentCoordinates = new Vector2Int(coords.x, coords.y);
         parentGame = game;
     }
 
@@ -71,25 +71,6 @@ public abstract class Piece : MonoBehaviour {
         // Spawn in 1 second after the tiles do.
         GameManager.Instance.GrowMe(this.gameObject);
     }
-    /*
-	public virtual Vector2Int[] GetPossibleMoves()
-	{
-		Vector2Int[] returnArray = new Vector2Int[moveOffsets.Length * moveMagnitude];
-
-		for (int i = 0; i < returnArray.Length; i++)
-		{
-			int offsetIndex = Mathf.FloorToInt(i / moveMagnitude);
-			int coefficient = moveMagnitude > 1 ? (i + 1) % moveMagnitude : 1;
-			coefficient = coefficient == 0 ? moveMagnitude : coefficient;
-			Vector2Int moveOffset = new Vector2Int(moveOffsets[offsetIndex].x * coefficient, moveOffsets[offsetIndex].y * coefficient);
-			//Debug.Log("Move Offset: [" + moveOffset.x + ", " + moveOffset.y + "]");
-
-			returnArray[i] = currentCoordinates + moveOffset;
-		}
-
-		return returnArray;
-	}
-	*/
 
     public virtual List<Vector2Int> GetPossibleMoves() {
         List<Vector2Int> list = new List<Vector2Int>();
@@ -103,9 +84,7 @@ public abstract class Piece : MonoBehaviour {
         return list;
     }
 
-    public virtual void DetermineMoveset() {
-
-    }
+    public virtual void DetermineMoveset() { }
 
     protected MoveUp GetUp(ref InitialMove init) {
         Vector2Int offset = new Vector2Int(0, 1);
